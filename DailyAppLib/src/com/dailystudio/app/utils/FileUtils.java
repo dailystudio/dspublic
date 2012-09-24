@@ -370,6 +370,7 @@ public class FileUtils {
 			DataInputStream dis = new DataInputStream(is);
 			DataOutputStream dos = new DataOutputStream(os);
 			
+			@SuppressWarnings("unused")
 			int bytesReceived = 0;
 			int bytesRead = 0;
 			byte[] buffer = new byte[2048];
