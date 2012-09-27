@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.test.AndroidTestCase;
 
 import com.dailystudio.dataobject.Column;
+import com.dailystudio.dataobject.query.QueryToken;
 
 public class TextColumnTest extends AndroidTestCase {
 	
@@ -250,6 +251,18 @@ public class TextColumnTest extends AndroidTestCase {
 		expected = "\'Hello world!\'";
 		actual = column.convertValueToString("Hello world!");
 		assertEquals(expected, actual);
+	}
+
+	public void testLikeOperator() {
+		TextColumn column = null;
+		
+		column = new TextColumn("textVal");
+		assertNotNull(column);
+		assertEquals(new QueryToken("textVal LIKE \'%abc%\'"), column.like("%abc%"));
+		
+		column = new TextColumn("textVal");
+		assertNotNull(column);
+		assertEquals(new QueryToken(), column.eq(1000));
 	}
 
 }

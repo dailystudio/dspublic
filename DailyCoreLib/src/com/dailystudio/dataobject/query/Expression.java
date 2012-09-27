@@ -23,6 +23,7 @@ public class Expression {
 	public static String OPERATOR_NOT_IN = "NOT IN";
 	public static String OPERATOR_ISNULL = "ISNULL";
 	public static String OPERATOR_NOTNULL = "NOTNULL";
+	public static String OPERATOR_LIKE = "LIKE";
 	
 	public static String OPERATOR_EQ = OPERATOR_EQUALS;
 	public static String OPERATOR_NEQ = OPERATOR_NOT_EQUALS;

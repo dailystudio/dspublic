@@ -1,5 +1,8 @@
 package com.dailystudio.dataobject;
 
+import com.dailystudio.dataobject.query.Expression;
+import com.dailystudio.dataobject.query.ExpressionToken;
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -116,5 +119,11 @@ public class TextColumn extends Column {
 		
 		return sVal;
 	}
+	
+	public ExpressionToken like(String value) {
+		return binaryOperator(
+				Expression.OPERATOR_LIKE, value);
+	}
+
 
 }
