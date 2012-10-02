@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 import com.dailystudio.compat.CompatAsyncTask;
 import com.dailystudio.development.Logger;
@@ -277,6 +278,106 @@ public class ThumbAsyncDecoder {
 		
 	}
 
+	private static class DecodeAndroidResourceSchemeThumbAsyncTask 
+		extends AbsDecodeThumbAsyncTask {
+
+		public DecodeAndroidResourceSchemeThumbAsyncTask(String thumbKey, String resUri) {
+			super(thumbKey, resUri);
+		}
+
+		@Override
+		protected Bitmap doDecodeBitmap(Context context,
+				String thumbKey, String decodeSource) {
+			if (context == null || decodeSource == null) {
+				return null;
+			}
+			
+			final String pkg = dumpPackage(decodeSource);
+			final String type = dumpResourceType(decodeSource);
+			final String resName = dumpResourceName(decodeSource);
+			if (pkg == null || type == null|| resName == null) {
+				Logger.debug("invalid params: pkg = %s, typev = %s, resName = %d", 
+						pkg, type, resName);
+				return null;
+			}
+			
+			final PackageManager pkgmgr = context.getPackageManager();
+			if (pkgmgr == null) {
+				return null;
+			}
+			
+			Bitmap bitmap = null;
+			try {
+				final Resources res = pkgmgr.getResourcesForApplication(pkg);
+				
+				if (res != null) {
+					final int resId = res.getIdentifier(resName, type, pkg);
+					if (resId <= 0) {
+						Logger.debug("resId = %d, no res found for: pkg = %s, typev = %s, resName = %d", 
+								resId, pkg, type, resName);
+						return null;
+					}
+					
+					Drawable d = res.getDrawable(resId);
+					
+					if (d instanceof BitmapDrawable) {
+						bitmap = ((BitmapDrawable)d).getBitmap();
+					}
+				}
+			} catch (NameNotFoundException e) {
+				Logger.debug("decode thumb failure: %s", e.toString());
+				
+				bitmap = null;
+			} catch (OutOfMemoryError e) {
+				Logger.debug("decode thumb failure: %s", e.toString());
+				
+				bitmap = null;
+			}
+
+/*			Logger.debug("DECODE THUMB: thumb = %s, bitmap = %s", 
+					thumbPath,
+					bitmap);
+*/			
+			return bitmap;
+		}
+
+		public static String dumpPackage(String resUri) {
+			if (resUri == null) {
+				return null;
+			}
+			
+			Uri uri = Uri.parse(resUri);
+			
+			return uri.getHost();
+		}
+	   
+		public static String dumpResourceName(String resUri) {
+			if (resUri == null) {
+				return null;
+			}
+			
+			Uri uri = Uri.parse(resUri);
+			
+			return uri.getLastPathSegment();
+		}
+		
+		public static String dumpResourceType(String resUri) {
+			if (resUri == null) {
+				return null;
+			}
+			
+			Uri uri = Uri.parse(resUri);
+			
+			List<String> segments = uri.getPathSegments();
+			if (segments == null || segments.size() < 2) {
+				return null;
+			}
+			
+			return segments.get(0);
+		}
+		
+	}
+
 	private static Set<String> sThumbDecodeRequests = new HashSet<String>();
     
 	public static void requestDecodeFileThumb(Context context,
@@ -319,6 +420,20 @@ public class ThumbAsyncDecoder {
 
 		requestDecodeThumb(context, new DecodeResourceThumbAsyncTask(
 				thumbKey, resPkg, resId));
+	}
+	
+	public static void requestDecodeAndroidResourceSchemeThumb(Context context,
+			String thumbKey, String resUri) {
+		if (context == null) {
+			return;
+		}
+		
+		if (thumbKey == null || resUri == null) {
+			return;
+		}
+
+		requestDecodeThumb(context, new DecodeAndroidResourceSchemeThumbAsyncTask(
+				thumbKey, resUri));
 	}
 	
 	protected static void requestDecodeThumb(Context context, 
