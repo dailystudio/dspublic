@@ -248,7 +248,7 @@ public class AndroidApplication extends AndroidObject {
 			mIcon = d;
 			mLabel = aInfo.loadLabel(pkgmgr);
 		} catch (NameNotFoundException e) {
-			e.printStackTrace();
+			Logger.warnning("resolve resources failure: %s", e.toString());
 		}
 	}
 
@@ -265,6 +265,31 @@ public class AndroidApplication extends AndroidObject {
                 Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         
         ActivityLauncher.launchActivity(context, intent);
+	}
+	
+	public boolean isInstalled(Context context) {
+		if (context == null || mPackageName == null) {
+			return false;
+		}
+		
+		final PackageManager pkgmgr = context.getPackageManager();
+		if (pkgmgr == null) {
+			return false;
+		}
+			
+		boolean installed = false;
+		try {
+			ApplicationInfo aInfo = 
+				pkgmgr.getApplicationInfo(mPackageName, 0);
+			
+			installed = (aInfo != null);
+		} catch (NameNotFoundException e) {
+			Logger.warnning("check installation failure: %s", e.toString());
+			
+			installed = false;
+		}
+
+		return installed;
 	}
 	
 	public final static List<AndroidApplication> queryApplications(Context context) {
