@@ -267,6 +267,18 @@ public class AndroidApplication extends AndroidObject {
         ActivityLauncher.launchActivity(context, intent);
 	}
 	
+	public void launch(Context context) {
+		Intent launchIntent = getLaunchIntent(context);
+		if (launchIntent == null) {
+			return;
+		}
+		
+		launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
+				| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		
+		ActivityLauncher.launchActivity(context, launchIntent);
+	}
+	
 	public boolean isInstalled(Context context) {
 		if (context == null || mPackageName == null) {
 			return false;
@@ -285,11 +297,37 @@ public class AndroidApplication extends AndroidObject {
 			installed = (aInfo != null);
 		} catch (NameNotFoundException e) {
 			Logger.warnning("check installation failure: %s", e.toString());
-			
+					
 			installed = false;
 		}
 
 		return installed;
+	}
+	
+	private Intent getLaunchIntent(Context context) {
+		if (context == null || mPackageName == null) {
+			return null;
+		}
+		
+		final PackageManager pkgmgr = context.getPackageManager();
+		if (pkgmgr == null) {
+			return null;
+		}
+		
+		Intent i = null;
+		i = pkgmgr.getLaunchIntentForPackage(mPackageName);
+		
+		return i;
+	}
+
+	public boolean isLaunchable(Context context) {
+		if (context == null || mPackageName == null) {
+			return false;
+		}
+		
+		final Intent i = getLaunchIntent(context);
+		
+		return (i != null);
 	}
 	
 	public final static List<AndroidApplication> queryApplications(Context context) {
