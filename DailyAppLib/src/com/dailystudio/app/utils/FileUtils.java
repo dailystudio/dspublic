@@ -181,19 +181,18 @@ public class FileUtils {
 			return null;
 		}
 		
-		return getFileContent(new FileInputStream(file));
+		final String encoding = detectFileEncoding(file);
+		Logger.debug("encoding = %s", encoding);
+
+		return getFileContent(new FileInputStream(file), encoding);
 	}
 	
-	public static String getFileContent(InputStream istream) throws IOException {
+	public static String getFileContent(InputStream istream, String encoding) throws IOException {
 		if (istream == null) {
 			return null;
 		}
 		
-		final String encoding = detectFileEncoding(istream);
-		Logger.debug("encoding = %s", encoding);
-		
 		InputStreamReader ireader = null;
-		
 		if (encoding != null) {
 			ireader = new InputStreamReader(istream, encoding);
 		} else {
@@ -224,28 +223,15 @@ public class FileUtils {
 			return null;
 		}
 		
+		final String encoding = detectFileEncoding(asstmgr.open(file));
+		Logger.debug("encoding = %s", encoding);
+
 		InputStream istream = asstmgr.open(file);
 		if (istream == null) {
 			return null;
 		}
 		
-		InputStreamReader ireader = null;
-		
-		ireader = new InputStreamReader(istream);
-		
-		StringWriter writer = new StringWriter();
-		
-		char buffer[] = new char[2048];
-		int n = 0;
-		while((n = ireader.read(buffer)) != -1) {
-			writer.write(buffer, 0, n);
-		}
-		
-		writer.flush();
-		
-		istream.close();
-		
-		return writer.toString();
+		return getFileContent(istream, encoding);
 	}
 	
 	public static String detectFileEncoding(String filename) {
@@ -297,6 +283,12 @@ public class FileUtils {
 	    String encoding = detector.getDetectedCharset();
 
 	    detector.reset();
+	    
+	    try {
+	    	istream.close();
+	    }  catch (IOException e) {
+			Logger.warnning("close stream failure: %s", e.toString());
+		}
 	    
 	    return encoding;
 	}
