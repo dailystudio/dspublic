@@ -296,7 +296,7 @@ public class AndroidApplication extends AndroidObject {
 			
 			installed = (aInfo != null);
 		} catch (NameNotFoundException e) {
-			Logger.warnning("check installation failure: %s", e.toString());
+//			Logger.warnning("check installation failure: %s", e.toString());
 					
 			installed = false;
 		}
