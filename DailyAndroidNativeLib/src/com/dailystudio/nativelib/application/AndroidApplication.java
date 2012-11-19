@@ -379,5 +379,32 @@ public class AndroidApplication extends AndroidObject {
 		
 		return applications;
 	}
+	
+	public static final boolean isSystemApplication(Context context, String pkg) {
+		if (context == null) {
+			return false;
+		}
+		
+		final PackageManager pkgmgr = context.getPackageManager();
+		if (pkgmgr == null) {
+			return false;
+		}
+		
+		ApplicationInfo appInfo = null;
+		try {
+			appInfo = pkgmgr.getApplicationInfo(pkg, 0);
+		} catch (NameNotFoundException e) {
+			Logger.warnning("cannot get appInfo for pkg: %s", pkg);
+			
+			appInfo = null;
+		}
+		
+		if (appInfo == null) {
+			return false;
+		}
+		
+		return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) 
+					== ApplicationInfo.FLAG_SYSTEM);
+	}
 
 }
