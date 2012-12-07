@@ -22,8 +22,20 @@ public class Logger {
 	private static void output(String format, LogToken token, Object... args) {
 		final String compose = String.format(DEBUG_MSG_TEMPL, 
 				getCallingMethodName(2), format);
-				
-		Log.d(getCallingSimpleClassName(2), String.format(compose, args));
+		
+		if (token == null) {
+			token = LogToken.LOG_D;
+		}
+			
+		if (token == LogToken.LOG_D) {
+			Log.d(getCallingSimpleClassName(2), String.format(compose, args));
+		} else if (token == LogToken.LOG_W) {
+			Log.w(getCallingSimpleClassName(2), String.format(compose, args));
+		} else if (token == LogToken.LOG_I) {
+			Log.i(getCallingSimpleClassName(2), String.format(compose, args));
+		} else if (token == LogToken.LOG_E) {
+			Log.e(getCallingSimpleClassName(2), String.format(compose, args));
+		}
 	}
 	
 	public static void setDebugEnabled(boolean enabled) {
