@@ -4,6 +4,13 @@ import android.util.Log;
 
 public class Logger {
 	
+	private static enum LogToken {
+		LOG_D,
+		LOG_W,
+		LOG_I,
+		LOG_E,
+	}
+	
 	private static final String UNKNOWN_METHOD = "UnknownMethod";
 	private static final String UNKNOWN_CLASS = "UnknownClass";
 	private static final int TRACE_BASE_INDEX = 3;
@@ -12,7 +19,7 @@ public class Logger {
 	
 	private static volatile boolean sLogDebugEnabled = true;
 	
-	private static void output(String format, Object... args) {
+	private static void output(String format, LogToken token, Object... args) {
 		final String compose = String.format(DEBUG_MSG_TEMPL, 
 				getCallingMethodName(2), format);
 				
@@ -23,20 +30,26 @@ public class Logger {
 		sLogDebugEnabled = enabled;
 	}
 	
+	public static boolean isDebugEnabled() {
+		return sLogDebugEnabled;
+	}
+	
 	public static void info(String format, Object... args) {
-		output(format, args);
+		output(format, LogToken.LOG_I, args);
 	}
 
 	public static void debug(String format, Object... args) {
-		if (sLogDebugEnabled == false) {
-			return;
+		if (sLogDebugEnabled) {
+			output(format, LogToken.LOG_D, args);
 		}
-		
-		output(format, args);
 	}
 	
 	public static void warnning(String format, Object... args) {
-		output(format, args);
+		output(format, LogToken.LOG_W, args);
+	}
+	
+	public static void error(String format, Object... args) {
+		output(format, LogToken.LOG_E, args);
 	}
 	
 	public static StackTraceElement getCallingElement(int traceLevel) {
