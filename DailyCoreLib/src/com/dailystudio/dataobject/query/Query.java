@@ -62,9 +62,10 @@ public class Query {
 	
 	@Override
 	public String toString() {
-	    return String.format("%s(0x%08x): sel = [%s], grpBy = [%s], ordBy = [%s], having = [%s], limit = [%s]",
+	    return String.format("%s(0x%08x): oclass = [%s], sel = [%s], grpBy = [%s], ordBy = [%s], having = [%s], limit = [%s]",
 	            getClass().getSimpleName(),
 	            hashCode(),
+	            getObjectClass(),
 	            getSelection(),
 	            getGroupBy(),
 	            getOrderBy(),
