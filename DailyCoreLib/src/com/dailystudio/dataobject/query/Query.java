@@ -60,4 +60,17 @@ public class Query {
 		return mLimit;
 	}
 	
+	@Override
+	public String toString() {
+	    return String.format("%s(0x%08x): sel = [%s], grpBy = [%s], ordBy = [%s], having = [%s], limit = [%s]",
+	            getClass().getSimpleName(),
+	            hashCode(),
+	            getSelection(),
+	            getGroupBy(),
+	            getOrderBy(),
+	            getHaving(),
+	            getLimit());
+	    
+	}
+	
 }
