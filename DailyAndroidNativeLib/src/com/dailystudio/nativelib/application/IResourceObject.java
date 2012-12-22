@@ -7,10 +7,11 @@ import android.graphics.drawable.Drawable;
 
 public interface IResourceObject {
 	
-	public static class ResourceObjectComparator implements Comparator<IResourceObject> {
+	public static class ResourceObjectComparator<T extends IResourceObject>
+	    implements Comparator<T> {
 
 		@Override
-		public int compare(IResourceObject object1, IResourceObject object2) {
+		public int compare(T object1, T object2) {
 			if (object1 == null) {
 				return -1;
 			} else if (object2 == null) {

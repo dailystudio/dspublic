@@ -21,21 +21,13 @@ import android.net.Uri;
 
 public class AndroidApplication extends AndroidObject {
 
-	public static class AndroidApplicationComparator extends ResourceObjectComparator {
+	public static class AndroidApplicationComparator
+	    extends ResourceObjectComparator<AndroidApplication> {
 
 		@Override
-		public int compare(IResourceObject object1, IResourceObject object2) {
+		public int compare(AndroidApplication app1, AndroidApplication app2) {
 			int ret = 0;
 			long lret = 0;
-			
-			if (object1 instanceof AndroidApplication == false) {
-				return -1;
-			} else if (object2 instanceof AndroidApplication == false) {
-				return 1;
-			}
-			
-			final AndroidApplication app1 = (AndroidApplication)object1;
-			final AndroidApplication app2 = (AndroidApplication)object2;
 			
 			final int fsys1 = (app1.mFlags & ApplicationInfo.FLAG_SYSTEM); 
 			final int fsys2 = (app2.mFlags & ApplicationInfo.FLAG_SYSTEM); 
@@ -72,7 +64,7 @@ public class AndroidApplication extends AndroidObject {
 				return (lret > 0 ? -1: 1);
 			}
 			
-			return super.compare(object1, object2);
+			return super.compare(app1, app2);
 		}
 		
 	}	

@@ -5,23 +5,15 @@ import android.content.pm.ResolveInfo;
 
 public abstract class AndroidComponentObject extends AndroidObject {
 	
-	public static class ComponentComparator extends ResourceObjectComparator {
+	public static class ComponentComparator 
+	    extends ResourceObjectComparator<AndroidComponentObject> {
 
 		@Override
-		public int compare(IResourceObject object1, IResourceObject object2) {
-			int ret = super.compare(object1, object2);
+		public int compare(AndroidComponentObject comp1, AndroidComponentObject comp2) {
+			int ret = super.compare(comp1, comp2);
 			if (ret != 0) {
 				return ret;
 			}
-			
-			if (object1 instanceof AndroidComponentObject == false) {
-				return -1;
-			} else if (object2 instanceof AndroidComponentObject == false) {
-				return 1;
-			}
-			
-			final AndroidComponentObject comp1 = (AndroidComponentObject)object1;
-			final AndroidComponentObject comp2 = (AndroidComponentObject)object2;
 			
 			if (comp1.mComponentName == null) {
 				return -1;
