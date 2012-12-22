@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.Loader;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
 
-public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
+public abstract class AbsAdapterFragment<Item, ItemSet> extends AbsLoaderFragment<ItemSet>
 	implements OnItemClickListener {
 	
 	public interface OnListItemSelectedListener {
@@ -23,8 +21,8 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
         
     }
 
-	private AbsListView mListView;
-	private ListAdapter mAdapter;
+	private AdapterView<BaseAdapter> mAdapterView;
+	private BaseAdapter mAdapter;
 	
     private OnListItemSelectedListener mOnListItemSelectedListener;
     
@@ -32,13 +30,13 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		bindListView();
+		bindAdapterView();
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		if (mOnListItemSelectedListener != null) {
-			final ListAdapter adapter = getListAdapter();
+			final BaseAdapter adapter = getAdapter();
 			if (adapter == null) {
 				return;
 			}
@@ -49,43 +47,45 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
 		}
 	}
 
-	protected int getListViewId() {
+	protected int getAdapterViewId() {
 		return android.R.id.list;
 	}
 	
-	protected void bindListView() {
+	@SuppressWarnings("unchecked")
+    protected void bindAdapterView() {
 		final View fragmentView = getView();
 		if (fragmentView == null) {
 			return;
 		}
 
-		AbsListView oldListView = mListView;
+		AdapterView<?> oldAdapterView = mAdapterView;
 
-		if (oldListView != null) {
-			oldListView.clearDisappearingChildren();
-			oldListView.clearAnimation();
-			oldListView.setAdapter(null);
-			oldListView.setOnItemClickListener(null);
-			oldListView.setVisibility(View.GONE);
+		if (oldAdapterView != null) {
+			oldAdapterView.clearDisappearingChildren();
+			oldAdapterView.clearAnimation();
+			oldAdapterView.setAdapter(null);
+			oldAdapterView.setOnItemClickListener(null);
+			oldAdapterView.setVisibility(View.GONE);
 		}
 		
 		mAdapter = onCreateAdapter();
 		
-		mListView = (AbsListView) fragmentView.findViewById(getListViewId());
-		if (mListView != null) {
-			mListView.setAdapter(mAdapter);
-			mListView.setOnItemClickListener(this);
-			mListView.setVisibility(View.VISIBLE);
-			mListView.scheduleLayoutAnimation();
+		mAdapterView = (AdapterView<BaseAdapter>) fragmentView.findViewById(
+		        getAdapterViewId());
+		if (mAdapterView != null) {
+			mAdapterView.setAdapter(mAdapter);
+			mAdapterView.setOnItemClickListener(this);
+			mAdapterView.setVisibility(View.VISIBLE);
+			mAdapterView.scheduleLayoutAnimation();
 		}
 	}
 	
-	public ListAdapter getListAdapter() {
+	public BaseAdapter getAdapter() {
 		return mAdapter;
 	}
 	
-	public AbsListView getListView() {
-		return mListView;
+	public AdapterView<BaseAdapter> getAdapterView() {
+		return mAdapterView;
 	}
 	
  	@Override
@@ -101,12 +101,12 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
     }
 
  	@Override
- 	public void onLoadFinished(Loader<T> loader, T data) {
+ 	public void onLoadFinished(Loader<ItemSet> loader, ItemSet data) {
  		bindData(mAdapter, data);
  	};
  	
  	@Override
- 	public void onLoaderReset(Loader<T> loader) {
+ 	public void onLoaderReset(Loader<ItemSet> loader) {
  		bindData(mAdapter, null);
  	};
  	
@@ -130,9 +130,9 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
 		mDeferredHandler.postIdle(notifyAdapterChangedRunnable);
 	}
  	
-	abstract protected void bindData(ListAdapter listAdapter, T data);
+	abstract protected void bindData(BaseAdapter adapter, ItemSet data);
 
-	abstract protected ListAdapter onCreateAdapter();
+	abstract protected BaseAdapter onCreateAdapter();
 	
 	private Handler mHandler = new Handler();
 	private DeferredHandler mDeferredHandler = new DeferredHandler();
@@ -149,6 +149,5 @@ public abstract class AbsListFragment<T> extends AbsLoaderFragment<T>
 		}
 		
 	};
-
 
 }

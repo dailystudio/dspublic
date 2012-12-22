@@ -2,9 +2,10 @@ package com.dailystudio.app.fragment;
 
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 
-public abstract class BaseCursorListFragment extends AbsListFragment<Cursor> {
+public abstract class AbsCursorAdapterFragment extends AbsAdapterFragment<Cursor, Cursor> {
 	
 	@Override
 	public void onDestroy() {
@@ -21,8 +22,8 @@ public abstract class BaseCursorListFragment extends AbsListFragment<Cursor> {
 	}
 
 	@Override
-	protected void bindListView() {
-		final ListAdapter oldAdapter = getListAdapter();
+	protected void bindAdapterView() {
+		final ListAdapter oldAdapter = getAdapter();
 		
 		Cursor oldCursor = null;
 
@@ -30,7 +31,7 @@ public abstract class BaseCursorListFragment extends AbsListFragment<Cursor> {
 			oldCursor = ((CursorAdapter)oldAdapter).getCursor();
 		}
 
-		super.bindListView();
+		super.bindAdapterView();
 		
 		if (oldCursor != null) {
 			swapCursor(oldCursor);
@@ -38,12 +39,12 @@ public abstract class BaseCursorListFragment extends AbsListFragment<Cursor> {
 	}
 	
 	@Override
-	protected void bindData(ListAdapter listAdapter, Cursor data) {
+	protected void bindData(BaseAdapter adapter, Cursor data) {
 		swapCursor(data);
 	}
 
 	protected void swapCursor(Cursor c) {
-		final ListAdapter adapter = getListAdapter();
+		final BaseAdapter adapter = getAdapter();
 		if (adapter instanceof CursorAdapter) {
 			Cursor oldCursor = ((CursorAdapter)adapter).swapCursor(c);
 			
