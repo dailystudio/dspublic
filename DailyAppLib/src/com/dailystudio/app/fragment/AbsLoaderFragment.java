@@ -29,6 +29,10 @@ public abstract class AbsLoaderFragment<T> extends Fragment implements LoaderCal
 		getLoaderManager().restartLoader(getLoaderId(), createLoaderArguments(), this);
 	}
 
+	protected int getEmptyViewId() {
+		return android.R.id.empty;
+	}
+	
 	abstract protected int getLoaderId();
 	abstract protected Bundle createLoaderArguments();
 

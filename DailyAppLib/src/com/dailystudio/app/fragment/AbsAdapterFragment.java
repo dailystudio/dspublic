@@ -51,10 +51,6 @@ public abstract class AbsAdapterFragment<Item, ItemSet> extends AbsLoaderFragmen
 		return android.R.id.list;
 	}
 	
-	protected int getEmptyViewId() {
-		return android.R.id.empty;
-	}
-	
 	@SuppressWarnings("unchecked")
     protected void bindAdapterView() {
 		final View fragmentView = getView();
