@@ -51,6 +51,10 @@ public abstract class AbsAdapterFragment<Item, ItemSet> extends AbsLoaderFragmen
 		return android.R.id.list;
 	}
 	
+	protected int getEmptyViewId() {
+		return android.R.id.empty;
+	}
+	
 	@SuppressWarnings("unchecked")
     protected void bindAdapterView() {
 		final View fragmentView = getView();
@@ -66,6 +70,7 @@ public abstract class AbsAdapterFragment<Item, ItemSet> extends AbsLoaderFragmen
 			oldAdapterView.setAdapter(null);
 			oldAdapterView.setOnItemClickListener(null);
 			oldAdapterView.setVisibility(View.GONE);
+			oldAdapterView.setEmptyView(null);
 		}
 		
 		mAdapter = onCreateAdapter();
@@ -77,6 +82,11 @@ public abstract class AbsAdapterFragment<Item, ItemSet> extends AbsLoaderFragmen
 			mAdapterView.setOnItemClickListener(this);
 			mAdapterView.setVisibility(View.VISIBLE);
 			mAdapterView.scheduleLayoutAnimation();
+			
+			final View emptyView = fragmentView.findViewById(getEmptyViewId());
+			if (emptyView != null) {
+				mAdapterView.setEmptyView(emptyView);
+			}
 		}
 	}
 	
