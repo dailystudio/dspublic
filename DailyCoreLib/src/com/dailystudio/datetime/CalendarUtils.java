@@ -1,4 +1,4 @@
-package com.dailystudio.app.utils;
+package com.dailystudio.datetime;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,6 +1,6 @@
 package com.dailystudio.app.async;
 
-import com.dailystudio.app.utils.CalendarUtils;
+import com.dailystudio.datetime.CalendarUtils;
 import com.dailystudio.development.Logger;
 
 import android.content.Context;
