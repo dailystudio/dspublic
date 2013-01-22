@@ -6,12 +6,23 @@ import com.dailystudio.development.Logger;
 public class TimeSpanUtils {
 	
 	public long[] calculateHourDistribution(long start, long end) {
+		return calculateHourDistribution(null, start, end);
+	}
+	
+	public long[] calculateHourDistribution(long[] inputDistrib, long start, long end) {
 /*		Logger.debug("[%s - %s]",
 				CalendarUtils.timeToReadableString(start),
 				CalendarUtils.timeToReadableString(end));
 */
 		if (start >= end) {
-			return null;
+			return inputDistrib;
+		}
+		
+		if (inputDistrib != null && inputDistrib.length != 24) {
+			Logger.error("incorrect dimension of inputDistrib[%d], expect: %d", 
+					inputDistrib.length,
+					24);
+			return inputDistrib;
 		}
 		
 		long startHour = start - start % CalendarUtils.HOUR_IN_MILLIS;
@@ -29,7 +40,10 @@ public class TimeSpanUtils {
 				CalendarUtils.timeToReadableString(startHour),
 				CalendarUtils.timeToReadableString(endHour));
 		
-		long[] hoursDistribution = new long[24];
+		long[] hoursDistribution = inputDistrib;
+		if (hoursDistribution == null) {
+			hoursDistribution = new long[24];
+		}
 		
 		long time = 0;
 		long distrib = 0;

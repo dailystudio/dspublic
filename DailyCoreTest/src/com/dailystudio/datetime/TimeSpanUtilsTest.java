@@ -48,9 +48,18 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		final long start = parseDateTime("2012-12-12 00:00:00.000");
 		final long end = parseDateTime("2010-12-13 00:00:00.000");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = null;
+		long[] expected = null;
 		
+		actual = distributor.calculateHourDistribution(start, end);
 		assertNull(actual);
+		
+		actual = distributor.calculateHourDistribution(null, start, end);
+		assertNull(actual);
+		
+		actual = new long[20]; 
+		expected = distributor.calculateHourDistribution(actual, start, end);
+		assertEquals(expected, actual);
 	}
 
 	public void testCalculateOneDayHourDistrib() {
@@ -164,7 +173,7 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		Asserts.assertEquals(expected, actual);
 	}
 	
-	public void testCalculateOverOneDayHourDistrib() {
+	public void testCalculateOverOneDay1HourDistrib() {
 		TimeSpanUtils distributor = new TimeSpanUtils();
 		
 		final long start = parseDateTime("2010-01-22 00:35:12.123");
@@ -285,6 +294,127 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 				(8 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 21 ~ Hour 22 */
 				(8 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
 				(8 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
+		};
+		
+		Asserts.assertEquals(expected, actual);
+	}
+	
+	public void testCalculateHourDistribOnExistedDistribArray1() {
+		TimeSpanUtils distributor = new TimeSpanUtils();
+		
+		final long start = parseDateTime("2012-12-12 00:00:00.000");
+		final long end = parseDateTime("2012-12-13 00:00:00.000");
+		
+		long[] existed = {
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 00 ~ Hour 01 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 02 ~ Hour 03 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 03 ~ Hour 04 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 04 ~ Hour 05 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 05 ~ Hour 06 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 06 ~ Hour 07 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 07 ~ Hour 08 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 08 ~ Hour 09 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 09 ~ Hour 10 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 10 ~ Hour 11 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 11 ~ Hour 12 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 12 ~ Hour 13 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 13 ~ Hour 14 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 14 ~ Hour 15 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 15 ~ Hour 16 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 16 ~ Hour 17 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 17 ~ Hour 18 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 18 ~ Hour 19 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 19 ~ Hour 20 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 20 ~ Hour 21 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 21 ~ Hour 22 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 23 ~ Hour 24 */
+		};
+		
+		long[] actual = distributor.calculateHourDistribution(
+				existed, start, end);
+		long[] expected = {
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 00 ~ Hour 01 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 02 ~ Hour 03 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 03 ~ Hour 04 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 04 ~ Hour 05 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 05 ~ Hour 06 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 06 ~ Hour 07 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 07 ~ Hour 08 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 08 ~ Hour 09 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 09 ~ Hour 10 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 10 ~ Hour 11 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 11 ~ Hour 12 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 12 ~ Hour 13 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 13 ~ Hour 14 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 14 ~ Hour 15 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 15 ~ Hour 16 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 16 ~ Hour 17 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 17 ~ Hour 18 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 18 ~ Hour 19 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 19 ~ Hour 20 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 20 ~ Hour 21 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 21 ~ Hour 22 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
+		};
+		
+		Asserts.assertEquals(expected, actual);
+	}
+
+	public void testCalculateHourDistribOnExistedDistribArray2() {
+		TimeSpanUtils distributor = new TimeSpanUtils();
+		
+		final long start1 = parseDateTime("2010-01-22 00:35:12.123");
+		final long end1 = parseDateTime("2010-01-23 14:35:22.000");
+		final long start2 = parseDateTime("2010-02-14 16:25:25.666");
+		final long end2 = parseDateTime("2010-02-15 10:02:33.999");
+		
+		long[] actual = null;
+		
+		actual = distributor.calculateHourDistribution(
+				actual, start1, end1);
+		actual = distributor.calculateHourDistribution(
+				actual, start2, end2);
+		
+		long[] expected = {
+				(2 * CalendarUtils.HOUR_IN_MILLIS 
+						+ 24 * CalendarUtils.MINUTE_IN_MILLIS 
+						+ 47 * CalendarUtils.SECOND_IN_MILLIS 
+						+ 877), /* Hour 00 ~ Hour 01 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 02 ~ Hour 03 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 03 ~ Hour 04 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 04 ~ Hour 05 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 05 ~ Hour 06 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 06 ~ Hour 07 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 07 ~ Hour 08 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 08 ~ Hour 09 */
+				(3 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 09 ~ Hour 10 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS) 
+					+ (2 * CalendarUtils.MINUTE_IN_MILLIS
+						+ 33 * CalendarUtils.SECOND_IN_MILLIS
+						+ 999), /* Hour 10 ~ Hour 11 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 11 ~ Hour 12 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 12 ~ Hour 13 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 13 ~ Hour 14 */
+				(CalendarUtils.HOUR_IN_MILLIS 
+						+ 35 * CalendarUtils.MINUTE_IN_MILLIS
+						+ 22 * CalendarUtils.SECOND_IN_MILLIS), /* Hour 14 ~ Hour 15 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 15 ~ Hour 16 */
+				CalendarUtils.HOUR_IN_MILLIS 
+					+ (34 * CalendarUtils.MINUTE_IN_MILLIS
+						+ 34 * CalendarUtils.SECOND_IN_MILLIS
+						+ 334), /* Hour 16 ~ Hour 17 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 17 ~ Hour 18 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 18 ~ Hour 19 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 19 ~ Hour 20 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 20 ~ Hour 21 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 21 ~ Hour 22 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
+				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
 		};
 		
 		Asserts.assertEquals(expected, actual);
