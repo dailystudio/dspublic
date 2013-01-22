@@ -185,7 +185,14 @@ public class CalendarUtils {
 			return -1;
 		}
 		
+		/* Week number according to the ISO-8601 standard, 
+		 * weeks starting on Monday. The first week of the 
+		 * year is the week that contains that year's first 
+		 * Thursday (='First 4-day week'). The highest week
+		 *  number in a year is either 52 or 53.
+		 */
 		sCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		sCalendar.setMinimalDaysInFirstWeek(4);
 		sCalendar.setTimeInMillis(mills);
 		
 		return sCalendar.get(Calendar.WEEK_OF_YEAR);
@@ -274,8 +281,8 @@ public class CalendarUtils {
 	
 	public static String durationToReadableString(long duration) {
 		String hourLabel = "h";
-		String minLabel = "\"";
-		String secLabel = "\'";
+		String minLabel = "\'";
+		String secLabel = "\"";
 		
 		long sec = duration / CalendarUtils.SECOND_IN_MILLIS;
 		long min = duration / CalendarUtils.MINUTE_IN_MILLIS;
