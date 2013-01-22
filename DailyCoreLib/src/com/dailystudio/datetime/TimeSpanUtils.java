@@ -5,11 +5,11 @@ import com.dailystudio.development.Logger;
 
 public class TimeSpanUtils {
 	
-	public long[] calculateHourDistribution(long start, long end) {
+	public static long[] calculateHourDistribution(long start, long end) {
 		return calculateHourDistribution(null, start, end);
 	}
 	
-	public long[] calculateHourDistribution(long[] inputDistrib, long start, long end) {
+	public static long[] calculateHourDistribution(long[] inputDistrib, long start, long end) {
 /*		Logger.debug("[%s - %s]",
 				CalendarUtils.timeToReadableString(start),
 				CalendarUtils.timeToReadableString(end));
@@ -36,10 +36,10 @@ public class TimeSpanUtils {
 			}
 		}
 */
-		Logger.debug("hour range: [%s - %s]",
+/*		Logger.debug("hour range: [%s - %s]",
 				CalendarUtils.timeToReadableString(startHour),
 				CalendarUtils.timeToReadableString(endHour));
-		
+*/		
 		long[] hoursDistribution = inputDistrib;
 		if (hoursDistribution == null) {
 			hoursDistribution = new long[24];
