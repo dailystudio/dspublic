@@ -39,6 +39,38 @@ public class Asserts {
 		}
 	}
 
+	public static void assertEquals(long[] expected, long[] actual) {
+		AndroidTestCase.assertNotNull(actual);
+		
+		if (expected == null) {
+			AndroidTestCase.assertEquals(0, actual.length);
+			return;
+		}
+		
+		AndroidTestCase.assertEquals(expected.length, actual.length);
+		
+		final int count = expected.length;
+		for (int i = 0; i < count; i++) {
+			AndroidTestCase.assertEquals(expected[i], actual[i]);
+		}
+	}
+
+	public static void assertEquals(int[] expected, int[] actual) {
+		AndroidTestCase.assertNotNull(actual);
+		
+		if (expected == null) {
+			AndroidTestCase.assertEquals(0, actual.length);
+			return;
+		}
+		
+		AndroidTestCase.assertEquals(expected.length, actual.length);
+		
+		final int count = expected.length;
+		for (int i = 0; i < count; i++) {
+			AndroidTestCase.assertEquals(expected[i], actual[i]);
+		}
+	}
+
 	public static void assertEquals(Object[] expected, Object[] actual) {
 		AndroidTestCase.assertNotNull(actual);
 		
