@@ -10,6 +10,18 @@ import com.dailystudio.development.Logger;
 
 public class TimeSpanUtils {
 	
+	public static long calculateOverlapDuration(long start1, long end1, 
+			long start2, long end2) {
+		if (start1 >= end1 || start2 >= end2) {
+			return 0;
+		}
+		
+		final long dstart = Math.max(start1, start2);
+		final long dend = Math.min(end1, end2);
+
+		return (dend - dstart);
+	}
+	
 	public static long calculateDays(long start, long end) {
 		return calculateDays(start, end, null);
 	}
