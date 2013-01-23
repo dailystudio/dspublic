@@ -43,32 +43,28 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculateErrorHourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-12-12 00:00:00.000");
 		final long end = parseDateTime("2010-12-13 00:00:00.000");
 		
 		long[] actual = null;
 		long[] expected = null;
 		
-		actual = distributor.calculateHourDistribution(start, end);
+		actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		assertNull(actual);
 		
-		actual = distributor.calculateHourDistribution(null, start, end);
+		actual = TimeSpanUtils.calculateHourDistribution(null, start, end);
 		assertNull(actual);
 		
 		actual = new long[20]; 
-		expected = distributor.calculateHourDistribution(actual, start, end);
+		expected = TimeSpanUtils.calculateHourDistribution(actual, start, end);
 		assertEquals(expected, actual);
 	}
 
 	public void testCalculateOneDayHourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-12-12 00:00:00.000");
 		final long end = parseDateTime("2012-12-13 00:00:00.000");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 00 ~ Hour 01 */
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 01 ~ Hour 02 */
@@ -100,12 +96,10 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculatePartDay1HourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-01-01 00:00:00.000");
 		final long end = parseDateTime("2012-01-01 22:00:00.000");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 00 ~ Hour 01 */
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 01 ~ Hour 02 */
@@ -137,12 +131,10 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculatePartDay2HourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-01-01 00:21:00.000");
 		final long end = parseDateTime("2012-01-01 12:30:00.000");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				(39 * CalendarUtils.MINUTE_IN_MILLIS), /* Hour 00 ~ Hour 01 */
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 01 ~ Hour 02 */
@@ -174,12 +166,10 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculateOverOneDay1HourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2010-01-22 00:35:12.123");
 		final long end = parseDateTime("2010-01-23 14:35:22.000");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				(CalendarUtils.HOUR_IN_MILLIS 
 						+ 24 * CalendarUtils.MINUTE_IN_MILLIS 
@@ -216,12 +206,10 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculateOverOneDay2HourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2010-02-14 16:25:25.666");
 		final long end = parseDateTime("2010-02-15 10:02:33.999");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 00 ~ Hour 01 */
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 01 ~ Hour 02 */
@@ -257,12 +245,10 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 
 	public void testCalculateOverWeekHourDistrib() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-12-31 17:20:33.555");
 		final long end = parseDateTime("2013-01-08 19:36:24.111");
 		
-		long[] actual = distributor.calculateHourDistribution(start, end);
+		long[] actual = TimeSpanUtils.calculateHourDistribution(start, end);
 		long[] expected = {
 				(8 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 00 ~ Hour 01 */
 				(8 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
@@ -300,8 +286,6 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculateHourDistribOnExistedDistribArray1() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start = parseDateTime("2012-12-12 00:00:00.000");
 		final long end = parseDateTime("2012-12-13 00:00:00.000");
 		
@@ -332,7 +316,7 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 				CalendarUtils.HOUR_IN_MILLIS, /* Hour 23 ~ Hour 24 */
 		};
 		
-		long[] actual = distributor.calculateHourDistribution(
+		long[] actual = TimeSpanUtils.calculateHourDistribution(
 				existed, start, end);
 		long[] expected = {
 				(2 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 00 ~ Hour 01 */
@@ -365,8 +349,6 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 
 	public void testCalculateHourDistribOnExistedDistribArray2() {
-		TimeSpanUtils distributor = new TimeSpanUtils();
-		
 		final long start1 = parseDateTime("2010-01-22 00:35:12.123");
 		final long end1 = parseDateTime("2010-01-23 14:35:22.000");
 		final long start2 = parseDateTime("2010-02-14 16:25:25.666");
@@ -374,9 +356,9 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		
 		long[] actual = null;
 		
-		actual = distributor.calculateHourDistribution(
+		actual = TimeSpanUtils.calculateHourDistribution(
 				actual, start1, end1);
-		actual = distributor.calculateHourDistribution(
+		actual = TimeSpanUtils.calculateHourDistribution(
 				actual, start2, end2);
 		
 		long[] expected = {
