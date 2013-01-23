@@ -1,10 +1,59 @@
 package com.dailystudio.datetime;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import android.util.FloatMath;
+
 import com.dailystudio.datetime.CalendarUtils;
 import com.dailystudio.development.Logger;
 
 public class TimeSpanUtils {
 	
+	public static long calculateDays(long start, long end) {
+		return calculateDays(start, end, null);
+	}
+	
+	public static long calculateDays(long start, long end, int[] filterWeekdays) {
+		if (filterWeekdays == null) {
+			final long days = (long)FloatMath.ceil((end - start)
+					/ (float)CalendarUtils.DAY_IN_MILLIS);
+			Logger.debug("(end(%d, %s) - start(%d, %s)) / dayInMillis(%d) = days(%d)", 
+					end, CalendarUtils.timeToReadableString(end),
+					start, CalendarUtils.timeToReadableString(start),
+					CalendarUtils.DAY_IN_MILLIS,
+					days);
+
+			return days;
+		}
+		
+		long time = 0;
+		
+		start = CalendarUtils.getStartOfDay(start);
+		end = CalendarUtils.getStartOfDay(end);
+		
+		Set<Integer> weekdays = new HashSet<Integer>();
+		
+		for (int fday: filterWeekdays) {
+			weekdays.add((fday == 0 ? 7 : fday));
+		}
+		
+		int weekday;
+		long count = 0;
+		for (time = start; time <= end; time += CalendarUtils.DAY_IN_MILLIS) {
+			weekday = CalendarUtils.getWeekDay(time);
+			Logger.debug("time = %s, weekday = %d", 
+					CalendarUtils.timeToReadableString(time),
+					weekday);
+			
+			if (weekdays.contains(weekday)) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+
 	public static long[] calculateHourDistribution(long start, long end) {
 		return calculateHourDistribution(null, start, end);
 	}

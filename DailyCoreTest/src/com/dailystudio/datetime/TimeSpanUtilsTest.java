@@ -402,4 +402,73 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		Asserts.assertEquals(expected, actual);
 	}
 
+	public void testCalculateDaysWithoutFilters() {
+		long start = 0;
+		long end = 0;
+		long actual = 0;
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-01 00:00:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end);
+		assertEquals(1, actual);
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-08 00:00:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end);
+		assertEquals(8, actual);
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-08 23:59:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end);
+		assertEquals(9, actual);
+		
+		start = parseDateTime("2012-12-31 12:00:00.000");
+		end = parseDateTime("2013-01-08 23:59:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end);
+		assertEquals(9, actual);
+	}
+	
+
+	public void testCalculateDaysWithFilters() {
+		int[] filter_weekdays = {
+			1, 2, 3, 4, 5,
+		};
+		
+		int[] filter_weekend = {
+			0, 6,
+		};
+
+		long start = 0;
+		long end = 0;
+		long actual = 0;
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-01 00:00:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		assertEquals(1, actual);
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		assertEquals(0, actual);
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-08 00:00:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		assertEquals(6, actual);
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		assertEquals(2, actual);
+		
+		start = parseDateTime("2012-12-31 00:00:00.000");
+		end = parseDateTime("2013-01-08 23:59:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		assertEquals(7, actual);
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		assertEquals(2, actual);
+		
+		start = parseDateTime("2012-12-31 12:00:00.000");
+		end = parseDateTime("2013-01-08 23:59:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end);
+		assertEquals(7, actual);
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		assertEquals(2, actual);
+	}
+	
 }
