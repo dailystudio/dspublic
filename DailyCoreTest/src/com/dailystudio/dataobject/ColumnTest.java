@@ -250,6 +250,246 @@ public class ColumnTest extends AndroidTestCase {
 				column2.plus(column1));
 	}
 	
+	public void testMINUSOperator() {
+		Column column1 = null;
+		Column column2 = null;
+		
+		column1 = new IntegerColumn("intVal1");
+		assertNotNull(column1);
+		column2 = new IntegerColumn("intVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( intVal1 ) - ( intVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( intVal2 ) - ( intVal1 ) )"), 
+				column2.minus(column1));
+
+		column1 = new LongColumn("longVal1");
+		assertNotNull(column1);
+		column2 = new LongColumn("longVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( longVal1 ) - ( longVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( longVal2 ) - ( longVal1 ) )"), 
+				column2.minus(column1));
+
+		column1 = new DoubleColumn("dbVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( dbVal1 ) - ( dbVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) - ( dbVal1 ) )"), 
+				column2.minus(column1));
+
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new TextColumn("textVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( textVal1 ) - ( textVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( textVal2 ) - ( textVal1 ) )"), 
+				column2.minus(column1));
+		
+		column1 = new TimeColumn("timeVal1");
+		assertNotNull(column1);
+		column2 = new TimeColumn("timeVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( timeVal1 ) - ( timeVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( timeVal2 ) - ( timeVal1 ) )"), 
+				column2.minus(column1));
+		
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		
+		assertEquals(new QueryToken("( ( textVal1 ) - ( dbVal2 ) )"), 
+				column1.minus(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) - ( textVal1 ) )"), 
+				column2.minus(column1));
+	}
+	
+	public void testMULTIPLEOperator() {
+		Column column1 = null;
+		Column column2 = null;
+		
+		column1 = new IntegerColumn("intVal1");
+		assertNotNull(column1);
+		column2 = new IntegerColumn("intVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( intVal1 ) * ( intVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( intVal2 ) * ( intVal1 ) )"), 
+				column2.multiple(column1));
+
+		column1 = new LongColumn("longVal1");
+		assertNotNull(column1);
+		column2 = new LongColumn("longVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( longVal1 ) * ( longVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( longVal2 ) * ( longVal1 ) )"), 
+				column2.multiple(column1));
+
+		column1 = new DoubleColumn("dbVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( dbVal1 ) * ( dbVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) * ( dbVal1 ) )"), 
+				column2.multiple(column1));
+
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new TextColumn("textVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( textVal1 ) * ( textVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( textVal2 ) * ( textVal1 ) )"), 
+				column2.multiple(column1));
+		
+		column1 = new TimeColumn("timeVal1");
+		assertNotNull(column1);
+		column2 = new TimeColumn("timeVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( timeVal1 ) * ( timeVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( timeVal2 ) * ( timeVal1 ) )"), 
+				column2.multiple(column1));
+		
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		
+		assertEquals(new QueryToken("( ( textVal1 ) * ( dbVal2 ) )"), 
+				column1.multiple(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) * ( textVal1 ) )"), 
+				column2.multiple(column1));
+	}
+	
+	public void testDIVIDEOperator() {
+		Column column1 = null;
+		Column column2 = null;
+		
+		column1 = new IntegerColumn("intVal1");
+		assertNotNull(column1);
+		column2 = new IntegerColumn("intVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( intVal1 ) / ( intVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( intVal2 ) / ( intVal1 ) )"), 
+				column2.divide(column1));
+
+		column1 = new LongColumn("longVal1");
+		assertNotNull(column1);
+		column2 = new LongColumn("longVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( longVal1 ) / ( longVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( longVal2 ) / ( longVal1 ) )"), 
+				column2.divide(column1));
+
+		column1 = new DoubleColumn("dbVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( dbVal1 ) / ( dbVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) / ( dbVal1 ) )"), 
+				column2.divide(column1));
+
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new TextColumn("textVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( textVal1 ) / ( textVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( textVal2 ) / ( textVal1 ) )"), 
+				column2.divide(column1));
+		
+		column1 = new TimeColumn("timeVal1");
+		assertNotNull(column1);
+		column2 = new TimeColumn("timeVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( timeVal1 ) / ( timeVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( timeVal2 ) / ( timeVal1 ) )"), 
+				column2.divide(column1));
+		
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		
+		assertEquals(new QueryToken("( ( textVal1 ) / ( dbVal2 ) )"), 
+				column1.divide(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) / ( textVal1 ) )"), 
+				column2.divide(column1));
+	}
+	
+	public void testMODULOperator() {
+		Column column1 = null;
+		Column column2 = null;
+		
+		column1 = new IntegerColumn("intVal1");
+		assertNotNull(column1);
+		column2 = new IntegerColumn("intVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( intVal1 ) % ( intVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( intVal2 ) %( intVal1 ) )"), 
+				column2.modulo(column1));
+
+		column1 = new LongColumn("longVal1");
+		assertNotNull(column1);
+		column2 = new LongColumn("longVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( longVal1 ) % ( longVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( longVal2 ) % ( longVal1 ) )"), 
+				column2.modulo(column1));
+
+		column1 = new DoubleColumn("dbVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( dbVal1 ) % ( dbVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) % ( dbVal1 ) )"), 
+				column2.modulo(column1));
+
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new TextColumn("textVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( textVal1 ) % ( textVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( textVal2 ) % ( textVal1 ) )"), 
+				column2.modulo(column1));
+		
+		column1 = new TimeColumn("timeVal1");
+		assertNotNull(column1);
+		column2 = new TimeColumn("timeVal2");
+		assertNotNull(column2);
+		assertEquals(new QueryToken("( ( timeVal1 ) % ( timeVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( timeVal2 ) % ( timeVal1 ) )"), 
+				column2.modulo(column1));
+		
+		column1 = new TextColumn("textVal1");
+		assertNotNull(column1);
+		column2 = new DoubleColumn("dbVal2");
+		assertNotNull(column2);
+		
+		assertEquals(new QueryToken("( ( textVal1 ) % ( dbVal2 ) )"), 
+				column1.modulo(column2));
+		assertEquals(new QueryToken("( ( dbVal2 ) % ( textVal1 ) )"), 
+				column2.modulo(column1));
+	}
+	
 	public void testGTOperator() {
 		Column column = null;
 		

@@ -141,6 +141,22 @@ public abstract class Column {
 		return new ExpressionToken(this).plus(new ExpressionToken(column));
 	}
 
+	public ExpressionToken minus(Column column) {
+		return new ExpressionToken(this).minus(new ExpressionToken(column));
+	}
+
+	public ExpressionToken multiple(Column column) {
+		return new ExpressionToken(this).multiple(new ExpressionToken(column));
+	}
+
+	public ExpressionToken divide(Column column) {
+		return new ExpressionToken(this).divide(new ExpressionToken(column));
+	}
+
+	public ExpressionToken modulo(Column column) {
+		return new ExpressionToken(this).modulo(new ExpressionToken(column));
+	}
+
 	public ExpressionToken eq(Object value) {
 		return binaryOperator(
 				Expression.OPERATOR_EQ, value);
