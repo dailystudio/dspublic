@@ -33,6 +33,81 @@ public class ExpressionTokenTest extends ActivityTestCase {
 		assertEquals(new QueryToken("a < 10"), token);
 	}
 	
+	public void testPlusOperation() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		assertNotNull(token1);
+		
+		token2 = new ExpressionToken("def");
+		assertNotNull(token2);
+
+		token = token1.plus(token2);
+		assertEquals(new QueryToken("( ( abc ) + ( def ) )"), token);
+	}
+
+	public void testMinusOperation() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		assertNotNull(token1);
+		
+		token2 = new ExpressionToken("def");
+		assertNotNull(token2);
+
+		token = token1.minus(token2);
+		assertEquals(new QueryToken("( ( abc ) - ( def ) )"), token);
+	}
+
+	public void testMultipleOperation() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		assertNotNull(token1);
+		
+		token2 = new ExpressionToken("def");
+		assertNotNull(token2);
+
+		token = token1.multiple(token2);
+		assertEquals(new QueryToken("( ( abc ) * ( def ) )"), token);
+	}
+
+	public void testDivideOperation() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		assertNotNull(token1);
+		
+		token2 = new ExpressionToken("def");
+		assertNotNull(token2);
+
+		token = token1.divide(token2);
+		assertEquals(new QueryToken("( ( abc ) / ( def ) )"), token);
+	}
+
+	public void testModuloOperation() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		assertNotNull(token1);
+		
+		token2 = new ExpressionToken("def");
+		assertNotNull(token2);
+
+		token = token1.modulo(token2);
+		assertEquals(new QueryToken("( ( abc ) % ( def ) )"), token);
+	}
+
 	public void testAndOperation() {
 		Column column = null;
 		

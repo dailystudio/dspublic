@@ -1,11 +1,18 @@
 package com.dailystudio.dataobject.query;
 
+import com.dailystudio.dataobject.Column;
+
 public class QueryToken {
 	
 	protected StringBuilder mTokenBuilder = null;
 	
 	public QueryToken() {
-		this(null);
+		this((String)null);
+	}
+
+	public QueryToken(Column column) {
+		this((column == null) ? 
+				(String)null : column.getName());
 	}
 
 	public QueryToken(String token) {
@@ -17,10 +24,11 @@ public class QueryToken {
 	}
 	
 	protected QueryToken binaryOperator(String operator, QueryToken token) {
-		return binaryOperator(operator, token, true);
+		return binaryOperator(operator, token, true, false);
 	}
 
-	protected QueryToken binaryOperator(String operator, QueryToken token, boolean withBrace) {
+	protected QueryToken binaryOperator(String operator, QueryToken token, 
+			boolean withBrace, boolean prioritized) {
 		if (operator == null || token == null) {
 			return this;
 		}
@@ -32,6 +40,10 @@ public class QueryToken {
 		
 		if (mTokenBuilder == null || mTokenBuilder.length() <= 0) {
 			return this;
+		}
+		
+		if (prioritized) {
+			mTokenBuilder.insert(0, Expression.OPERATOR_LEFT_BRACE);
 		}
 		
 		if (withBrace) {
@@ -46,6 +58,10 @@ public class QueryToken {
 		}
 		mTokenBuilder.append(tstr);
 		if (withBrace) {
+			mTokenBuilder.append(Expression.OPERATOR_RIGHT_BRACE);
+		}
+		
+		if (prioritized) {
 			mTokenBuilder.append(Expression.OPERATOR_RIGHT_BRACE);
 		}
 		

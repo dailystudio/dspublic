@@ -136,7 +136,11 @@ public abstract class Column {
 	 */
 	private static final ExpressionToken sEmtpyExpToken = new ExpressionToken();
 	private static final OrderingToken sEmtpyOrderToken = new OrderingToken();
-	
+
+	public ExpressionToken plus(Column column) {
+		return new ExpressionToken(this).plus(new ExpressionToken(column));
+	}
+
 	public ExpressionToken eq(Object value) {
 		return binaryOperator(
 				Expression.OPERATOR_EQ, value);

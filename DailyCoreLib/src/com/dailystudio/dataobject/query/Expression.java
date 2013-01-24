@@ -10,6 +10,12 @@ public class Expression {
 	public static String OPERATOR_LEFT_BRACE = "( ";
 	public static String OPERATOR_RIGHT_BRACE = " )";
 
+	public static String OPERATOR_PLUS = " + ";
+	public static String OPERATOR_MINUS = " - ";
+	public static String OPERATOR_MULTIPLE = " * ";
+	public static String OPERATOR_DIVIDE = " / ";
+	public static String OPERATOR_MODULO = " % ";
+	
 	public static String OPERATOR_AND = " AND ";
 	public static String OPERATOR_OR = " OR ";
 

@@ -11,7 +11,7 @@ public class OrderingToken extends QueryToken {
 	}
 	
 	public OrderingToken with (OrderingToken token) {
-		return (OrderingToken) binaryOperator(Expression.OPERATOR_WITH, token, false);
+		return (OrderingToken) binaryOperator(Expression.OPERATOR_WITH, token, false, false);
 	}
 	
 }
