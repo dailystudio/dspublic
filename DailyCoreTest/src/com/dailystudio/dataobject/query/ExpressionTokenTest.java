@@ -135,6 +135,45 @@ public class ExpressionTokenTest extends ActivityTestCase {
 		token.or(column.gt(2000));
 		assertEquals(new QueryToken("( intVal < 1000 ) OR ( intVal > 2000 )"), token);
 	}
+	
+	public void testComparisonOperations() {
+		ExpressionToken token1 = null;
+		ExpressionToken token2 = null;
+		ExpressionToken token = null;
+		
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(1);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(123456789l);
+		token = token1.eq(token2);
+		assertEquals(new QueryToken("( abc ) == ( 123456789 )"), token);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(3.5f);
+		token = token1.neq(token2);
+		assertEquals(new QueryToken("( abc ) != ( 3.5 )"), token);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken("'hello world'");
+		token = token1.lt(token2);
+		assertEquals(new QueryToken("( abc ) < ( 'hello world' )"), token);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(1);
+		token = token1.lte(token2);
+		assertEquals(new QueryToken("( abc ) <= ( 1 )"), token);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(1);
+		token = token1.gt(token2);
+		assertEquals(new QueryToken("( abc ) > ( 1 )"), token);
+
+		token1 = new ExpressionToken("abc");
+		token2 = new ExpressionToken(1);
+		token = token1.gte(token2);
+		assertEquals(new QueryToken("( abc ) >= ( 1 )"), token);
+	}
 
 	public void testSamples() {
 		Template templ = new Template();

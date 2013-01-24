@@ -440,7 +440,7 @@ public class ColumnTest extends AndroidTestCase {
 		assertNotNull(column2);
 		assertEquals(new QueryToken("( ( intVal1 ) % ( intVal2 ) )"), 
 				column1.modulo(column2));
-		assertEquals(new QueryToken("( ( intVal2 ) %( intVal1 ) )"), 
+		assertEquals(new QueryToken("( ( intVal2 ) % ( intVal1 ) )"), 
 				column2.modulo(column1));
 
 		column1 = new LongColumn("longVal1");

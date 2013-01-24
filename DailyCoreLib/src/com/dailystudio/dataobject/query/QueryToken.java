@@ -24,11 +24,11 @@ public class QueryToken {
 	}
 	
 	protected QueryToken binaryOperator(String operator, QueryToken token) {
-		return binaryOperator(operator, token, true, false);
+		return binaryOperator(operator, token, true, true, false);
 	}
 
 	protected QueryToken binaryOperator(String operator, QueryToken token, 
-			boolean withBrace, boolean prioritized) {
+			boolean withSpace, boolean withBrace, boolean prioritized) {
 		if (operator == null || token == null) {
 			return this;
 		}
@@ -51,7 +51,13 @@ public class QueryToken {
 			mTokenBuilder.append(Expression.OPERATOR_RIGHT_BRACE);
 		}
 		
+		if (withSpace) {
+			mTokenBuilder.append(' ');
+		}
 		mTokenBuilder.append(operator);
+		if (withSpace) {
+			mTokenBuilder.append(' ');
+		}
 		
 		if (withBrace) {
 			mTokenBuilder.append(Expression.OPERATOR_LEFT_BRACE);
