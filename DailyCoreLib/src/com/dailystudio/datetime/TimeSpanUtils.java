@@ -18,8 +18,15 @@ public class TimeSpanUtils {
 		
 		final long dstart = Math.max(start1, start2);
 		final long dend = Math.min(end1, end2);
-
-		return (dend - dstart);
+/*		Logger.debug("dstart = %s[%d], dend = %s[%d]",
+				CalendarUtils.timeToReadableString(dstart),
+				dstart,
+				CalendarUtils.timeToReadableString(dend),
+				dend);
+*/
+		final long overlap = (dend - dstart);
+		
+		return (overlap >= 0 ? overlap : 0);
 	}
 	
 	public static long calculateDays(long start, long end) {

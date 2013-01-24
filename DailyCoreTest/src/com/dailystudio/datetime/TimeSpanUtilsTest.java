@@ -444,14 +444,14 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		start = parseDateTime("2012-12-31 00:00:00.000");
 		end = parseDateTime("2013-01-01 00:00:00.000");
 		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
-		assertEquals(1, actual);
+		assertEquals(2, actual);
 		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
 		assertEquals(0, actual);
 		
 		start = parseDateTime("2012-12-31 00:00:00.000");
 		end = parseDateTime("2013-01-08 00:00:00.000");
 		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
-		assertEquals(6, actual);
+		assertEquals(7, actual);
 		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
 		assertEquals(2, actual);
 		
@@ -463,11 +463,11 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		assertEquals(2, actual);
 		
 		start = parseDateTime("2012-12-31 12:00:00.000");
-		end = parseDateTime("2013-01-08 23:59:00.000");
-		actual = TimeSpanUtils.calculateDays(start, end);
-		assertEquals(7, actual);
+		end = parseDateTime("2013-01-05 23:59:00.000");
+		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		assertEquals(5, actual);
 		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
-		assertEquals(2, actual);
+		assertEquals(1, actual);
 	}
 	
 	public void testCalculateOverlapDuration() {
@@ -478,9 +478,9 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		long actual = 0;
 		
 		start1 = parseDateTime("2012-12-31 00:00:00.000");
-		end1 = parseDateTime("2013-12-31 06:00:00.000");
-		start2 = parseDateTime("2012-12-31 2:00:00.000");
-		end2 = parseDateTime("2013-12-31 12:00:00.000");
+		end1 = parseDateTime("2012-12-31 06:00:00.000");
+		start2 = parseDateTime("2012-12-31 02:00:00.000");
+		end2 = parseDateTime("2012-12-31 12:00:00.000");
 		actual = TimeSpanUtils.calculateOverlapDuration(
 				start1, end1, start2, end2);
 		assertEquals((4 * CalendarUtils.HOUR_IN_MILLIS), actual);
@@ -505,13 +505,13 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		end2 = parseDateTime("2013-01-26 12:00:00.000");
 		actual = TimeSpanUtils.calculateOverlapDuration(
 				start1, end1, start2, end2);
-		assertEquals((CalendarUtils.DAY_IN_MILLIS
+		assertEquals((2 * CalendarUtils.DAY_IN_MILLIS
 				+ 3 * CalendarUtils.HOUR_IN_MILLIS
 				+ 10 * CalendarUtils.MINUTE_IN_MILLIS
 				+ 234), actual);
 		actual = TimeSpanUtils.calculateOverlapDuration(
 				start2, end2, start1, end1);
-		assertEquals((CalendarUtils.DAY_IN_MILLIS
+		assertEquals((2 * CalendarUtils.DAY_IN_MILLIS
 				+ 3 * CalendarUtils.HOUR_IN_MILLIS
 				+ 10 * CalendarUtils.MINUTE_IN_MILLIS
 				+ 234), actual);
