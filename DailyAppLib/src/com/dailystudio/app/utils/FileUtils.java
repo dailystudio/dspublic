@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.dailystudio.development.Logger;
+import com.dailystudio.utils.ResourcesUtils;
 
 public class FileUtils {
 
@@ -232,6 +233,33 @@ public class FileUtils {
 		}
 		
 		return getFileContent(istream, encoding);
+	}
+	
+	public static boolean copyAssetFile(Context context, 
+			String assetFile, String dstFile) throws IOException {
+		if (context == null 
+				|| assetFile == null
+				|| dstFile == null) {
+			return false;
+		}
+		
+		final AssetManager asstmgr = context.getAssets();
+		if (asstmgr == null) {
+			return false;
+		}
+		
+		final String encoding = detectFileEncoding(asstmgr.open(assetFile));
+		Logger.debug("encoding = %s", encoding);
+
+		InputStream istream = asstmgr.open(assetFile);
+		if (istream == null) {
+			return false;
+		}
+		
+		FileOutputStream ostream = 
+				new FileOutputStream(dstFile);
+
+		return ResourcesUtils.copyToFile(istream, ostream);
 	}
 	
 	public static String detectFileEncoding(String filename) {

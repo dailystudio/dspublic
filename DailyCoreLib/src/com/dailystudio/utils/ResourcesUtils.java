@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 import com.dailystudio.system.CommandShell;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -43,6 +44,7 @@ public class ResourcesUtils {
 		return markAsExecutable(dstFile);
 	}
 
+	@SuppressLint("WorldReadableFiles")
 	public static boolean copyRawToFile(Context srcContext, int resId, Context dstContext, String fname) {
 		if (srcContext == null || fname == null) {
 			return false;
@@ -108,7 +110,7 @@ public class ResourcesUtils {
 				&& CommandShell.getExitValue(ret) == 0);
 	}
 
-	static boolean copyToFile(InputStream input, FileOutputStream output) {
+	public static boolean copyToFile(InputStream input, FileOutputStream output) {
 		if (input == null || output == null) {
 			return false;
 		}
