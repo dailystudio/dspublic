@@ -21,6 +21,7 @@ import org.mozilla.universalchardet.UniversalDetector;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import com.dailystudio.development.Logger;
 import com.dailystudio.utils.ResourcesUtils;
@@ -235,6 +236,36 @@ public class FileUtils {
 		return getFileContent(istream, encoding);
 	}
 	
+	public static boolean copyRawFile(Context context, String rawFile, 
+			String dstFile) throws IOException {
+		if (context == null 
+				|| rawFile == null
+				|| dstFile == null) {
+			return false;
+		}
+		
+		final Resources res = context.getResources();
+		if (res == null) {
+			return false;
+		}
+		
+		final int resId = res.getIdentifier(rawFile, 
+				"raw", context.getPackageName());
+		if (resId <= 0) {
+			return false;
+		}
+		
+		InputStream istream = res.openRawResource(resId);
+		if (istream == null) {
+			return false;
+		}		
+		
+		FileOutputStream ostream = 
+				new FileOutputStream(dstFile);
+
+		return ResourcesUtils.copyToFile(istream, ostream);
+	}
+	
 	public static boolean copyAssetFile(Context context, 
 			String assetFile, String dstFile) throws IOException {
 		if (context == null 
@@ -248,9 +279,6 @@ public class FileUtils {
 			return false;
 		}
 		
-		final String encoding = detectFileEncoding(asstmgr.open(assetFile));
-		Logger.debug("encoding = %s", encoding);
-
 		InputStream istream = asstmgr.open(assetFile);
 		if (istream == null) {
 			return false;
