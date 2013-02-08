@@ -29,7 +29,7 @@ public class CalendarUtils {
 		}
 	}
 	
-	public static final long getStartOfDay (long mills) {
+	public synchronized static final long getStartOfDay (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -43,7 +43,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getEndOfDay (long mills) {
+	public synchronized static final long getEndOfDay (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -57,7 +57,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getStartOfWeek (long mills) {
+	public synchronized static final long getStartOfWeek (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -74,7 +74,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getEndOfWeek (long mills) {
+	public synchronized static final long getEndOfWeek (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -91,7 +91,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getStartOfMonth (long mills) {
+	public synchronized static final long getStartOfMonth (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -107,7 +107,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getEndOfMonth (long mills) {
+	public synchronized static final long getEndOfMonth (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -126,7 +126,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 
-	public static final long getStartOfYear (long mills) {
+	public synchronized static final long getStartOfYear (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -143,7 +143,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
-	public static final long getEndOfYear (long mills) {
+	public synchronized static final long getEndOfYear (long mills) {
 		if (sCalendar == null) {
 			return mills;
 		}
@@ -160,7 +160,7 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 
-	public static final int getYear (long mills) {
+	public synchronized static final int getYear (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -170,7 +170,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.YEAR);
 	}
 
-	public static final int getMonth (long mills) {
+	public synchronized static final int getMonth (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -180,7 +180,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.MONTH);
 	}
 
-	public static final int getWeek (long mills) {
+	public synchronized static final int getWeek (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -198,7 +198,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.WEEK_OF_YEAR);
 	}
 
-	public static final int getDay (long mills) {
+	public synchronized static final int getDay (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -207,7 +207,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.DAY_OF_MONTH);
 	}
 
-	public static final int getWeekDay (long mills) {
+	public synchronized static final int getWeekDay (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -221,7 +221,7 @@ public class CalendarUtils {
 		return day;
 	}
 
-	public static final int getHour (long mills) {
+	public synchronized static final int getHour (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -231,7 +231,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.HOUR_OF_DAY);
 	}
 	
-	public static final int getMinute (long mills) {
+	public synchronized static final int getMinute (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
@@ -241,7 +241,7 @@ public class CalendarUtils {
 		return sCalendar.get(Calendar.MINUTE);
 	}
 	
-	public static final int getSecond (long mills) {
+	public synchronized static final int getSecond (long mills) {
 		if (sCalendar == null) {
 			return -1;
 		}
