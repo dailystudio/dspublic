@@ -30,11 +30,12 @@ class OpenedDatabaseCloseReceiver extends BroadcastReceiver {
 			}
 			
 			OpenedDatabase db = odbmgr.removeObject(serial);
-/*			Logger.debug("CLOSE: serial = %d, db = %s", 
-					serial, db);
-*/			
+			
 			odbmgr.removeObject(db);
-		}
+/*			
+			Logger.debug("CLOSE: serial = %d, db = %s [remained: %d]", 
+					serial, db, odbmgr.getCount());
+*/		}
 	}
 
 }

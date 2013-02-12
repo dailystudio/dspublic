@@ -13,7 +13,11 @@ public class OpenedDatabaseManager extends SingletonManager<Long, OpenedDatabase
 	}
 	
 	@Override
-	public void addObject(OpenedDatabase object) {
+	public synchronized void addObject(OpenedDatabase object) {
+		/*
+		 * Synchronzied this method to avoid register and unregister
+		 * close db receiver issue;
+		 */
 		final int prevCount = getCount();
 		
 		if (prevCount == 0) {
@@ -26,7 +30,11 @@ public class OpenedDatabaseManager extends SingletonManager<Long, OpenedDatabase
 	}
 	
 	@Override
-	public OpenedDatabase removeObject(Long key) {
+	public synchronized OpenedDatabase removeObject(Long key) {
+		/*
+		 * Synchronzied this method to avoid register and unregister
+		 * close db receiver issue;
+		 */
 		OpenedDatabase odb = super.removeObject(key);
 		
 		if (odb != null) {
@@ -47,6 +55,9 @@ public class OpenedDatabaseManager extends SingletonManager<Long, OpenedDatabase
 			return false;
 		}
 		
+		synchronized (mReceiver) {
+			
+		}
 		IntentFilter filter = 
 			new IntentFilter(OpenedDatabaseCloseReceiver.ACTION_CLOSE_DATABASE);
 		
@@ -75,6 +86,7 @@ public class OpenedDatabaseManager extends SingletonManager<Long, OpenedDatabase
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	private OpenedDatabaseCloseReceiver mReceiver = new OpenedDatabaseCloseReceiver();

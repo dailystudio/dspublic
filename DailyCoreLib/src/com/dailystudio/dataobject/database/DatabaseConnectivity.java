@@ -359,6 +359,7 @@ public class DatabaseConnectivity extends AbsDatabaseConnectivity {
 			Class<? extends DatabaseObject> projectionClass) {
 		final long serial = System.currentTimeMillis();
 		
+//		Logger.debug("OPEN DB: serial = %d", serial);
 		Cursor c = doQueryCursor(serial, query, projectionClass);
 		if (c == null) {
 			return null;
@@ -399,6 +400,7 @@ public class DatabaseConnectivity extends AbsDatabaseConnectivity {
 		i.putExtra(OpenedDatabaseCloseReceiver.EXTRA_SERIAL, serial);
 		
 		mContext.sendBroadcast(i);
+//		Logger.debug("CLOSE DB: serial = %d", serial);
 	}
 
 	@Override

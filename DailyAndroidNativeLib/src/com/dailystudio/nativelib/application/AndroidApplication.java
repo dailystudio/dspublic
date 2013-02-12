@@ -272,28 +272,7 @@ public class AndroidApplication extends AndroidObject {
 	}
 	
 	public boolean isInstalled(Context context) {
-		if (context == null || mPackageName == null) {
-			return false;
-		}
-		
-		final PackageManager pkgmgr = context.getPackageManager();
-		if (pkgmgr == null) {
-			return false;
-		}
-			
-		boolean installed = false;
-		try {
-			ApplicationInfo aInfo = 
-				pkgmgr.getApplicationInfo(mPackageName, 0);
-			
-			installed = (aInfo != null);
-		} catch (NameNotFoundException e) {
-//			Logger.warnning("check installation failure: %s", e.toString());
-					
-			installed = false;
-		}
-
-		return installed;
+		return isInstalled(context, mPackageName);
 	}
 	
 	private Intent getLaunchIntent(Context context) {
@@ -397,6 +376,31 @@ public class AndroidApplication extends AndroidObject {
 		
 		return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) 
 					== ApplicationInfo.FLAG_SYSTEM);
+	}
+	
+	public static boolean isInstalled(Context context, String pkg) {
+		if (context == null || pkg == null) {
+			return false;
+		}
+		
+		final PackageManager pkgmgr = context.getPackageManager();
+		if (pkgmgr == null) {
+			return false;
+		}
+			
+		boolean installed = false;
+		try {
+			ApplicationInfo aInfo = 
+				pkgmgr.getApplicationInfo(pkg, 0);
+			
+			installed = (aInfo != null);
+		} catch (NameNotFoundException e) {
+//			Logger.warnning("check installation failure: %s", e.toString());
+					
+			installed = false;
+		}
+
+		return installed;
 	}
 
 }
