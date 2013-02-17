@@ -271,6 +271,19 @@ public class AndroidApplication extends AndroidObject {
 		ActivityLauncher.launchActivity(context, launchIntent);
 	}
 	
+	public void manage(Context context) {
+        String packageName = getPackageName();
+        
+        Intent intent = new Intent(
+        		"android.settings.APPLICATION_DETAILS_SETTINGS",
+                Uri.fromParts("package", packageName, null));
+        
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
+        		| Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		
+		ActivityLauncher.launchActivity(context, intent);
+	}
+	
 	public boolean isInstalled(Context context) {
 		return isInstalled(context, mPackageName);
 	}
