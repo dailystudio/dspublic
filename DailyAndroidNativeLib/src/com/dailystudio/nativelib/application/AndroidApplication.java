@@ -75,6 +75,9 @@ public class AndroidApplication extends AndroidObject {
 	private long mFirstInstallTime = 0l;
 	private long mLastUpdateTime = 0l;
 	
+	private String mAppVerName;
+	private int mAppVerCode = 0;
+	
 	public AndroidApplication(PackageInfo pInfo) {
 		if (pInfo != null) {
 			mPackageName = pInfo.packageName;
@@ -85,6 +88,9 @@ public class AndroidApplication extends AndroidObject {
 			if (pInfo.applicationInfo != null) {
 				mFlags = pInfo.applicationInfo.flags;
 			}
+			
+			mAppVerCode = pInfo.versionCode;
+			mAppVerName = pInfo.versionName;
 		}
 	}
 	
@@ -190,6 +196,14 @@ public class AndroidApplication extends AndroidObject {
 	public boolean isPersistent() {
 		return ((mFlags & ApplicationInfo.FLAG_PERSISTENT) 
 				== ApplicationInfo.FLAG_PERSISTENT);
+	}
+	
+	public String getVersionName() {
+		return mAppVerName;
+	}
+	
+	public int getVersionCode() {
+		return mAppVerCode;
 	}
 	
 	@Override
