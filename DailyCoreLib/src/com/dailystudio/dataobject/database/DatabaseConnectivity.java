@@ -453,4 +453,14 @@ public class DatabaseConnectivity extends AbsDatabaseConnectivity {
 		return new DatabaseUpdateInfo(newVer, oldVer);
 	}
 
+	public Uri getDatabaseObserverUri() {
+		final String database = DatabaseObject.classToDatabase(mObjectClass);
+		final String table = DatabaseObject.classToTable(mObjectClass);
+
+		Uri resUri = ProviderUriBuilder.buildResultUri(
+				mAuthority, database, getDatabaseVersion(), table);
+		
+		return resUri;
+	}
+
 }

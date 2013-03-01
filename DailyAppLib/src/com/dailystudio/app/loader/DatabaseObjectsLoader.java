@@ -4,31 +4,17 @@ import java.util.List;
 
 import com.dailystudio.dataobject.DatabaseObject;
 import com.dailystudio.dataobject.database.DatabaseConnectivity;
-import com.dailystudio.dataobject.database.DatabaseObserver;
 import com.dailystudio.dataobject.query.Query;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
 
 public abstract class DatabaseObjectsLoader<T extends DatabaseObject> 
 	extends AbsAsyncDataLoader<List<T>> {
 
-	private class PrivateDatabaseObserver extends DatabaseObserver {
+    final ForceLoadContentObserver mObserver = new ForceLoadContentObserver();
 
-		public PrivateDatabaseObserver(Context context,
-				Class<? extends DatabaseObject> klass) {
-			super(context, klass);
-		}
-
-		@Override
-		protected void onDatabaseChanged(Context context,
-				Class<? extends DatabaseObject> objectClass) {
-			onContentChanged();
-		}
-		
-	};
-	
-	private DatabaseObserver mDataObserver;
-	
 	public DatabaseObjectsLoader(Context context) {
 		super(context);
 	}
@@ -36,9 +22,8 @@ public abstract class DatabaseObjectsLoader<T extends DatabaseObject>
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> loadInBackground() {
-		if (mDataObserver != null) {
-			mDataObserver.unregister();
-			mDataObserver = null;
+		if (mObserver != null) {
+			getContext().getContentResolver().unregisterContentObserver(mObserver);
 		}
 		
 		final Class<? extends DatabaseObject> objectClass = getObjectClass();
@@ -67,8 +52,13 @@ public abstract class DatabaseObjectsLoader<T extends DatabaseObject>
 			data = connectivity.query(query, projectionClass);
 		}
 		
-		mDataObserver = new PrivateDatabaseObserver(getContext(), objectClass);
-		mDataObserver.register();
+		
+		Uri uri = connectivity.getDatabaseObserverUri();
+		if (uri != null) {
+			ContentResolver cr = getContext().getContentResolver();
+			
+			cr.registerContentObserver(uri, true, mObserver);
+		}
 		
 		return (List<T>)data;
 	}
