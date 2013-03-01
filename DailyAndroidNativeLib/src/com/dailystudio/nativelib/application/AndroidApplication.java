@@ -302,7 +302,7 @@ public class AndroidApplication extends AndroidObject {
 		return isInstalled(context, mPackageName);
 	}
 	
-	private Intent getLaunchIntent(Context context) {
+	public Intent getLaunchIntent(Context context) {
 		if (context == null || mPackageName == null) {
 			return null;
 		}
@@ -316,6 +316,17 @@ public class AndroidApplication extends AndroidObject {
 		i = pkgmgr.getLaunchIntentForPackage(mPackageName);
 		
 		return i;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s(0x%08x): pkg = %s, [ver(%d, %s), flags: 0x%08x]",
+				getClass().getSimpleName(),
+				hashCode(),
+				getPackageName(),
+				getVersionCode(),
+				getVersionName(),
+				getFlags());
 	}
 
 	public boolean isLaunchable(Context context) {
