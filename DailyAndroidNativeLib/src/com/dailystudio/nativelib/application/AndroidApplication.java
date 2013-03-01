@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -414,6 +415,43 @@ public class AndroidApplication extends AndroidObject {
 		
 		return ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) 
 					== ApplicationInfo.FLAG_SYSTEM);
+	}
+	
+	public static final boolean isDefaultLauncherApp(Context context, String pkg) {
+		if (context == null || pkg == null) {
+			return false;
+		}
+		
+		final PackageManager pkgmgr = context.getPackageManager();
+		if (pkgmgr == null) {
+			return false;
+		}
+		
+		List<ResolveInfo> launcherInfos = null;
+		
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+
+		launcherInfos = pkgmgr.queryIntentActivities(intent, 0);
+		if (launcherInfos == null) {
+			return false;
+		}
+		
+		for (ResolveInfo rInfo: launcherInfos) {
+			if (rInfo.activityInfo == null) {
+				continue;
+			}
+			
+			if (rInfo.activityInfo.applicationInfo == null) {
+				continue;
+			}
+			
+			if (pkg.equals(rInfo.activityInfo.applicationInfo.packageName)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	public static boolean isInstalled(Context context, String pkg) {
