@@ -74,10 +74,19 @@ public class TimeSpanUtils {
 	}
 
 	public static long[] calculateHourDistribution(long start, long end) {
-		return calculateHourDistribution(null, start, end);
+		return calculateHourDistribution(null, start, end, null);
 	}
 	
 	public static long[] calculateHourDistribution(long[] inputDistrib, long start, long end) {
+		return calculateHourDistribution(inputDistrib, start, end, null);
+	}
+	
+	public static long[] calculateHourDistribution(long start, long end, int[] filterWeekdays) {
+		return calculateHourDistribution(null, start, end, filterWeekdays);
+	}
+	
+	public static long[] calculateHourDistribution(long[] inputDistrib, 
+			long start, long end, int[] filterWeekdays) {
 /*		Logger.debug("[%s - %s]",
 				CalendarUtils.timeToReadableString(start),
 				CalendarUtils.timeToReadableString(end));
@@ -113,12 +122,27 @@ public class TimeSpanUtils {
 			hoursDistribution = new long[24];
 		}
 		
+		Set<Integer> weekdays = null;
+		if (filterWeekdays != null) {
+			weekdays = new HashSet<Integer>();
+			
+			for (int fday: filterWeekdays) {
+				weekdays.add((fday == 0 ? 7 : fday));
+			}
+		}
+		
+		int weekday;
 		long time = 0;
 		long distrib = 0;
 		long dstart = 0;
 		long dend = 0;
 		int hourIndex = -1;
 		for (time = startHour; time <= endHour; time += CalendarUtils.HOUR_IN_MILLIS) {
+			weekday = CalendarUtils.getWeekDay(time);
+			if (weekdays != null && !weekdays.contains(weekday)) {
+				continue;
+			}
+			
 			hourIndex = CalendarUtils.getHour(time);
 			
 			dstart = Math.max(time, start);

@@ -10,6 +10,14 @@ import com.dailystudio.test.Asserts;
 public class TimeSpanUtilsTest extends ActivityTestCase {
 
 	private final static String PARSE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+	private final static int[] FILTER_WEEKDAYS = {
+		1, 2, 3, 4, 5,
+	};
+		
+	private final static int[] FILTER_WEEKEND = {
+		0, 6,
+	};
+
 
 	@Override
 	protected void setUp() throws Exception {
@@ -93,6 +101,71 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		};
 		
 		Asserts.assertEquals(expected, actual);
+	}
+	
+	public void testCalculateOneDayHourDistribWithFilters() {
+		final long start = parseDateTime("2012-12-12 00:00:00.000");
+		final long end = parseDateTime("2012-12-13 00:00:00.000");
+		
+		long[] actual1 = TimeSpanUtils.calculateHourDistribution(start, end,
+				FILTER_WEEKDAYS);
+		long[] expected1 = {
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 00 ~ Hour 01 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 01 ~ Hour 02 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 02 ~ Hour 03 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 03 ~ Hour 04 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 04 ~ Hour 05 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 05 ~ Hour 06 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 06 ~ Hour 07 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 07 ~ Hour 08 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 08 ~ Hour 09 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 09 ~ Hour 10 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 10 ~ Hour 11 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 11 ~ Hour 12 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 12 ~ Hour 13 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 13 ~ Hour 14 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 14 ~ Hour 15 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 15 ~ Hour 16 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 16 ~ Hour 17 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 17 ~ Hour 18 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 18 ~ Hour 19 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 19 ~ Hour 20 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 20 ~ Hour 21 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 21 ~ Hour 22 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 22 ~ Hour 23 */
+				CalendarUtils.HOUR_IN_MILLIS, /* Hour 23 ~ Hour 24 */
+		};
+		Asserts.assertEquals(expected1, actual1);
+
+		long[] actual2 = TimeSpanUtils.calculateHourDistribution(start, end,
+				FILTER_WEEKEND);
+		long[] expected2 = {
+				0, /* Hour 00 ~ Hour 01 */
+				0, /* Hour 01 ~ Hour 02 */
+				0, /* Hour 02 ~ Hour 03 */
+				0, /* Hour 03 ~ Hour 04 */
+				0, /* Hour 04 ~ Hour 05 */
+				0, /* Hour 05 ~ Hour 06 */
+				0, /* Hour 06 ~ Hour 07 */
+				0, /* Hour 07 ~ Hour 08 */
+				0, /* Hour 08 ~ Hour 09 */
+				0, /* Hour 09 ~ Hour 10 */
+				0, /* Hour 10 ~ Hour 11 */
+				0, /* Hour 11 ~ Hour 12 */
+				0, /* Hour 12 ~ Hour 13 */
+				0, /* Hour 13 ~ Hour 14 */
+				0, /* Hour 14 ~ Hour 15 */
+				0, /* Hour 15 ~ Hour 16 */
+				0, /* Hour 16 ~ Hour 17 */
+				0, /* Hour 17 ~ Hour 18 */
+				0, /* Hour 18 ~ Hour 19 */
+				0, /* Hour 19 ~ Hour 20 */
+				0, /* Hour 20 ~ Hour 21 */
+				0, /* Hour 21 ~ Hour 22 */
+				0, /* Hour 22 ~ Hour 23 */
+				0, /* Hour 23 ~ Hour 24 */
+		};
+		Asserts.assertEquals(expected2, actual2);
 	}
 	
 	public void testCalculatePartDay1HourDistrib() {
@@ -203,6 +276,43 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 		};
 		
 		Asserts.assertEquals(expected, actual);
+	}
+	
+	public void testCalculateOverOneDay1HourDistribWithFilter() {
+		final long start = parseDateTime("2010-01-22 00:35:12.123");
+		final long end = parseDateTime("2010-01-23 14:35:22.000");
+		
+		long[] actual1 = TimeSpanUtils.calculateHourDistribution(start, end,
+				FILTER_WEEKDAYS);
+		long[] expected1 = {
+				(24 * CalendarUtils.MINUTE_IN_MILLIS 
+					+ 47 * CalendarUtils.SECOND_IN_MILLIS 
+					+ 877), /* Hour 00 ~ Hour 01 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 02 ~ Hour 03 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 03 ~ Hour 04 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 04 ~ Hour 05 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 05 ~ Hour 06 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 06 ~ Hour 07 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 07 ~ Hour 08 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 08 ~ Hour 09 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 09 ~ Hour 10 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 10 ~ Hour 11 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 11 ~ Hour 12 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 12 ~ Hour 13 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 13 ~ Hour 14 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 14 ~ Hour 15 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 15 ~ Hour 16 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 16 ~ Hour 17 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 17 ~ Hour 18 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 18 ~ Hour 19 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 19 ~ Hour 20 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 20 ~ Hour 21 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 21 ~ Hour 22 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
+		};
+		Asserts.assertEquals(expected1, actual1);
 	}
 	
 	public void testCalculateOverOneDay2HourDistrib() {
@@ -429,44 +539,36 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 	}
 	
 	public void testCalculateDaysWithFilters() {
-		int[] filter_weekdays = {
-			1, 2, 3, 4, 5,
-		};
-		
-		int[] filter_weekend = {
-			0, 6,
-		};
-
 		long start = 0;
 		long end = 0;
 		long actual = 0;
 		
 		start = parseDateTime("2012-12-31 00:00:00.000");
 		end = parseDateTime("2013-01-01 00:00:00.000");
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKDAYS);
 		assertEquals(2, actual);
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKEND);
 		assertEquals(0, actual);
 		
 		start = parseDateTime("2012-12-31 00:00:00.000");
 		end = parseDateTime("2013-01-08 00:00:00.000");
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKDAYS);
 		assertEquals(7, actual);
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKEND);
 		assertEquals(2, actual);
 		
 		start = parseDateTime("2012-12-31 00:00:00.000");
 		end = parseDateTime("2013-01-08 23:59:00.000");
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKDAYS);
 		assertEquals(7, actual);
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKEND);
 		assertEquals(2, actual);
 		
 		start = parseDateTime("2012-12-31 12:00:00.000");
 		end = parseDateTime("2013-01-05 23:59:00.000");
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekdays);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKDAYS);
 		assertEquals(5, actual);
-		actual = TimeSpanUtils.calculateDays(start, end, filter_weekend);
+		actual = TimeSpanUtils.calculateDays(start, end, FILTER_WEEKEND);
 		assertEquals(1, actual);
 	}
 	
