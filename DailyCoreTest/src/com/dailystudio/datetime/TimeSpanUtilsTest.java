@@ -313,6 +313,37 @@ public class TimeSpanUtilsTest extends ActivityTestCase {
 				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
 		};
 		Asserts.assertEquals(expected1, actual1);
+		
+		long[] actual2 = TimeSpanUtils.calculateHourDistribution(start, end,
+				FILTER_WEEKEND);
+		long[] expected2 = {
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 00 ~ Hour 01 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 01 ~ Hour 02 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 02 ~ Hour 03 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 03 ~ Hour 04 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 04 ~ Hour 05 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 05 ~ Hour 06 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 06 ~ Hour 07 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 07 ~ Hour 08 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 08 ~ Hour 09 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 09 ~ Hour 10 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 10 ~ Hour 11 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 11 ~ Hour 12 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 12 ~ Hour 13 */
+				(1 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 13 ~ Hour 14 */
+				(35 * CalendarUtils.MINUTE_IN_MILLIS
+						+ 22 * CalendarUtils.SECOND_IN_MILLIS), /* Hour 14 ~ Hour 15 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 15 ~ Hour 16 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 16 ~ Hour 17 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 17 ~ Hour 18 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 18 ~ Hour 19 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 19 ~ Hour 20 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 20 ~ Hour 21 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 21 ~ Hour 22 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 22 ~ Hour 23 */
+				(0 * CalendarUtils.HOUR_IN_MILLIS), /* Hour 23 ~ Hour 24 */
+		};
+		Asserts.assertEquals(expected2, actual2);
 	}
 	
 	public void testCalculateOverOneDay2HourDistrib() {
