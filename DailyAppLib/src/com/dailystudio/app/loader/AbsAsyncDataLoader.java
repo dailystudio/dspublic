@@ -3,9 +3,9 @@ package com.dailystudio.app.loader;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-public abstract class AbsAsyncDataLoader<T> extends AsyncTaskLoader<T> {
+public abstract class AbsAsyncDataLoader<D> extends AsyncTaskLoader<D> {
 
-	T mData;
+	D mData;
 	
 	public AbsAsyncDataLoader(Context context) {
 		super(context);
@@ -17,7 +17,7 @@ public abstract class AbsAsyncDataLoader<T> extends AsyncTaskLoader<T> {
      * here just adds a little more logic.
      */
     @Override 
-    public void deliverResult(T data) {
+    public void deliverResult(D data) {
         if (isReset()) {
             // An async query came in while the loader is stopped.  We
             // don't need the result.
@@ -26,7 +26,7 @@ public abstract class AbsAsyncDataLoader<T> extends AsyncTaskLoader<T> {
             }
         }
         
-        T oldData = data;
+        D oldData = data;
         mData = data;
 
         if (isStarted()) {
@@ -71,7 +71,7 @@ public abstract class AbsAsyncDataLoader<T> extends AsyncTaskLoader<T> {
     /**
      * Handles a request to cancel a load.
      */
-    @Override public void onCanceled(T data) {
+    @Override public void onCanceled(D data) {
         super.onCanceled(data);
 
         // At this point we can release the resources associated with 'items'
@@ -100,7 +100,7 @@ public abstract class AbsAsyncDataLoader<T> extends AsyncTaskLoader<T> {
      * Helper function to take care of releasing resources associated
      * with an actively loaded data set.
      */
-    protected void onReleaseData(T data) {
+    protected void onReleaseData(D data) {
         // For a simple object T there is nothing to do.  For something
         // like a Cursor, we would close it here.
     }
