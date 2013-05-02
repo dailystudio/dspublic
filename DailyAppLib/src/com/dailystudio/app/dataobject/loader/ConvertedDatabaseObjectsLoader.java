@@ -1,7 +1,8 @@
-package com.dailystudio.app.loader;
+package com.dailystudio.app.dataobject.loader;
 
 import java.util.List;
 
+import com.dailystudio.app.loader.AbsAsyncDataLoader;
 import com.dailystudio.dataobject.DatabaseObject;
 import com.dailystudio.dataobject.database.DatabaseConnectivity;
 import com.dailystudio.dataobject.query.Query;

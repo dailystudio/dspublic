@@ -1,4 +1,4 @@
-package com.dailystudio.app.loader;
+package com.dailystudio.app.dataobject.loader;
 
 import com.dailystudio.dataobject.DatabaseObject;
 
