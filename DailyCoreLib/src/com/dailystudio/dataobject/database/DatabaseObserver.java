@@ -21,6 +21,10 @@ public abstract class DatabaseObserver {
 		mObjectClass = klass;
 	}
 	
+	public Class<? extends DatabaseObject> getObserverdObjectClass() {
+		return mObjectClass;
+	}
+	
 	public void register() {
 		if (mContext == null || mObjectClass == null) {
 			return;
