@@ -1,5 +1,7 @@
 package com.dailystudio.development;
 
+import com.dailystudio.BuildConfig;
+
 import android.util.Log;
 
 public class Logger {
@@ -17,7 +19,7 @@ public class Logger {
 	
 	private static final String DEBUG_MSG_TEMPL = "%s(): %s";
 	
-	private static volatile boolean sLogDebugEnabled = true;
+	private static volatile boolean sLogDebugEnabled = BuildConfig.DEBUG;
 	
 	private static void output(String format, LogToken token, Object... args) {
 		final String compose = String.format(DEBUG_MSG_TEMPL, 
