@@ -235,7 +235,23 @@ public class AndroidApplication extends AndroidObject {
 				return;
 			}
 			
-			Drawable d = aInfo.loadIcon(pkgmgr);
+			Drawable d = null;
+			if (isHiResIconRequired()
+					&& getIconDpi() != DEFAULT_ICON_DPI) {
+				d = getFullResIcon(context, aInfo.packageName, aInfo.icon);
+//				Logger.debug("use HiRes icon[%ddpi] for pkg[%s]: dimen[%-3dx%-3d]",
+//						getIconDpi(),
+//						getPackageName(), 
+//						(d == null ? 0 : d.getIntrinsicWidth()),
+//						(d == null ? 0 : d.getIntrinsicHeight()));
+			} else {
+				d = aInfo.loadIcon(pkgmgr);
+//				Logger.debug("use normal icon[%ddpi] for pkg[%s]: dimen[%-3dx%-3d]",
+//						getIconDpi(),
+//						getPackageName(), 
+//						(d == null ? 0 : d.getIntrinsicWidth()),
+//						(d == null ? 0 : d.getIntrinsicHeight()));
+			}
 			
 			final int iw = getIconWidth();
 			final int ih = getIconHeight();
@@ -479,4 +495,9 @@ public class AndroidApplication extends AndroidObject {
 		return installed;
 	}
 
+	public Drawable getFullResIcon(Context context,
+			int iconId) {
+		return getFullResIcon(context, getPackageName(), iconId);
+	}
+	
 }

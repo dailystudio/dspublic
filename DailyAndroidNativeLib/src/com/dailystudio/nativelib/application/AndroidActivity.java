@@ -62,7 +62,13 @@ public class AndroidActivity extends AndroidComponentObject {
 				return;
 			}
 			
-			Drawable d = aInfo.loadIcon(pkgmgr);
+			Drawable d = null;
+			if (isHiResIconRequired()
+					&& getIconDpi() != DEFAULT_ICON_DPI) {
+				d = getFullResIcon(context, aInfo);
+			} else {
+				d = aInfo.loadIcon(pkgmgr);
+			}
 			
 			final int iw = getIconWidth();
 			final int ih = getIconHeight();
