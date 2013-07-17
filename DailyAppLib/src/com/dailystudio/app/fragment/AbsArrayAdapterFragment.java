@@ -32,11 +32,17 @@ public abstract class AbsArrayAdapterFragment<T> extends AbsAdapterFragment<T, L
         ArrayAdapter<T> objectAdapter =
             (ArrayAdapter<T>)adapter;
         
-        objectAdapter.clear();
+        if (clearBeforeBindData()) {
+        	objectAdapter.clear();
+        }
         
         for (T o: data) {
             objectAdapter.add(o);
         }
+    }
+    
+    protected boolean clearBeforeBindData() {
+    	return true;
     }
     
     protected void sortAdapterIfPossible() {
