@@ -30,7 +30,16 @@ public class ThumbCacheManager {
 		new ThumbCacheObserable();
 	
     public static void clear() {
-    	sThumbsCache.evictAll();
+    	synchronized (sThumbsCache) {
+    		sThumbsCache.evictAll();
+		}
+    }
+    
+    public static void setCacheSize(int size) {
+    	synchronized (sThumbsCache) {
+    		sThumbsCache.evictAll();
+    		sThumbsCache = new LruCache<String, Bitmap>(size);
+		}
     }
     
     public static void addCacheObserver(Observer observer) {

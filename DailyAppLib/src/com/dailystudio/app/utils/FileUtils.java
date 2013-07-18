@@ -394,8 +394,25 @@ public class FileUtils {
 			return false;
 		}
 		
+		boolean ret = false;
+		
+		try {
+			ret = downloadFile(fileUrl, new FileOutputStream(dstFile));
+		} catch (Exception e) {
+			Logger.debug("download file failure: %s", e.toString());
+
+			ret = false;
+		}
+		
+		return ret;
+	}
+	
+	public static boolean downloadFile(String fileUrl, OutputStream os) {
+		if (fileUrl == null || os == null) {
+			return false;
+		}
+		
 		InputStream is = null;
-		OutputStream os = null;
 
 		boolean success = false;
 		try {
@@ -413,8 +430,6 @@ public class FileUtils {
 			
 			is = connection.getInputStream();
 			
-			os = new FileOutputStream(dstFile);
-	         
 			DataInputStream dis = new DataInputStream(is);
 			DataOutputStream dos = new DataOutputStream(os);
 			
