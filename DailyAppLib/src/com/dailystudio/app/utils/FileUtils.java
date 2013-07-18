@@ -22,6 +22,7 @@ import org.mozilla.universalchardet.UniversalDetector;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.text.TextUtils;
 
 import com.dailystudio.development.Logger;
 import com.dailystudio.utils.ResourcesUtils;
@@ -32,6 +33,11 @@ public class FileUtils {
 	
 	private static final int DOWNLOAD_CONNECTION_TIMEOUT = (3 * 1000);
 	private static final int DOWNLOAD_READ_TIMEOUT = (20 * 1000);
+	
+	public static final long SIZE_KB = 1024;
+	public static final long SIZE_MB = (1024 * SIZE_KB);
+	public static final long SIZE_GB = (1024 * SIZE_MB);
+	public static final long SIZE_TB = (1024 * SIZE_GB);
 	
 	public static boolean checkOrCreateNoMediaDirectory(String directory) {
 		if (directory == null) {
@@ -139,6 +145,10 @@ public class FileUtils {
 	}
 	
 	public static boolean deleteFiles(String path) {
+		return deleteFiles(path, true);
+	}
+
+	public static boolean deleteFiles(String path, boolean includeFolder) {
 		if (path == null) {
 			return false;
 		}
@@ -147,24 +157,76 @@ public class FileUtils {
 
 	    boolean success = false;
 	    if (file.exists()) {
-	        String deleteCmd = "rm -r " + path;
+	    	StringBuilder deleteCmd =
+	    			new StringBuilder("rm -r ");
+	    	
+	    	deleteCmd.append(path);
+	    	if (!includeFolder) {
+	    		deleteCmd.append("/*");
+	    	}
 	        
 	        Runtime runtime = Runtime.getRuntime();
 	        try {
-	            runtime.exec(deleteCmd);
+	        	Logger.debug("delete cmd: %s", 
+	        			deleteCmd.toString());
+	            runtime.exec(deleteCmd.toString()).waitFor();
 	            
 	            success = true;
 	        } catch (IOException e) { 
-	        	Logger.debug("failure: [%s]", e.toString());
+	        	Logger.debug("delete failure: [%s]", e.toString());
 	        	
 	        	success = false;
-	        }
-	        
+	        } catch (InterruptedException e) {
+	        	Logger.debug("delete failure: [%s]", e.toString());
+	        	
+	        	success = false;
+			}
 	    }
 	    
 	    return success;
 	}
 	
+	public static boolean deleteFile(String fileName) {
+		if (fileName == null) {
+			return false;
+		}
+		
+	    File file = new File(fileName);
+
+	    boolean success = false;
+	    if (file.exists()) {
+	        success = file.delete();
+	    }
+	    
+	    return success;
+	}
+	
+	public static long getFolderSize(String dirName) {
+		if (TextUtils.isEmpty(dirName)) {
+			return 0l;
+		}
+		
+		return getFolderSize(new File(dirName));
+	}
+	
+	public static long getFolderSize(File dir) {
+		if (dir == null || dir.exists() == false) {
+			return 0l;
+		}
+		
+		long size = 0l;
+
+		for (File file : dir.listFiles()) {
+			if (file.isFile()) {
+				size += file.length();
+			} else {
+				size += getFolderSize(file);
+			}
+		}
+
+		return size;
+	}
+
 	public static long getFileLength(String file) {
 		if (file == null) {
 			return 0l;
