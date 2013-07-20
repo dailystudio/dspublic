@@ -25,8 +25,15 @@ public abstract class PeroidicalAsyncChecker extends AsyncChecker {
                 CalendarUtils.durationToReadableString(interval));
         
         final long elapsed = now - lastTimestamp;
+    	/*
+    	 * XXX: elapsed < 0 means there is some time problem
+    	 * 		during last check, because the laststamp even large
+    	 * 		than current time, we should run this at once to
+    	 * 		correct this issue.
+    	 */
         if (lastTimestamp == -1
-                || (elapsed >= interval)) {
+                || (elapsed >= interval)
+                || (elapsed < 0)) {
             run();
         } else {
             Logger.warnning("time elapsed(%s) less than interval, skip",
