@@ -2,6 +2,8 @@ package com.dailystudio.datetime;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class CalendarUtils {
 
@@ -277,6 +279,14 @@ public class CalendarUtils {
 
 	public static final boolean isInRange(long time, long start, long end) {
 		return (time >= start && time <= end);
+	}
+	
+	public static final long getTimezoneOffeset() {
+		TimeZone tz = TimeZone.getDefault();
+		Date now = new Date();
+		int offsetFromUtc = tz.getOffset(now.getTime());
+		
+		return offsetFromUtc;
 	}
 	
 	public static String durationToReadableString(long duration) {

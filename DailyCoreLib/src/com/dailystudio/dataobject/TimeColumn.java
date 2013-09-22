@@ -1,7 +1,9 @@
 package com.dailystudio.dataobject;
 
+import com.dailystudio.dataobject.query.ExpressionToken;
 import com.dailystudio.dataobject.query.OrderingToken;
 import com.dailystudio.dataobject.utils.SQLiteDateTimeUtils;
+import com.dailystudio.datetime.CalendarUtils;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -104,6 +106,11 @@ public class TimeColumn extends LongColumn {
 		Long lVal = (Long)value;
 		
 		return String.valueOf(lVal.longValue());
+	}
+	
+	public ExpressionToken timeInDay() {
+		return new ExpressionToken(String.format("( %s %% %d )",
+				getName(), CalendarUtils.DAY_IN_MILLIS));
 	}
 
 	public OrderingToken groupByHour() {

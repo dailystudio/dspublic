@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.test.AndroidTestCase;
 
 import com.dailystudio.dataobject.Column;
+import com.dailystudio.dataobject.query.ExpressionToken;
 import com.dailystudio.dataobject.query.OrderingToken;
 
 public class TimeColumnTest extends AndroidTestCase {
@@ -131,10 +132,10 @@ public class TimeColumnTest extends AndroidTestCase {
 		ContentValues values = new ContentValues();
 		
 		column.setValue(values, 987654321012345678l);
-		assertEquals(new Long(987654321012345678l), values.getAsLong("columnA"));
+		assertEquals(Long.valueOf(987654321012345678l), values.getAsLong("columnA"));
 		
 		column.setValue(values, -12345678l);
-		assertEquals(new Long(-12345678l), values.getAsLong("columnA"));
+		assertEquals(Long.valueOf(-12345678l), values.getAsLong("columnA"));
 		
 		boolean exceptionCacthed = false;
 		try {
@@ -166,10 +167,10 @@ public class TimeColumnTest extends AndroidTestCase {
 		ContentValues values = new ContentValues();
 		
 		columnA.setValue(values, 987654321012345678l);
-		assertEquals(new Long(987654321012345678l), columnA.getValue(values));
+		assertEquals(Long.valueOf(987654321012345678l), columnA.getValue(values));
 		
 		columnB.setValue(values, -12345678l);
-		assertEquals(new Long(-12345678l), columnB.getValue(values));
+		assertEquals(Long.valueOf(-12345678l), columnB.getValue(values));
 	}
 
 	public void testMatchValueType() {
@@ -253,6 +254,17 @@ public class TimeColumnTest extends AndroidTestCase {
 		assertEquals(expected, actual);
 	}
 
+	public void testTimeInDay() {
+		TimeColumn column = new TimeColumn("time");
+		assertNotNull(column);
+		
+		ExpressionToken exp = column.timeInDay();
+		String expected = null;;
+		
+		expected = "( time % 86400000 )";
+		assertEquals(expected, exp.toString());
+	}
+	
 	public void testGroupBy() {
 		TimeColumn column = new TimeColumn("time");
 		assertNotNull(column);
