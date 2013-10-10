@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="DailyCoreLib" default="help">
+<project name="DailyCoreLibTest" default="help">
 
-	<!-- The local.properties file is created and updated by the 'android' tool.
+    <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
          Version Control Systems. -->
     <property file="local.properties" />
@@ -88,5 +88,5 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-    
+
 </project>
