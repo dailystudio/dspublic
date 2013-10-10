@@ -70,7 +70,17 @@ public class FileUtils {
 		return checkOrCreateNoMediaTagInDirectory(directory);
 	}
 
-	private static boolean checkOrCreateNoMediaTagInDirectory(File dir) {
+	public static boolean checkOrCreateNoMediaTagInDirectory(String directory) {
+		if (directory == null) {
+			return false;
+		}
+		
+		File dir = new File(directory);
+	
+		return checkOrCreateNoMediaTagInDirectory(dir);
+	}
+	
+	public static boolean checkOrCreateNoMediaTagInDirectory(File dir) {
 		if (dir == null) {
 			return false;
 		}
