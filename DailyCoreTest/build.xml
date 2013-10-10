@@ -90,6 +90,9 @@
     <import file="${sdk.dir}/tools/ant/build.xml" />
     
 	<target name="findbugs">
+	    <property environment="env"/>
+	    <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
+	    
 	    <echo>FindBugs Home: ${findbugs.home}</echo>
 		
 		<available file="${findbugs.home}/lib/findbugs.jar" property="findbugs.available" />
