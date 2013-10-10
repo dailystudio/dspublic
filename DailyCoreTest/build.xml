@@ -89,14 +89,22 @@
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
     
-	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
-	
 	<target name="findbugs">
-		<mkdir dir="reports" />
+	    <echo>FindBugs Home: ${findbugs.home}</echo>
+		
+		<available file="${findbugs.home}/lib/findbugs.jar" property="findbugs.available" />
+    	<fail unless="findbugs.available" message="Error: FINDBUGS_HOME not set or findbugs.jar not found." />
+	    
+		<taskdef name="findbugs" classpath="${findbugs.home}/lib/findbugs-ant.jar" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
+	
+    	<mkdir dir="reports" />
 		<findbugs home="${findbugs.home}" output="xml" outputFile="reports/findbugs.xml" excludeFilter="findbugs-exclude.xml">
-			<auxClasspath path="${android.jar}" />
-			<class location="${out.dir}" />
-		</findbugs>
+            <auxClasspath>
+                <pathelement location="${project.target.android.jar}" />
+                <path refid="project.all.jars.path" />
+            </auxClasspath>
+            <class location="${out.dir}" />
+		</findbugs>	
 	</target>
 	
 </project>
