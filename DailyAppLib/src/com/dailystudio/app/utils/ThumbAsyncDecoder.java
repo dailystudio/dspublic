@@ -71,11 +71,9 @@ public class ThumbAsyncDecoder {
 		protected void onPostExecute(Bitmap result) {
 			super.onPostExecute(result);
 			
-			if (result == null) {
-				return;
+			if (result != null) {
+				ThumbCacheManager.cachedThumb(mThumbKey, result);
 			}
-			
-			ThumbCacheManager.cachedThumb(mThumbKey, result);
 			
 			synchronized (sThumbDecodeRequests) {
 				sThumbDecodeRequests.remove(mThumbKey);
