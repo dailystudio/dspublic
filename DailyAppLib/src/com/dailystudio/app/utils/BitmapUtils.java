@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import com.dailystudio.development.Logger;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,21 +13,20 @@ import android.graphics.BitmapFactory.Options;
 
 public class BitmapUtils {
 
-	public static int estimateSampleSize(Context context, String filePath, 
+	public static int estimateSampleSize(String filePath, 
 			int destWidth, int destHeight) {
-		return estimateSampleSize(context, filePath, destWidth, destHeight, 0);
+		return estimateSampleSize(filePath, destWidth, destHeight, 0);
 	}
 	
-	public static int estimateSampleSize(Context context, String filePath, 
+	public static int estimateSampleSize(String filePath, 
 			int destWidth,
 			int destHeight,
 			int orientation) {
-		if (context == null || filePath == null) {
+		if (filePath == null) {
 			return 0;
 		}
 		
-		final Resources res = context.getResources();
-		if (res == null) {
+		if (destWidth <= 0 || destHeight <= 0) {
 			return 0;
 		}
 		
@@ -90,9 +87,9 @@ public class BitmapUtils {
 		return source;
 	}
 	
-	public static Bitmap scaleBitmap(Context context, Bitmap bitmap,
+	public static Bitmap scaleBitmap(Bitmap bitmap,
 			int destWidth, int destHeight) {
-		if (context == null || bitmap == null) {
+		if (bitmap == null) {
 			return null;
 		}
 		
@@ -102,11 +99,6 @@ public class BitmapUtils {
 		
 		Bitmap newBitmap = bitmap;
 
-		final Resources res = context.getResources();
-		if (res == null) {
-			return null;
-		}
-		
 		final int owidth = bitmap.getWidth();
 		final int oheight = bitmap.getHeight();
 		final int nwidth = destWidth;
