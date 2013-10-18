@@ -8,7 +8,12 @@ import com.dailystudio.development.Logger;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
 
 public class BitmapUtils {
@@ -200,5 +205,40 @@ public class BitmapUtils {
 		
 		return success;
 	}
+
+	public static Bitmap createColorFiltedBitmap(Bitmap origBitmap, 
+			ColorMatrix cm) {
+		if (origBitmap == null || cm == null) {
+			return origBitmap;
+		}
+		
+		final int width = origBitmap.getWidth();
+		final int height = origBitmap.getHeight();
+		if (width <= 0 || height <= 0) {
+			return origBitmap;
+		}
+		
+		Bitmap filteredBitmap = Bitmap.createBitmap(width,
+				height, Config.ARGB_8888);
+		
+		Canvas c = new Canvas(filteredBitmap);
+	    
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);      
+		
+	    Paint paint = new Paint();
+		paint.setColorFilter(f);
+			    
+	    c.drawBitmap(origBitmap, 0, 0, paint);
+	    
+	    return filteredBitmap;
+	}
+	
+	public static Bitmap createGrayScaledBitmap(Bitmap origBitmap) {
+		ColorMatrix cm = new ColorMatrix();      
+		cm.setSaturation(0);      
+		
+		return createColorFiltedBitmap(origBitmap, cm);
+	}
+	
 
 }
