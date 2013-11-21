@@ -71,6 +71,7 @@ public class AndroidApplication extends AndroidObject {
 	}	
 
 	private String mPackageName = null;
+	private String mPackagePath = null;
 	
 	private int mFlags = 0;
 	private long mFirstInstallTime = 0l;
@@ -79,9 +80,11 @@ public class AndroidApplication extends AndroidObject {
 	private String mAppVerName;
 	private int mAppVerCode = 0;
 	
+	
 	public AndroidApplication(PackageInfo pInfo) {
 		if (pInfo != null) {
 			mPackageName = pInfo.packageName;
+			mPackagePath = pInfo.applicationInfo.sourceDir;
 			
 			mFirstInstallTime = getFirstInstallTime(pInfo);
 			mLastUpdateTime = getLastUpdateTime(pInfo);
@@ -161,6 +164,10 @@ public class AndroidApplication extends AndroidObject {
 
 	public String getPackageName() {
 		return mPackageName;
+	}
+	
+	public String getPackagePath() {
+		return mPackagePath;
 	}
 	
 	public long getFirstInstallTime() {
