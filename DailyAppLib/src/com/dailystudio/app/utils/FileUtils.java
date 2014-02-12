@@ -38,37 +38,6 @@ public class FileUtils {
 	public static final long SIZE_MB = (1024 * SIZE_KB);
 	public static final long SIZE_GB = (1024 * SIZE_MB);
 	public static final long SIZE_TB = (1024 * SIZE_GB);
-	
-	public static boolean checkOrCreateDirectory(String directory) {
-		if (directory == null) {
-			return false;
-		}
-		
-		File dir = new File(directory);
-	
-		return checkOrCreateDirectory(dir);
-	}
-	
-	public static boolean checkOrCreateDirectory(File directory) {
-		if (directory == null) {
-			return false;
-		}
-		
-		if (directory.exists()) {
-			if (directory.isDirectory()) {
-				return true;
-			} else {
-				Logger.warnning("%s is NOT a directory", directory);
-			}
-		}
-		
-		final boolean success = directory.mkdirs();
-		if (success == false) {
-			return false;
-		}
-		
-		return success;
-	}
 
 	public static boolean checkOrCreateNoMediaDirectory(String directory) {
 		if (directory == null) {
@@ -81,6 +50,24 @@ public class FileUtils {
 	}
 	
 	public static boolean checkOrCreateNoMediaDirectory(File directory) {
+		return checkOrCreateDirectory(directory, true);
+	}
+	
+	public static boolean checkOrCreateDirectory(String directory) {
+		if (directory == null) {
+			return false;
+		}
+		
+		File dir = new File(directory);
+	
+		return checkOrCreateDirectory(dir);
+	}
+	
+	public static boolean checkOrCreateDirectory(File directory) {
+		return checkOrCreateDirectory(directory, false);
+	}
+	
+	public static boolean checkOrCreateDirectory(File directory, boolean nomedia) {
 		if (directory == null) {
 			return false;
 		}
@@ -96,6 +83,10 @@ public class FileUtils {
 		final boolean success = directory.mkdirs();
 		if (success == false) {
 			return false;
+		}
+		
+		if (!nomedia) {
+			return success;
 		}
 		
 		return checkOrCreateNoMediaTagInDirectory(directory);
@@ -125,7 +116,11 @@ public class FileUtils {
 		try {
 			success = tagFile.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.warnning("could not create tag[%s] in dir[%s]: %s",
+					NO_MEDIA_TAG_FILE,
+					dir.getAbsoluteFile(),
+					e.toString());
+			
 			success = false;
 		}
 		
