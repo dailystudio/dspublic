@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.dailystudio.development.Logger;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
@@ -173,16 +174,24 @@ public class BitmapUtils {
 	}
 	
 	public static boolean saveBitmap(Bitmap bitmap, String filename) {
+		return saveBitmap(bitmap, filename, 100);
+	}
+	
+	public static boolean saveBitmap(Bitmap bitmap, String filename, int quailty) {
 		if (filename == null) {
 			return false;
 		}
 		
 		File file = new File(filename);
 		
-		return saveBitmap(bitmap, file);
+		return saveBitmap(bitmap, file, quailty);
 	}
 	
 	public static boolean saveBitmap(Bitmap bitmap, File file) {
+		return saveBitmap(bitmap, file, 100);
+	}
+	
+	public static boolean saveBitmap(Bitmap bitmap, File file, int quailty) {
 		if (bitmap == null || file == null) {
 			return false;
 		}
@@ -190,13 +199,18 @@ public class BitmapUtils {
 		boolean success = false;
 		try {
 			FileOutputStream out = new FileOutputStream(file);
+			CompressFormat format =
+					(quailty >= 100 ? Bitmap.CompressFormat.PNG
+							: Bitmap.CompressFormat.JPEG);
 			
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+			Logger.debug("save bitmap: %s, [quality: %d, format: %s]",
+					file, quailty, format);
+			final boolean ret = bitmap.compress(format, quailty, out);
 			
 			out.flush();
 			out.close();
 			
-			success = true;
+			success = ret;
 		} catch (IOException e) {
 			Logger.debug("save bitmap failure: %s", e.toString());
 			
@@ -239,6 +253,5 @@ public class BitmapUtils {
 		
 		return createColorFiltedBitmap(origBitmap, cm);
 	}
-	
 
 }

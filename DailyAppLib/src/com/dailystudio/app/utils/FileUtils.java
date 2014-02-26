@@ -228,7 +228,15 @@ public class FileUtils {
 		}
 		
 	    File file = new File(fileName);
-
+	    
+	    return deleteFile(file);
+	}
+	
+	public static boolean deleteFile(File file) {
+		if (file == null) {
+			return false;
+		}
+		
 	    boolean success = false;
 	    if (file.exists()) {
 	        success = file.delete();
