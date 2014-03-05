@@ -5,6 +5,37 @@ import java.util.List;
 
 public class ArrayUtils {
 
+	public static String stringArrayToString(String[] strings, String delimiter) {
+		if (strings == null || delimiter == null) {
+			return null;
+		}
+
+		final int N = strings.length;
+		if (N <= 0) {
+			return null;
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		
+		int i;
+		for (i = 0; i < N; i++) {
+			builder.append(strings[i]);
+			if (i != (N - 1)) {
+				builder.append(delimiter);
+			}
+		}
+		
+		return builder.toString();
+	}
+	
+	public static String[] toStringArray(String string, String delimiter) {
+		if (string == null || delimiter == null) {
+			return null;
+		}
+		
+		return string.split(delimiter);
+	}
+	
 	public static Integer[] toIntegerArray(int[] array) {
 		if (array == null) {
 			return null;
