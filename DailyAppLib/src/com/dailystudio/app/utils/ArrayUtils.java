@@ -5,6 +5,8 @@ import java.util.List;
 
 public class ArrayUtils {
 
+	public static final String DEFAULT_ARRAY_DELIMITER = ",";
+	
 	public static String stringArrayToString(String[] strings, String delimiter) {
 		if (strings == null || delimiter == null) {
 			return null;
@@ -50,6 +52,29 @@ public class ArrayUtils {
 		}
 		
 		return newArray.toArray(new Integer[0]);
+	}
+	
+	public static String intArrayToString(int[] array) {
+		return intArrayToString(array, DEFAULT_ARRAY_DELIMITER);
+	}
+	
+	public static String intArrayToString(int[] array, String delimiter) {
+		if (array == null) {
+			return null;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		final int N = array.length;
+		
+		for (int i = 0; i < N; i++) {
+			sb.append(String.valueOf(array[i]));
+			if (i != (N - 1)) {
+				sb.append(delimiter);
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 	public static String byteArrayToHex(byte[] a) {
