@@ -81,6 +81,19 @@ public abstract class AbsPrefs {
 		editor.commit();
 	}
 	
+	public void setFloatPrefValue(Context context,
+			String pref, float fValue) {
+		if (context == null 
+				|| pref == null) {
+			return;
+		}
+		
+		Editor editor = getEditor(context);
+		
+		editor.putFloat(pref, fValue);
+		editor.commit();
+	}
+	
 	public String getStringPrefValue(Context context, String pref) {
 		if (context == null 
 				|| pref == null) {
@@ -148,6 +161,24 @@ public abstract class AbsPrefs {
 		}
 		
 		return sharedPref.getLong(pref, defVal);
+	}
+
+	public float getFloatPreValue(Context context, String pref) {
+		return getFloatPreValue(context, pref, 0.0f);
+	}
+
+	public float getFloatPreValue(Context context, String pref, float defVal) {
+		if (context == null 
+				|| pref == null) {
+			return defVal;
+		}
+		
+		SharedPreferences sharedPref = getSharedPreferences(context);
+		if (sharedPref == null) {
+			return defVal;
+		}
+		
+		return sharedPref.getFloat(pref, defVal);
 	}
 
 	abstract protected String getPrefName();
