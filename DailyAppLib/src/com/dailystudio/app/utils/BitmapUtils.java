@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.dailystudio.development.Logger;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
+import android.view.View;
+import android.view.View.MeasureSpec;
 
 public class BitmapUtils {
 
@@ -252,6 +255,63 @@ public class BitmapUtils {
 		cm.setSaturation(0);      
 		
 		return createColorFiltedBitmap(origBitmap, cm);
+	}
+
+	public static Bitmap createViewSnapshot(Context context, 
+			View view,
+			int desireWidth, int desireHeight) {
+		if (view == null) {
+			return null;
+		}
+		
+		int widthMeasureSpec;
+		int heightMeasureSpec;
+		
+		if (desireWidth <= 0) {
+			widthMeasureSpec = MeasureSpec.makeMeasureSpec(
+					desireWidth, MeasureSpec.UNSPECIFIED);
+		} else {
+			widthMeasureSpec = MeasureSpec.makeMeasureSpec(
+					desireWidth, MeasureSpec.EXACTLY);
+		}
+		
+		if (desireHeight <= 0) {
+			heightMeasureSpec = MeasureSpec.makeMeasureSpec(
+					desireHeight, MeasureSpec.UNSPECIFIED);
+		} else {
+			heightMeasureSpec = MeasureSpec.makeMeasureSpec(
+					desireHeight, MeasureSpec.EXACTLY);
+		}
+		
+		view.measure(widthMeasureSpec, heightMeasureSpec);
+		Logger.debug("MEASURED: [%d, %d]", 
+				view.getMeasuredWidth(),
+				view.getMeasuredHeight());
+		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+		
+		Config config = Bitmap.Config.ARGB_8888;
+		
+		Bitmap bitmap = null;
+		
+		try {
+			bitmap = Bitmap.createBitmap(
+					desireWidth, desireHeight, config);
+		} catch (OutOfMemoryError e) {
+			Logger.warnning("create cache bitmap failure: %s",
+					e.toString());
+			
+			bitmap = null;
+		}
+		
+		if (bitmap == null) {
+			return null;
+		}
+		
+		Canvas canvas = new Canvas(bitmap);
+		
+		view.draw(canvas);
+		
+		return bitmap;
 	}
 
 }
