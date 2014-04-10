@@ -1,5 +1,6 @@
 package com.dailystudio.app.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
+import android.util.Base64;
 import android.view.View;
 import android.view.View.MeasureSpec;
 
@@ -312,6 +314,30 @@ public class BitmapUtils {
 		view.draw(canvas);
 		
 		return bitmap;
+	}
+
+	public static String bitmapToBase64String(Bitmap bitmap) {
+		if (bitmap == null) {
+			return null;
+		}
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+		byte[] bytes = null;
+		String base64str = null;
+		try {
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);  
+			
+			bytes = baos.toByteArray();
+			
+			base64str = Base64.encodeToString(bytes, Base64.DEFAULT);
+		} catch (OutOfMemoryError e) {
+			Logger.debug("convert bitmap failure : %s",
+					e.toString());
+			
+			base64str = null;
+		}
+		
+		return base64str;
 	}
 
 }
