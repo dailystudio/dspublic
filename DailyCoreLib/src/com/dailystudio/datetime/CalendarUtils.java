@@ -31,6 +31,19 @@ public class CalendarUtils {
 		}
 	}
 	
+	public synchronized static final long getTimeOfDay (long mills) {
+		if (sCalendar == null) {
+			return mills;
+		}
+		
+		sCalendar.setTimeInMillis(mills);
+		sCalendar.set(Calendar.YEAR, 0);
+		sCalendar.set(Calendar.MONTH, 0);
+		sCalendar.set(Calendar.DAY_OF_MONTH, 0);
+		
+		return sCalendar.getTimeInMillis();
+	}
+	
 	public synchronized static final long getStartOfDay (long mills) {
 		if (sCalendar == null) {
 			return mills;
