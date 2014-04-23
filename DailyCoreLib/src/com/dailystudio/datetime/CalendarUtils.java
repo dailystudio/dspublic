@@ -37,9 +37,9 @@ public class CalendarUtils {
 		}
 		
 		sCalendar.setTimeInMillis(mills);
-		sCalendar.set(Calendar.YEAR, 0);
-		sCalendar.set(Calendar.MONTH, 0);
-		sCalendar.set(Calendar.DAY_OF_MONTH, 0);
+		sCalendar.set(Calendar.YEAR, 2013);
+		sCalendar.set(Calendar.MONTH, 14);
+		sCalendar.set(Calendar.DAY_OF_MONTH, 8);
 		
 		return sCalendar.getTimeInMillis();
 	}
