@@ -44,6 +44,24 @@ public class CalendarUtils {
 		return sCalendar.getTimeInMillis();
 	}
 	
+	public synchronized static final long setTimeOfDate (long mills, long targetDate) {
+		if (sCalendar == null) {
+			return mills;
+		}
+		
+		sCalendar.setTimeInMillis(targetDate);
+		final int year = sCalendar.get(Calendar.YEAR);
+		final int month = sCalendar.get(Calendar.MONTH);
+		final int day = sCalendar.get(Calendar.DAY_OF_MONTH);
+		
+		sCalendar.setTimeInMillis(mills);
+		sCalendar.set(Calendar.YEAR, year);
+		sCalendar.set(Calendar.MONTH, month);
+		sCalendar.set(Calendar.DAY_OF_MONTH, day);
+		
+		return sCalendar.getTimeInMillis();
+	}
+	
 	public synchronized static final long getStartOfDay (long mills) {
 		if (sCalendar == null) {
 			return mills;
