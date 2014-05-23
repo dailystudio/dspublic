@@ -342,6 +342,28 @@ public class FileUtils {
 		return getFileContent(istream, encoding);
 	}
 	
+    public static String getRawFileContent(Context context, int rawId) throws IOException {
+        if (context == null || rawId <= 0) {
+            return null;
+        }
+
+        final Resources res = context.getResources();
+        if (res == null) {
+            return null;
+        }
+
+        InputStream istream = res.openRawResource(rawId);
+        if (istream == null) {
+            return null;
+        }
+
+        final String encoding = FileUtils.detectFileEncoding(istream);
+
+        return FileUtils.getFileContent(res.openRawResource(rawId),
+                encoding);
+    }
+
+	
 	public static boolean copyRawFile(Context context, String rawFile, 
 			String dstFile) throws IOException {
 		if (context == null 
