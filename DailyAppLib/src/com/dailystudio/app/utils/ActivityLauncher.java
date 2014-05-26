@@ -9,6 +9,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 public class ActivityLauncher {
@@ -55,6 +56,26 @@ public class ActivityLauncher {
 		launchActivity(context, intent, sOnExceptionHandler);
 	}
 	
+	public static void launchActivityForResult(Fragment fragment, Intent intent, int requestCode) {
+		launchActivityForResult(fragment, intent, requestCode, sOnExceptionHandler);
+	}
+	
+	public static void launchActivityForResult(Fragment fragment, Intent intent, int requestCode, OnExceptionHandler oec) {
+		if (fragment != null && intent != null) {
+			try {
+				fragment.startActivityForResult(intent, requestCode);
+			} catch (ActivityNotFoundException e) {
+				if (oec != null) {
+					oec.onException(intent, e);
+				}
+			} catch (SecurityException e) {
+				if (oec != null) {
+					oec.onException(intent, e);
+				}
+			}
+		}
+	}
+
 	public static void launchActivityForResult(Activity activity, Intent intent, int requestCode, OnExceptionHandler oec) {
 		if (activity != null && intent != null) {
 			try {
