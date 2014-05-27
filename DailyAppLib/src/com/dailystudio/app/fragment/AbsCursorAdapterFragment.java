@@ -1,5 +1,8 @@
 package com.dailystudio.app.fragment;
 
+import com.dailystudio.app.widget.SimpleDatabaseObjectCursorAdapter;
+import com.dailystudio.dataobject.DatabaseObject;
+
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.widget.BaseAdapter;
@@ -54,4 +57,32 @@ public abstract class AbsCursorAdapterFragment extends AbsAdapterFragment<Cursor
 		}
 	}
 	
+	public DatabaseObject dumpObject(Cursor cursor) {
+		if (cursor == null) {
+			return null;
+		}
+		
+		ListAdapter adapter = getAdapter();
+		if (adapter instanceof SimpleDatabaseObjectCursorAdapter == false) {
+			return null;
+		}
+		
+		final SimpleDatabaseObjectCursorAdapter<?> dbObjectAdapter = 
+			(SimpleDatabaseObjectCursorAdapter<?>)adapter;
+		
+		return dbObjectAdapter.dumpItem(cursor);
+	}
+	
+	public DatabaseObject dumpObject(int position) {
+		ListAdapter adapter = getAdapter();
+		if (adapter instanceof SimpleDatabaseObjectCursorAdapter == false) {
+			return null;
+		}
+		
+		final SimpleDatabaseObjectCursorAdapter<?> dbObjectAdapter = 
+			(SimpleDatabaseObjectCursorAdapter<?>)adapter;
+		
+		return dbObjectAdapter.dumpItem(position);
+	}
+
 }
