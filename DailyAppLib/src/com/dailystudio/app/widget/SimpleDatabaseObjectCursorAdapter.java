@@ -33,12 +33,23 @@ public class SimpleDatabaseObjectCursorAdapter<T extends DatabaseObject>
 			return null;
 		}
 		
+		int oldPos = -1;
+		final Cursor c = getCursor();
+		if (c != null) {
+			oldPos = c.getPosition();
+		}
+		
+		T item = null;
 		Object o = getItem(position);
-		if (o instanceof Cursor == false) {
-			return null;
+		if (o instanceof Cursor) {
+			item = dumpItem((Cursor)o);
+		}
+		
+		if (c != null && oldPos != -1) {
+			c.moveToPosition(oldPos);
 		}
 
-		return dumpItem((Cursor)o);
+		return item;
 	}
 
 	@SuppressWarnings("unchecked")
