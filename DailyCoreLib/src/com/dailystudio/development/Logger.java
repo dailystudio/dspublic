@@ -1,7 +1,11 @@
 package com.dailystudio.development;
 
+import java.io.File;
+
 import com.dailystudio.BuildConfig;
 
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class Logger {
@@ -13,6 +17,8 @@ public class Logger {
 		LOG_E,
 	}
 	
+	private static final String SUPPRESS_FILE = "dslog_suppress"; 
+
 	private static final String UNKNOWN_METHOD = "UnknownMethod";
 	private static final String UNKNOWN_CLASS = "UnknownClass";
 	private static final int TRACE_BASE_INDEX = 3;
@@ -46,6 +52,44 @@ public class Logger {
 	
 	public static boolean isDebugEnabled() {
 		return sLogDebugEnabled;
+	}
+	
+	public static boolean isDebugSuppressed() {
+		return isDebugSuppressed(SUPPRESS_FILE);
+	}
+	
+	public static boolean isPackageDebugSuppressed(String pkg) {
+		if (TextUtils.isEmpty(pkg)) {
+			return false;
+		}
+		
+		StringBuilder sb = new StringBuilder(SUPPRESS_FILE);
+		sb.append('.');
+		sb.append(pkg);
+		
+		return isDebugSuppressed(sb.toString());
+	}
+	
+	private static boolean isDebugSuppressed(String tagfile) {
+		if (TextUtils.isEmpty(tagfile)) {
+			return false;
+		}
+		
+		final String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state) 
+				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			final File externalStorage = 
+					Environment.getExternalStorageDirectory();
+			if (externalStorage != null) {
+				final File supfile = new File(externalStorage, tagfile);
+				if (supfile.exists()
+						&& supfile.isFile()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public static void info(String format, Object... args) {
