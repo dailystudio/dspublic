@@ -18,6 +18,7 @@ public class Logger {
 	}
 	
 	private static final String SUPPRESS_FILE = "dslog_suppress"; 
+	private static final String FORCE_FILE = "dslog_force"; 
 
 	private static final String UNKNOWN_METHOD = "UnknownMethod";
 	private static final String UNKNOWN_CLASS = "UnknownClass";
@@ -70,7 +71,31 @@ public class Logger {
 		return isDebugSuppressed(sb.toString());
 	}
 	
-	private static boolean isDebugSuppressed(String tagfile) {
+	private static boolean isDebugSuppressed(String supTagFile) {
+		return isTagFileExisted(supTagFile);
+	}
+	
+	public static boolean isDebugForced() {
+		return isDebugSuppressed(FORCE_FILE);
+	}
+	
+	public static boolean isPackageDebugForced(String pkg) {
+		if (TextUtils.isEmpty(pkg)) {
+			return false;
+		}
+		
+		StringBuilder sb = new StringBuilder(FORCE_FILE);
+		sb.append('.');
+		sb.append(pkg);
+		
+		return isDebugForced(sb.toString());
+	}
+	
+	private static boolean isDebugForced(String forceTagFile) {
+		return isTagFileExisted(forceTagFile);
+	}
+	
+	private static boolean isTagFileExisted(String tagfile) {
 		if (TextUtils.isEmpty(tagfile)) {
 			return false;
 		}
