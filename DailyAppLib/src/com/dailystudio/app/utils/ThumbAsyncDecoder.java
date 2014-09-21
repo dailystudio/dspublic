@@ -434,7 +434,7 @@ public class ThumbAsyncDecoder {
 				thumbKey, resUri));
 	}
 	
-	protected static void requestDecodeThumb(Context context, 
+	public static void requestDecodeThumb(Context context, 
 			AbsDecodeThumbAsyncTask decodeTask) {
 		if (context == null || decodeTask == null) {
 			return;
