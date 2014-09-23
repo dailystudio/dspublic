@@ -77,6 +77,29 @@ public class ArrayUtils {
 		return sb.toString();
 	}
 	
+	public static String longArrayToString(long[] array) {
+		return longArrayToString(array, DEFAULT_ARRAY_DELIMITER);
+	}
+	
+	public static String longArrayToString(long[] array, String delimiter) {
+		if (array == null) {
+			return null;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		final int N = array.length;
+		
+		for (int i = 0; i < N; i++) {
+			sb.append(String.valueOf(array[i]));
+			if (i != (N - 1)) {
+				sb.append(delimiter);
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 	public static String floatArrayToString(float[] array) {
 		return floatArrayToString(array, DEFAULT_ARRAY_DELIMITER);
 	}
