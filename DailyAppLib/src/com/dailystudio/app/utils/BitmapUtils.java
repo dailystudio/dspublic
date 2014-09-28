@@ -396,6 +396,10 @@ public class BitmapUtils {
 			return bitmaps[0];
 		}
 		
+		if (bitmaps[0] == null) {
+			return bitmaps[0];
+		}
+		
 		final int bw = bitmaps[0].getWidth();
 		final int bh = bitmaps[0].getHeight();
 		final Config config = bitmaps[0].getConfig();
