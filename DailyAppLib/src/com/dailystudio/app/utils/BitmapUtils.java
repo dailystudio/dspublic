@@ -4,10 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.dailystudio.development.Logger;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Rect;
 import android.util.Base64;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -338,6 +341,136 @@ public class BitmapUtils {
 		}
 		
 		return base64str;
+	}
+	
+	public static Bitmap compositeDrawableWithMask(
+			Bitmap rgbBitmap, Bitmap alphaBitmap) {
+		if (rgbBitmap == null) {
+			return null;
+		}
+		
+		if (alphaBitmap == null) {
+			return rgbBitmap;
+		}
+		
+		final int rgbw = rgbBitmap.getWidth();
+		final int rgbh = rgbBitmap.getHeight();
+		final int alphaw = alphaBitmap.getWidth();
+		final int alphah = alphaBitmap.getHeight();
+		if (rgbw != alphaw
+				|| rgbh != alphah) {
+			Logger.warnning("mismatch bitmaps, rgb[%-3dx%-3d], alpha[%-3dx%-3d]",
+					rgbw, rgbh, alphaw, alphah);
+			
+			return rgbBitmap;
+		}
+
+		Bitmap destBitmap = Bitmap.createBitmap(rgbw, rgbh,
+				Bitmap.Config.ARGB_8888);
+
+		int[] pixels = new int[rgbw];
+		int[] alpha = new int[rgbw];
+		for (int y = 0; y < rgbh; y++) {
+			rgbBitmap.getPixels(pixels, 0, rgbw, 0, y, rgbw, 1);
+			alphaBitmap.getPixels(alpha, 0, rgbw, 0, y, rgbw, 1);
+
+			for (int x = 0; x < rgbw; x++) {
+				// Replace the alpha channel with the r value from the bitmap.
+				pixels[x] = (pixels[x] & 0x00FFFFFF)
+						| ((alpha[x] << 8) & 0xFF000000);
+			}
+			
+			destBitmap.setPixels(pixels, 0, rgbw, 0, y, rgbw, 1);
+		}
+
+		return destBitmap;
+	}
+	
+	public static Bitmap compositeBitmaps(Bitmap... bitmaps) {
+		if (bitmaps == null) {
+			return null;
+		}
+		
+		final int N = bitmaps.length;
+		if (N == 1) {
+			return bitmaps[0];
+		}
+		
+		final int bw = bitmaps[0].getWidth();
+		final int bh = bitmaps[0].getHeight();
+		final Config config = bitmaps[0].getConfig();
+		
+		Bitmap finalBitmap = null;
+		try {
+			finalBitmap = Bitmap.createBitmap(bw, bh, config);
+		} catch (OutOfMemoryError e) {
+			Logger.warnning("could not create composite bitmap: %s",
+					e.toString());
+			
+			finalBitmap = null;
+		}
+		
+		if (finalBitmap == null) {
+			return bitmaps[0];
+		}
+		
+		Canvas canvas = new Canvas(finalBitmap);
+		
+		Bitmap currbmp = null;
+		Rect src = new Rect();
+		Rect dst = new Rect();
+		for (int i = 0; i < N; i++) {
+			currbmp = bitmaps[i];
+			if (currbmp.getWidth() != bw
+					|| currbmp.getHeight() != bh) {
+				currbmp = BitmapUtils.scaleBitmap(currbmp, bw, bh);
+			}
+			
+			src.set(0, 0, currbmp.getWidth(), currbmp.getHeight());
+			dst.set(0, 0, bw, bh);
+			
+			canvas.drawBitmap(currbmp, src, dst, null);
+		}
+		
+		return finalBitmap;
+	}
+	
+	public static Bitmap loadAssetBitmap(Context context, String assetFile) {
+		AssetManager assetManager = context.getAssets();
+		if (assetManager == null) {
+			return null;
+		}
+		
+	    InputStream istream = null;
+	    Bitmap bitmap = null;
+	    try {
+	        istream = assetManager.open(assetFile);
+	        
+	        if (istream != null) {
+	        	bitmap = BitmapFactory.decodeStream(istream);
+	        }
+	    } catch (OutOfMemoryError e) {
+	    	Logger.warnning("could not decode asset bitmap: %s",
+	    			assetFile,
+	    			e.toString());
+	    	
+	        bitmap = null;
+		} catch (IOException e) {
+	    	Logger.warnning("could not decode asset bitmap: %s",
+	    			assetFile,
+	    			e.toString());
+	    	
+	        bitmap = null;
+	    } finally {
+	    	try {
+		    	if (istream != null) {
+		    		istream.close();
+		    	}
+	    	} catch (IOException e) {
+			}
+	    }
+	    
+	    return bitmap;
 	}
 
 }
