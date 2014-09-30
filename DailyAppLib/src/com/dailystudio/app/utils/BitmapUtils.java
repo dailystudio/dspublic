@@ -385,8 +385,20 @@ public class BitmapUtils {
 
 		return destBitmap;
 	}
+
+	public static Bitmap compositeBitmaps(Bitmap bitmap1, Bitmap bitmap2) {
+		return compositeBitmaps(false, bitmap1, bitmap2);
+	}
+	
+	public static Bitmap compositeBitmaps(boolean scale, Bitmap bitmap1, Bitmap bitmap2) {
+		return compositeBitmaps(scale, new Bitmap[] { bitmap1, bitmap2 });
+	}
 	
 	public static Bitmap compositeBitmaps(Bitmap... bitmaps) {
+		return compositeBitmaps(false, bitmaps);
+	}
+	
+	public static Bitmap compositeBitmaps(boolean scale, Bitmap... bitmaps) {
 		if (bitmaps == null) {
 			return null;
 		}
@@ -400,10 +412,20 @@ public class BitmapUtils {
 			return bitmaps[0];
 		}
 		
-		final int bw = bitmaps[0].getWidth();
-		final int bh = bitmaps[0].getHeight();
+		int bw = bitmaps[0].getWidth();
+		int bh = bitmaps[0].getHeight();
 		final Config config = bitmaps[0].getConfig();
 		
+		if (!scale) {
+			int[] dimension = findMaxDimension(bitmaps);
+			if (dimension != null) {
+				bw = dimension[0];
+				bh = dimension[1];
+			}
+		}
+		
+		Logger.debug("target composite dimen: %d x %d",
+				bw, bh);
 		Bitmap finalBitmap = null;
 		try {
 			finalBitmap = Bitmap.createBitmap(bw, bh, config);
@@ -423,16 +445,29 @@ public class BitmapUtils {
 		Bitmap currbmp = null;
 		Rect src = new Rect();
 		Rect dst = new Rect();
+		int xoff = 0;
+		int yoff = 0;
 		for (int i = 0; i < N; i++) {
 			currbmp = bitmaps[i];
+			
+			xoff = 0;
+			yoff = 0;
+			
 			if (currbmp.getWidth() != bw
-					|| currbmp.getHeight() != bh) {
-				currbmp = BitmapUtils.scaleBitmap(currbmp, bw, bh);
+						|| currbmp.getHeight() != bh) {
+				if (scale) {
+					currbmp = BitmapUtils.scaleBitmap(currbmp, bw, bh);
+				} else {
+					xoff = (bw - currbmp.getWidth()) / 2;
+					yoff = (bh - currbmp.getHeight()) / 2;
+				}
 			}
 			
 			src.set(0, 0, currbmp.getWidth(), currbmp.getHeight());
-			dst.set(0, 0, bw, bh);
-			
+			dst.set(xoff, yoff, 
+					xoff + currbmp.getWidth(), 
+					yoff + currbmp.getHeight());
+			Logger.debug("dst = %s", dst);
 			canvas.drawBitmap(currbmp, src, dst, null);
 		}
 		
@@ -475,6 +510,44 @@ public class BitmapUtils {
 	    }
 	    
 	    return bitmap;
+	}
+	
+	public static int[] findMaxDimension(Bitmap... bitmaps) {
+		if (bitmaps == null) {
+			return null;
+		}
+		
+		int[] dimension = new int[] {0, 0};
+		
+		final int N = bitmaps.length;
+		if (N == 1) {
+			if (bitmaps[0] == null) {
+				return dimension;
+			} else {
+				dimension[0] = bitmaps[0].getWidth();
+				dimension[1] = bitmaps[0].getHeight();
+				
+				return dimension;
+			}
+		}
+		
+		Bitmap bitmap = null;
+		for (int i = 0; i < N; i++) {
+			bitmap = bitmaps[i];
+			if (bitmap == null) {
+				continue;
+			}
+			
+			if (bitmap.getWidth() > dimension[0]) {
+				dimension[0] = bitmap.getWidth();
+			}
+			
+			if (bitmap.getHeight() > dimension[1]) {
+				dimension[1] = bitmap.getHeight();
+			}
+		}
+		
+		return dimension;
 	}
 
 }
