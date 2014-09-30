@@ -424,8 +424,9 @@ public class BitmapUtils {
 			}
 		}
 		
-		Logger.debug("target composite dimen: %d x %d",
+/*		Logger.debug("target composite dimen: %d x %d",
 				bw, bh);
+*/
 		Bitmap finalBitmap = null;
 		try {
 			finalBitmap = Bitmap.createBitmap(bw, bh, config);
@@ -467,7 +468,7 @@ public class BitmapUtils {
 			dst.set(xoff, yoff, 
 					xoff + currbmp.getWidth(), 
 					yoff + currbmp.getHeight());
-			Logger.debug("dst = %s", dst);
+
 			canvas.drawBitmap(currbmp, src, dst, null);
 		}
 		
