@@ -6,6 +6,9 @@ import java.util.List;
 import com.dailystudio.app.utils.ActivityLauncher;
 import com.dailystudio.development.Logger;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +19,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 
 public class AndroidActivity extends AndroidComponentObject {
 
@@ -149,6 +153,61 @@ public class AndroidActivity extends AndroidComponentObject {
         }
         
         return activities;
+	}
+
+	public static ComponentName getTopActivity(Context context) {
+		return getTopActivityAboveL(context);
+	}
+	
+	public static ComponentName getTopActivityAboveL(Context context) {
+		if (context == null) {
+			return null;
+		}
+
+		ActivityManager actmgr = (ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		if (actmgr == null) {
+			return null;
+		}
+
+		List<RunningTaskInfo> tasks = actmgr.getRunningTasks(1);
+		if (tasks == null || tasks.size() <= 0) {
+			return null;
+		}
+
+		List<RunningAppProcessInfo> processes = actmgr.getRunningAppProcesses();
+		if (processes == null) {
+			return null;
+		}
+
+		RunningAppProcessInfo p0 = processes.get(0);
+		if (p0 == null) {
+			return null;
+		}
+
+		String pkg = p0.processName;
+
+		String[] pkglist = p0.pkgList;
+		if (pkglist != null && pkglist.length > 0) {
+			pkg = pkglist[0];
+		}
+
+		Logger.debug("top app-pkg: %s", pkg);
+		if (TextUtils.isEmpty(pkg)) {
+			return null;
+		}
+
+		AndroidApplication app = new AndroidApplication(pkg);
+
+		Intent i = app.getLaunchIntent(context);
+		if (i == null) {
+			return null;
+		}
+
+		final ComponentName comp = i.getComponent();
+		Logger.debug("top app-comp: %s", comp);
+
+		return comp;
 	}
 
 }
