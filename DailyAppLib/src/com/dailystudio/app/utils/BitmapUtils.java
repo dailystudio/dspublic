@@ -21,6 +21,7 @@ import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -478,6 +479,10 @@ public class BitmapUtils {
 	public static Bitmap loadAssetBitmap(Context context, String assetFile) {
 		AssetManager assetManager = context.getAssets();
 		if (assetManager == null) {
+			return null;
+		}
+		
+		if (TextUtils.isEmpty(assetFile)) {
 			return null;
 		}
 		
