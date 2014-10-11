@@ -451,6 +451,9 @@ public class BitmapUtils {
 		int yoff = 0;
 		for (int i = 0; i < N; i++) {
 			currbmp = bitmaps[i];
+			if (currbmp == null) {
+				continue;
+			}
 			
 			xoff = 0;
 			yoff = 0;
