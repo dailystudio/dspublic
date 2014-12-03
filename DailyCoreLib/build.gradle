@@ -1,11 +1,10 @@
 apply plugin: 'android-library'
-
 android {
 
     defaultConfig {
-        versionName      appVersion
-        versionCode      Integer.parseInt(appVersionCode)
-        minSdkVersion    Integer.parseInt(androidMinSdkVersion)
+        versionName appVersion
+        versionCode Integer.parseInt(appVersionCode)
+        minSdkVersion Integer.parseInt(androidMinSdkVersion)
         targetSdkVersion Integer.parseInt(androidTargetSdkVersion)
     }
 
@@ -32,10 +31,9 @@ android {
         }
     }
 }
-
 buildscript {
     repositories {
-		mavenLocal()
+        mavenLocal()
         mavenCentral()
     }
 
@@ -43,7 +41,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:${project.ext.gradleAndroidPluginVersion}"
     }
 }
-
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
+}
+dependencies {
 }
