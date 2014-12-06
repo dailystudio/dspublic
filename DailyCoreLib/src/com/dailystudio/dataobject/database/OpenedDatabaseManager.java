@@ -30,12 +30,12 @@ public class OpenedDatabaseManager extends SingletonManager<Long, OpenedDatabase
 	}
 	
 	@Override
-	public synchronized OpenedDatabase removeObject(Long key) {
+	public synchronized OpenedDatabase removeObjectByKey(Long key) {
 		/*
 		 * Synchronzied this method to avoid register and unregister
 		 * close db receiver issue;
 		 */
-		OpenedDatabase odb = super.removeObject(key);
+		OpenedDatabase odb = super.removeObjectByKey(key);
 		
 		if (odb != null) {
 			odb.close();

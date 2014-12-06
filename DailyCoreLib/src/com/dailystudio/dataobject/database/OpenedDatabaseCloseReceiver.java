@@ -29,7 +29,7 @@ class OpenedDatabaseCloseReceiver extends BroadcastReceiver {
 				return;
 			}
 			
-			OpenedDatabase db = odbmgr.removeObject(serial);
+			OpenedDatabase db = odbmgr.removeObjectByKey(serial);
 			
 			odbmgr.removeObject(db);
 /*			

@@ -125,6 +125,9 @@ public class SingletonManagerTest extends AndroidTestCase  {
 		
 		ssmgr1.removeObject(new SObject1("TargetB"));
 		assertEquals(2, ssmgr1.getCount());
+		
+		ssmgr1.removeObjectByKey("TargetB");
+		assertEquals(1, ssmgr1.getCount());
 	}
 
 	public void testGetObject() {

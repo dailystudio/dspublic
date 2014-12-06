@@ -30,8 +30,8 @@ public class ObservableManager extends SingletonManager<Class<? extends NativeOb
 	}
 	
 	@Override
-	public NativeObservable removeObject(Class<? extends NativeObservable> key) {
-		NativeObservable observable = super.removeObject(key);
+	public NativeObservable removeObjectByKey(Class<? extends NativeObservable> key) {
+		NativeObservable observable = super.removeObjectByKey(key);
 		if (observable != null) {
 			observable.onDestroy();
 		}
@@ -74,7 +74,7 @@ public class ObservableManager extends SingletonManager<Class<? extends NativeOb
 			return;
 		}
 		
-		obmgr.removeObject(klass);
+		obmgr.removeObjectByKey(klass);
 	}
 	
 	public static void clearObservables() {

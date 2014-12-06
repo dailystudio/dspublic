@@ -81,7 +81,7 @@ public class GroupManager<G, K, T extends IGroupObject<G, K>> extends SingletonM
 	}
 	
 	@Override
-	public T removeObject(K key) {
+	public T removeObjectByKey(K key) {
 		T object = getObject(key);
 		if (object == null) {
 			return null;
@@ -106,7 +106,7 @@ public class GroupManager<G, K, T extends IGroupObject<G, K>> extends SingletonM
 	    	}
     	}
     	
-		return super.removeObject(key);
+		return super.removeObjectByKey(key);
 	}
 	
 	@Override

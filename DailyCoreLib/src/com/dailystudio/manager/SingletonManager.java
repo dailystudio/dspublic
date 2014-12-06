@@ -63,7 +63,7 @@ public class SingletonManager<K, T extends ISingletonObject<K>> extends Manager<
     	super.removeObject(object);
 	}
 	
-	public T removeObject(K key) {
+	public T removeObjectByKey(K key) {
     	if (key == null) {
     		return null;
     	}
