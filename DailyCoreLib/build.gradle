@@ -32,6 +32,7 @@ android {
         }
     }
 }
+
 buildscript {
     repositories {
         mavenLocal()
@@ -42,8 +43,13 @@ buildscript {
         classpath "com.android.tools.build:gradle:${project.ext.gradleAndroidPluginVersion}"
     }
 }
+
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
-dependencies {
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
 }
+
+apply from: './maven_push.gradle'
