@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    defaultConfig {
+        versionName appVersion
+        versionCode Integer.parseInt(appVersionCode)
+        minSdkVersion Integer.parseInt(androidMinSdkVersion)
+        targetSdkVersion Integer.parseInt(androidTargetSdkVersion)
+    }
+
+    lintOptions {
+        checkAllWarnings true
+        warningsAsErrors false
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    compileSdkVersion Integer.parseInt(androidCompileSdkVersion)
+    buildToolsVersion androidBuildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${project.ext.gradleAndroidPluginVersion}"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+dependencies {
+    compile "com.github.dailystudio:dailyapplib:${project.ext.dailyCoreLibVersion}"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleWrapperVersion
+}
+
+apply from: './maven_push.gradle'
