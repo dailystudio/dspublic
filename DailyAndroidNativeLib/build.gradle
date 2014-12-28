@@ -47,11 +47,16 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'https://oss.sonatype.org/content/groups/public'
+        }
     }
 }
 
 dependencies {
-    compile "com.github.dailystudio:dailyapplib:${project.ext.dailyCoreLibVersion}"
+    compile ("com.github.dailystudio:dailyapplib:${project.ext.dailyAppLibVersion}") {
+        transitive = true
+    }
 }
 
 task wrapper(type: Wrapper) {
