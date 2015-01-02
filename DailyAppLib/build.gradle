@@ -47,14 +47,12 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven {
-            url 'https://oss.sonatype.org/content/groups/public'
-        }
     }
 }
 
 dependencies {
-    compile "com.github.dailystudio:dailycorelib:${project.ext.dailyCoreLibVersion}"
+    compile project(':DailyCoreLib')
+
     compile "com.android.support:support-v4:${project.ext.androidSupportVersion}"
     compile "com.googlecode.juniversalchardet:juniversalchardet:${project.ext.juniversalchardetVersion}"
 }

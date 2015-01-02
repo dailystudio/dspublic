@@ -1,1 +1,6 @@
 include ':'
+include 'DailyCoreLib'
+include 'DailyAppLib'
+
+project(':DailyCoreLib').projectDir = new File('../DailyCoreLib')
+project(':DailyAppLib').projectDir = new File('../DailyAppLib')
