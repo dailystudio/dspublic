@@ -82,6 +82,50 @@ public class AndroidContact {
                 (mContactPhoto == null ? 0: mContactPhoto.getHeight()));
     }
 
+    public static AndroidContact getContactByUri(Context context, Uri contactUri) {
+        if (context == null || contactUri == null) {
+            return null;
+        }
+
+        final ContentResolver cr = context.getContentResolver();
+        if (cr == null) {
+            return null;
+        }
+
+        String[] projection = new String[] {
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup._ID
+        };
+
+        AndroidContact contact = null;
+
+        Cursor c = cr.query(contactUri, projection, null, null, null);
+        Logger.debug("c = %s(size = %d)", c, (c == null ? 0 : c.getCount()));
+        try {
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    contact = new AndroidContact();
+
+                    contact.mContactId = c.getLong(
+                            c.getColumnIndex(
+                                    ContactsContract.PhoneLookup._ID));
+                    contact.mDisplayName = c.getString(
+                            c.getColumnIndex(
+                                    ContactsContract.PhoneLookup.DISPLAY_NAME));
+                }
+            }
+        } catch (Exception e) {
+            Logger.warnning("get contact for uri(%s) failed: %s",
+                    contactUri, e.toString());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        return contact;
+    }
+
     public static AndroidContact getContactByNumber(Context context, String givenNumber) {
         AndroidContact[] contacts = getContactsByNumber(context, givenNumber);
         if (context == null || contacts.length <= 0) {
