@@ -14,12 +14,15 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -558,5 +561,35 @@ public class BitmapUtils {
 		
 		return dimension;
 	}
+
+    public static Bitmap getRoundBitmap(Bitmap source, int radius) {
+        Bitmap scaledBitmap;
+        if(source.getWidth() != radius || source.getHeight() != radius) {
+            scaledBitmap = scaleBitmap(source, radius, radius);
+        } else {
+            scaledBitmap = source;
+        }
+
+        Bitmap output = Bitmap.createBitmap(scaledBitmap.getWidth(),
+                scaledBitmap.getHeight(), Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        final Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
+
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+
+        canvas.drawARGB(0, 0, 0, 0);
+
+        canvas.drawCircle(scaledBitmap.getWidth() / 2 + 0.7f, scaledBitmap.getHeight() / 2 + 0.7f,
+                scaledBitmap.getWidth() / 2 + 0.1f, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(scaledBitmap, rect, rect, paint);
+
+        return output;
+    }
 
 }
