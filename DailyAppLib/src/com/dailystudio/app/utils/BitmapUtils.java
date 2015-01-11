@@ -583,8 +583,8 @@ public class BitmapUtils {
 
         canvas.drawARGB(0, 0, 0, 0);
 
-        canvas.drawCircle(scaledBitmap.getWidth() / 2 + 0.7f, scaledBitmap.getHeight() / 2 + 0.7f,
-                scaledBitmap.getWidth() / 2 + 0.1f, paint);
+        canvas.drawCircle(scaledBitmap.getWidth() / 2, scaledBitmap.getHeight() / 2,
+                scaledBitmap.getWidth() / 2, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(scaledBitmap, rect, rect, paint);
