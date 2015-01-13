@@ -70,16 +70,23 @@ public class AndroidContact {
         return mContactPhoto;
     }
 
+    public Uri getContactUri() {
+        return Uri.withAppendedPath(
+                ContactsContract.Contacts.CONTENT_URI,
+                String.valueOf(mContactId));
+    }
+
     @Override
     public String toString() {
-        return String.format("%s(0x%08x): contact info(id = %d, displayName: %s, photo: %s(%-3dx%-3d))",
+        return String.format("%s(0x%08x): contact info(id = %d, displayName: %s, photo: %s(%-3dx%-3d), uri = %s)",
                 getClass().getSimpleName(),
                 hashCode(),
                 mContactId,
                 mDisplayName,
                 mContactPhoto,
                 (mContactPhoto == null ? 0: mContactPhoto.getWidth()),
-                (mContactPhoto == null ? 0: mContactPhoto.getHeight()));
+                (mContactPhoto == null ? 0: mContactPhoto.getHeight()),
+                getContactUri());
     }
 
     public static AndroidContact getContactByUri(Context context, Uri contactUri) {
@@ -156,12 +163,10 @@ public class AndroidContact {
         };
 
         Cursor c = cr.query(uri, projection, null, null, null);
-        Logger.debug("c = %s(size = %d)", c, (c == null ? 0 : c.getCount()));
         try {
             if (c != null) {
                 AndroidContact contact;
 
-                DatabaseUtils.dumpCursor(c);
                 while (c.moveToNext()) {
                     contact = new AndroidContact();
 
@@ -210,7 +215,7 @@ public class AndroidContact {
                 null);
         try {
             if (c != null) {
-                DatabaseUtils.dumpCursor(c);
+//                DatabaseUtils.dumpCursor(c);
                 while (c.moveToNext()) {
                     displayName = c.getString(c.getColumnIndex(
                             ContactsContract.Contacts.DISPLAY_NAME));
@@ -244,8 +249,8 @@ public class AndroidContact {
                 String.valueOf(contactId));
 
         InputStream photoInputStream = openContactPhotoStream(cr, contactUri);
-        Logger.warnning("photoInputStream for contact(%d) = %s",
-                contactId, photoInputStream);
+//        Logger.warnning("photoInputStream for contact(%d) = %s",
+//                contactId, photoInputStream);
         if (photoInputStream == null) {
             return null;
         }
@@ -296,6 +301,98 @@ public class AndroidContact {
         }
 
         return photoInputStream;
+    }
+
+    public static String getPhoneNumberByContactId(Context context, long contactId) {
+        if (context == null) {
+            return null;
+        }
+
+        final ContentResolver cr = context.getContentResolver();
+        if (cr == null) {
+            return null;
+        }
+
+        String phoneNumber = null;
+
+        String[] projection = new String[] {
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+        };
+
+        Cursor c = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                projection,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                new String[] { String.valueOf(contactId) },
+                null);
+        try {
+            if (c != null) {
+//                DatabaseUtils.dumpCursor(c);
+                while (c.moveToNext()) {
+                    phoneNumber = c.getString(c.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER));
+                }
+            }
+        } catch (Exception e) {
+            Logger.warnning("retrieve phone number for contact(%d) failed: %s",
+                    contactId, e.toString());
+
+            phoneNumber = null;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        return phoneNumber;
+    }
+
+    public static long getContactId(Context context, long rawContactId) {
+        return getContactId(context, Uri.withAppendedPath(
+                ContactsContract.RawContacts.CONTENT_URI,
+                String.valueOf(rawContactId)));
+    }
+
+    public static long getContactId(Context context, Uri rawContactUri) {
+        if (context == null || rawContactUri == null) {
+            return -1;
+        }
+
+        final ContentResolver cr = context.getContentResolver();
+        if (cr == null) {
+            return -1;
+        }
+
+
+        String[] projection = new String[] {
+                ContactsContract.RawContacts.CONTACT_ID
+        };
+
+        long contactId = 0;
+
+        Cursor c = cr.query(rawContactUri,
+                projection,
+                null, null,
+                null);
+        try {
+            if (c != null) {
+                DatabaseUtils.dumpCursor(c);
+                while (c.moveToNext()) {
+                    contactId = c.getLong(c.getColumnIndex(
+                            ContactsContract.RawContacts.CONTACT_ID));
+                }
+            }
+        } catch (Exception e) {
+            Logger.warnning("retrieve phone number for contact(%d) failed: %s",
+                    contactId, e.toString());
+
+            contactId = 0;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        return contactId;
     }
 
 }
