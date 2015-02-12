@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class AndroidApplication extends AndroidObject {
 
@@ -82,25 +83,55 @@ public class AndroidApplication extends AndroidObject {
 	
 	
 	public AndroidApplication(PackageInfo pInfo) {
-		if (pInfo != null) {
-			mPackageName = pInfo.packageName;
-			mPackagePath = pInfo.applicationInfo.sourceDir;
-			
-			mFirstInstallTime = getFirstInstallTime(pInfo);
-			mLastUpdateTime = getLastUpdateTime(pInfo);
-			
-			if (pInfo.applicationInfo != null) {
-				mFlags = pInfo.applicationInfo.flags;
-			}
-			
-			mAppVerCode = pInfo.versionCode;
-			mAppVerName = pInfo.versionName;
-		}
+        fillInfo(pInfo);
 	}
 	
 	public AndroidApplication(String packageName) {
 		mPackageName = packageName;
 	}
+
+    private void fillInfo(PackageInfo pInfo) {
+        if (pInfo != null) {
+            mPackageName = pInfo.packageName;
+            mPackagePath = pInfo.applicationInfo.sourceDir;
+
+            mFirstInstallTime = getFirstInstallTime(pInfo);
+            mLastUpdateTime = getLastUpdateTime(pInfo);
+
+            if (pInfo.applicationInfo != null) {
+                mFlags = pInfo.applicationInfo.flags;
+            }
+
+            mAppVerCode = pInfo.versionCode;
+            mAppVerName = pInfo.versionName;
+        }
+    }
+
+    public void queryAndFillInfo(Context context) {
+        if (context == null || TextUtils.isEmpty(mPackageName)) {
+            return;
+        }
+
+        final PackageManager pkgmgr = context.getPackageManager();
+        if (pkgmgr == null) {
+            return;
+        }
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = pkgmgr.getPackageInfo(mPackageName, 0);
+        } catch (NameNotFoundException e) {
+            Logger.warnning("Could not get package info for [pkg: %s]: %s",
+                    mPackageName, e.toString());
+            pInfo = null;
+        }
+
+        if (pInfo == null) {
+            return;
+        }
+
+        fillInfo(pInfo);
+    }
 	
 	private long getFirstInstallTime(PackageInfo pInfo) {
 		// API level 9 and above have the "firstInstallTime" field.
