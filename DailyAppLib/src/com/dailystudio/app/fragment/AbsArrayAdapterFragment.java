@@ -20,10 +20,6 @@ public abstract class AbsArrayAdapterFragment<T> extends AbsAdapterFragment<T, L
     
     @Override
     protected void bindData(BaseAdapter adapter, List<T> data) {
-        if (data == null) {
-            return;
-        }
-        
         if (adapter instanceof ArrayAdapter == false) {
             return;
         }
@@ -35,7 +31,11 @@ public abstract class AbsArrayAdapterFragment<T> extends AbsAdapterFragment<T, L
         if (clearBeforeBindData()) {
         	objectAdapter.clear();
         }
-        
+
+        if (data == null) {
+            return;
+        }
+
         for (T o: data) {
             objectAdapter.add(o);
         }

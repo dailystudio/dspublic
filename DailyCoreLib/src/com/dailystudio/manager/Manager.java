@@ -216,6 +216,10 @@ public abstract class Manager<T> extends GlobalContextWrapper implements Compara
 			}
     	}
     }
+
+    public synchronized List<IObjectWatcher<T>> listWatchers() {
+        return new ArrayList<IObjectWatcher<T>>(mObjWatchers);
+    }
     
     public int compareTo(Manager<?> another) {
     	if (another == null) {

@@ -346,8 +346,29 @@ public class BitmapUtils {
 		
 		return base64str;
 	}
-	
-	public static Bitmap compositeDrawableWithMask(
+
+    public static Bitmap bitmapFromBase64String(String base64String) {
+        if (TextUtils.isEmpty(base64String)) {
+            return null;
+        }
+
+        Bitmap bitmap = null;
+        try {
+            byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
+            if (bytes != null && bytes.length > 0) {
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            }
+        }  catch (OutOfMemoryError e) {
+            Logger.warnning("decode bitmap from Base64 string failure: %s",
+                    e.toString());
+
+            bitmap = null;
+        }
+
+        return bitmap;
+    }
+
+    public static Bitmap compositeDrawableWithMask(
 			Bitmap rgbBitmap, Bitmap alphaBitmap) {
 		if (rgbBitmap == null) {
 			return null;

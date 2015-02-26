@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -56,6 +58,25 @@ public class DeviceInfoUtils {
 
     public static String getModel(Context context) {
         return Build.MODEL;
+    }
+
+    public static String getMacAddress(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        WifiManager wifiManager =
+                (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null) {
+            return null;
+        }
+
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        if (wInfo == null) {
+            return null;
+        }
+
+        return wInfo.getMacAddress();
     }
     
     public static String getAndroidId(Context context) {
