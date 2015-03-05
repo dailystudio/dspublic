@@ -586,7 +586,7 @@ public class BitmapUtils {
     public static Bitmap getRoundBitmap(Bitmap source, int radius) {
         Bitmap scaledBitmap;
         if(source.getWidth() != radius || source.getHeight() != radius) {
-            scaledBitmap = scaleBitmap(source, radius, radius);
+            scaledBitmap = scaleBitmap(source, radius * 2, radius * 2);
         } else {
             scaledBitmap = source;
         }
