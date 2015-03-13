@@ -145,11 +145,11 @@ public abstract class AbsPrefs {
 		return sharedPref.getLong(pref, defVal);
 	}
 
-	public long getIntegerPreValue(Context context, String pref) {
+	public int getIntegerPreValue(Context context, String pref) {
 		return getIntegerPreValue(context, pref, 0);
 	}
 
-	public long getIntegerPreValue(Context context, String pref, int defVal) {
+	public int getIntegerPreValue(Context context, String pref, int defVal) {
 		if (context == null 
 				|| pref == null) {
 			return defVal;
@@ -160,7 +160,7 @@ public abstract class AbsPrefs {
 			return defVal;
 		}
 		
-		return sharedPref.getLong(pref, defVal);
+		return sharedPref.getInt(pref, defVal);
 	}
 
 	public float getFloatPreValue(Context context, String pref) {
