@@ -125,4 +125,43 @@ public class DeviceInfoUtils {
 		return aId;
 	}
 
+    public static String getPhoneNumber(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        TelephonyManager telmgr =
+                (TelephonyManager) context.getSystemService(
+                        Context.TELEPHONY_SERVICE);
+
+        return telmgr.getLine1Number();
+    }
+
+    public static String getRegisteredNetwork(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        TelephonyManager telmgr =
+                (TelephonyManager) context.getSystemService(
+                        Context.TELEPHONY_SERVICE);
+        if (telmgr == null) {
+            return null;
+        }
+
+        String countryCode = null;
+    	/*
+    	 * XXX: result of getNetworkCountryIso() is unreliable on CDMA
+    	 * 		network or user is not register to a valid network.
+    	 * 		During this situation, we use MCC for fallback;
+    	 */
+        if (telmgr.getPhoneType() != TelephonyManager.PHONE_TYPE_CDMA) {
+            countryCode = telmgr.getNetworkCountryIso();
+        } else {
+            countryCode = telmgr.getSimCountryIso();
+        }
+
+        return countryCode;
+    }
+
 }
