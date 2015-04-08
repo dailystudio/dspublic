@@ -47,11 +47,14 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
+        mavenLocal()
     }
 }
 
 dependencies {
-    compile project(':DailyCoreLib')
+    debugCompile project(':DailyCoreLib')
+    releaseCompile "com.github.dailystudio:dailycorelib:${project.ext.dailyCoreLibVersion}"
 
     compile "com.android.support:support-v4:${project.ext.androidSupportVersion}"
     compile "com.googlecode.juniversalchardet:juniversalchardet:${project.ext.juniversalchardetVersion}"
