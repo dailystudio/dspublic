@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.dailystudio.app.async.AsyncTasksQueueExecutor;
 import com.dailystudio.datetime.CalendarUtils;
 import com.dailystudio.development.Logger;
 import com.dailystudio.utils.ClassNameUtils;
