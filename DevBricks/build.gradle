@@ -23,15 +23,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
     }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
-    }
-
 }
 
 buildscript {
@@ -53,6 +44,7 @@ allprojects {
 }
 
 dependencies {
+    testCompile "junit:junit:${project.ext.junitVerion}"
 }
 
 task wrapper(type: Wrapper) {
