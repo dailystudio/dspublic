@@ -101,8 +101,13 @@ public class CommandShellTest extends ActivityTestCase {
 	public void testExitValueOfExec() {
 		copyScriptFromRaw(R.raw.test_exit_with_n1, "test_exit_with_n1.sh");
 		
+		/*
+		 * XXX: run as a super user, otherwise we could exec
+		 * 		script in /data/data/ directory even its permission
+		  * 	is 777
+		 */
 		int ret = CommandShell.execAndWaitFor(
-				new String[]{getAbsolutePath("test_exit_with_n1.sh")});
+				new String[]{getAbsolutePath("test_exit_with_n1.sh")}, true);
 		assertEquals(CommandShell.ERR_NONE, CommandShell.getErrorCode(ret));
 		assertEquals(1, CommandShell.getExitValue(ret));
 	}
@@ -110,8 +115,13 @@ public class CommandShellTest extends ActivityTestCase {
 	public void testExecErrorScript() {
 		copyScriptFromRaw(R.raw.test_run_with_error, "test_run_with_error.sh");
 		
+		/*
+		 * XXX: run as a super user, otherwise we could exec
+		 * 		script in /data/data/ directory even its permission
+		  * 	is 777
+		 */
 		int ret = CommandShell.execAndWaitFor(
-				new String[]{getAbsolutePath("test_run_with_error.sh")});
+				new String[]{getAbsolutePath("test_run_with_error.sh")}, true);
 		assertEquals(CommandShell.ERR_NONE, CommandShell.getErrorCode(ret));
 		assertEquals(127, CommandShell.getExitValue(ret));
 	}
@@ -125,8 +135,13 @@ public class CommandShellTest extends ActivityTestCase {
 	
 	public void testExecWithPendingReturn() {
 		copyScriptFromRaw(R.raw.test_sleep_10s, "test_sleep_10s.sh");
+		/*
+		 * XXX: run as a super user, otherwise we could exec
+		 * 		script in /data/data/ directory even its permission
+		  * 	is 777
+		 */
 		int ret = CommandShell.exec(
-				getAbsolutePath("test_sleep_10s.sh"), 
+				getAbsolutePath("test_sleep_10s.sh"), true,
 				mHandler);
 
 		assertEquals(CommandShell.ERR_PENDING, CommandShell.getErrorCode(ret));
