@@ -44,6 +44,9 @@ allprojects {
 }
 
 dependencies {
+    compile "com.android.support:support-v4:${project.ext.androidSupportVersion}"
+    compile "com.googlecode.juniversalchardet:juniversalchardet:${project.ext.juniversalchardetVersion}"
+
     testCompile "junit:junit:${project.ext.junitVerion}"
 }
 
