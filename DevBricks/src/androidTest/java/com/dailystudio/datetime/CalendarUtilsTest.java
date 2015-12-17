@@ -760,18 +760,20 @@ public class CalendarUtilsTest extends ActivityTestCase {
 		assertNotNull(date);
 
 		final long time = date.getTime();
+		final String strAmPm = new SimpleDateFormat("aa").format(date);
+		assertNotNull(strAmPm);
 
 		/*
 		 * XXX: following asserts depends on localization.
 		 * 		PM will be translated to different words
 		 */
-		assertEquals("2012/08/04 01:14:52 PM", CalendarUtils.timeToReadableString(time));
-		assertEquals("2012/08/04 01:14:52 PM", CalendarUtils.timeToReadableString(time, true, true));
+		assertEquals("2012/08/04 01:14:52:000 " + strAmPm, CalendarUtils.timeToReadableString(time));
+		assertEquals("2012/08/04 01:14:52:000 " + strAmPm, CalendarUtils.timeToReadableString(time, true, true));
 		assertEquals("2012/08/04", CalendarUtils.timeToReadableString(time, true, false));
-		assertEquals("01:14:52 PM", CalendarUtils.timeToReadableString(time, false, true));
+		assertEquals("01:14:52:000 " + strAmPm, CalendarUtils.timeToReadableString(time, false, true));
 		assertEquals("", CalendarUtils.timeToReadableString(time, false, false));
 		assertEquals("2012/08/04", CalendarUtils.timeToReadableStringWithoutTime(time));
-		assertEquals("01:14:52 PM", CalendarUtils.timeToReadableStringWithoutDate(time));
+		assertEquals("01:14:52:000 " + strAmPm, CalendarUtils.timeToReadableStringWithoutDate(time));
 	}
 	
 	public void testDurationToReadableString() {
