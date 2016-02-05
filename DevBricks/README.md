@@ -16,7 +16,7 @@ Database facilities in DevBricks provides a efficient way to convert between **I
 
 If we have a class ***People*** which represent a people in memory. Its structure is defined as below:
 ```java
-public class A {
+public class People {
 	private String mName;
 	private int mAge;
 	private float mWeight;
@@ -24,12 +24,15 @@ public class A {
 	private boolean mMarried;
 }
 ```
-In database,  each people will be store as one record like:
+In database,  each people will be store as one record, like this:
 
 ID   | Name    | Age  | Weight | Height | Married 
 :--- | :-------| :--: | :--:   | :--:   | :--:   
 1    | David   | 34   | 69     | 175    | 1       
+2    | Lucy    | 33   | 48     | 165    | 0
 ...  | ...     | ..   | ..     | ...    | .
+
+
 
 ## Loader
 
