@@ -25,9 +25,11 @@ public class A {
 }
 ```
 In database,  each people will be store as one record like:
+
 ID   | Name    | Age  | Weight | Height | Married 
 :--- | :-------| :--: | :--:   | :--:   | :--:   
-1    | David   | 34   | 69     | 175    | 1        
+1    | David   | 34   | 69     | 175    | 1       
+...  | ...     | ..   | ..     | ...    | .
 
 ## Loader
 
