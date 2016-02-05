@@ -9,17 +9,14 @@ DevBricks provides several classes which will be usually  used in daily Android 
 - **Reliable** :  More than 60% code has related Unit test. Your work will stand on stable foundation. 
 - **Consistency** : DevBricks includes unified logging system, database accessing, UI elements and styles. This make all of your applications has consistency at primary impression.
 
-## Setup DevBricks
-
-## Using DevBricks
-
-### Database
+## Database
 Database facilities in DevBricks provides a efficient way to convert between **In-Memory Data Structures** and **SQLite Database Records**. 
 
 - ***DatabaseObject*** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
 - ***Column*** describe how to map a field of a In-Memory class to a column of database record.
 - ***Template*** contains a set of *Column* which is usually used to describe how to convert a *DatabaseObject* to database record.
 
+### Define Object
 If we have a class ***People*** which represent a people in memory. Its structure is defined as below:
 ```java
 public class People {
@@ -91,7 +88,54 @@ public class People extends DatabaseObject {
 
 }
 ```
-After that we can easily use database read/writer facilites to save or load ***People** objects between mem or database. 
+
+###Saving or loading objects
+Before moving forward, we need to declare one thing. Database manipulation in DevBricks is basing on ***Content Provider***. That mean you need to declare a content provide in ***AndroidManifest.xml*** of your project:
+```xml
+<application
+	android:icon="@drawable/ic_app"
+    android:label="@string/app_name">
+    ...
+	<provider
+	    android:name=".AppConnectivityProvider"
+        android:authorities="com.yourdomain.youapp" />
+    ...
+</application>
+```
+Class ***AppConnectivityProvider*** is derived from ***DatabaseConnectivityProvider***. Keep it clean. That is enough.
+```java
+public class AppConnectivityProvider extends DatabaseConnectivityProvider {
+
+}
+```
+Basically, you only need one provider like this to handle all the database operations. Keep the authority of this provider same as your package name will make everything easy.
+When you create a ***DatabaseReader*** or ***DatabaseWriter***,  you can use a shortcut creator, like this:
+```java
+DatabaseReader<People> reader = new DatabaseReader(context, People.class);
+DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
+...
+```
+But sometimes, we need to handle more complicated cases. You may need to define another provider. One is using inside application, while the other one is using to share data with other applications. In this case, you need to declare a provider with different authority:
+```xml
+<application
+	android:icon="@drawable/ic_app"
+    android:label="@string/app_name">
+    ...
+	<provider
+	    android:name=".ExternConnectivityProvider"
+        android:authorities="com.yourdomain.external" />
+    ...
+</application>
+```
+When you use DatabaseReader or DatabaseWriter on this provider, you need to pass the authority as second parameter in creator:
+```java
+
+DatabaseReader<People> reader = new DatabaseReader(context, "com.yourdomain.external", People.class);
+DatabaseWriter<People> writer = new DatabaseWriter(context, "com.yourdomain.external", People.class);
+...
+```
+
+Now, when you finish these steps above, you can easily use database read/write facilites to save or load ***People** objects between mem or database. 
 
 ***DatabaseWriter*** is a shortcut class to save im-memory obejct to database.  For example, add a ***People*** to database:
 
