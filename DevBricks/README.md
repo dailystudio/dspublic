@@ -1,13 +1,18 @@
 #DevBricks
 
+[![License](https://poser.pugx.org/dreamfactory/dreamfactory/license.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 DevBricks provides several classes which will be usually  used in daily Android development. With these "bricks", your development will become:
 
 - **Efficient** : The classes provided by DevBricks almost cover all of the aspect in daily devevoplment, from low-end databaes to user interface. You do not need to waste your time on those repeating work.
 - **Reliable** :  More than 60% code has related Unit test. Your work will stand on stable foundation. 
 - **Consistency** : DevBricks includes unified logging system, database accessing, UI elements and styles. This make all of your applications has consistency at primary impression.
 
+## Setup DevBricks
 
-## Database
+## Using DevBricks
+
+### Database
 Database facilities in DevBricks provides a efficient way to convert between **In-Memory Data Structures** and **SQLite Database Records**. 
 
 - ***DatabaseObject*** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
@@ -87,7 +92,7 @@ public class People extends DatabaseObject {
 ```
 After that we can easily use database read/writer facilites to save or load ***People** objects between mem or database. 
 
-***DatabaseWriter*** is a class to save im-memory obejct to database.  For example, add a ***People*** to database:
+***DatabaseWriter*** is a shortcut class to save im-memory obejct to database.  For example, add a ***People*** to database:
 
 ```java
 DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
@@ -102,8 +107,18 @@ p.setMarried(true);
 writer.insert(p);
 ```
 
-## Loader
+***DatabaseReader*** is a shortcut class to load database record into memory.  For example, query all ***People*** from database:
 
+```java
+DatabaseReader<People> reader = new DatabaseReader(context, People.class);
+
+List<People> people = reader.query(new Query(People.class));
+
+for (People p: people) {
+	/* process each people */
+}
+
+```
 
 >Copyright
->2010-2015 by Daily Studio.
+>2010-2016 by Daily Studio.
