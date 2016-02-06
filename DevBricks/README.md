@@ -15,9 +15,14 @@ Database facilities in DevBricks provides a efficient way to convert between **I
 - ***DatabaseObject*** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
 - ***Column*** describe how to map a field of a In-Memory class to a column of database record.
 - ***Template*** contains a set of *Column* which is usually used to describe how to convert a *DatabaseObject* to database record.
+- ***Query*** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
+- ***DatabaseReader*** is a shortcut class to reading obejcts from database.
+- ***DatabaseWriter*** is a shortcut class to saving objects into database.
 
-### Define Object
-If we have a class ***People*** which represent a people in memory. Its structure is defined as below:
+With these classes, even you do not have any knowledge about SQL or Androiud Content Provider, you can easily bind data in your application with permanent database storage.
+
+### Define an Object
+For example, if we have a class named ***People***, which represent a people data structure in memory. It is defined as below:
 ```java
 public class People {
 	private String mName;
@@ -27,7 +32,7 @@ public class People {
 	private boolean mMarried;
 }
 ```
-And we want each people will be stored as one record in database, like this:
+We want each people will be stored as one record in database, like this:
 
 ID   | Name    | Age  | Weight | Height | Married 
 :--- | :-------| :--: | :--:   | :--:   | :--:   
