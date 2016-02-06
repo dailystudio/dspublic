@@ -22,7 +22,7 @@ Database facilities in DevBricks provides a efficient way to convert between **I
 With these classes, even you do not have any knowledge about SQL or Androiud Content Provider, you can easily bind data in your application with permanent database storage.
 
 ### Define an Object
-For example, if we have a class named ***People***, which represent a people data structure in memory. It is defined as below:
+For example, if you have a class named ***People***, which represent a people data structure in memory. It is defined as below:
 ```java
 public class People {
 	private String mName;
@@ -32,7 +32,7 @@ public class People {
 	private boolean mMarried;
 }
 ```
-We want each people will be stored as one record in database, like this:
+You want each people will be stored as one record in database, like this:
 
 ID   | Name    | Age  | Weight | Height | Married 
 :--- | :-------| :--: | :--:   | :--:   | :--:   
@@ -40,7 +40,7 @@ ID   | Name    | Age  | Weight | Height | Married
 2    | Lucy    | 33   | 48.5   | 165    | 0
 ...  | ...     | ..   | ..     | ...    | .
 
-To map a ***People*** to a database record, we need to derive ***People*** from ***DatabaseObject*** , define a template and bind them together:
+To map a ***People*** to a database record, you need to derive ***People*** from ***DatabaseObject*** firstly,  then define a template and bind them together:
 
 ```java
 public class People extends DatabaseObject {
@@ -95,7 +95,7 @@ public class People extends DatabaseObject {
 ```
 
 ###Saving or loading objects
-Before moving forward, we need to declare one thing. Database manipulation in DevBricks is basing on ***Content Provider***. That mean you need to declare a content provide in ***AndroidManifest.xml*** of your project:
+Before moving forward, you need to understand a little more implementation behind the interface. Database manipulation in DevBricks is basing on ***Content Provider***, which is an important component on Android platform. Even you do not need to know more about this concept, you have to declare things in your ***AndroidManifest.xml*** before you start to use these interfaces. Firstly, you need to declare a ***Content Provider*** in the ***AndroidManifest.xml*** of your project:
 ```xml
 <application
 	android:icon="@drawable/ic_app"
@@ -107,20 +107,19 @@ Before moving forward, we need to declare one thing. Database manipulation in De
     ...
 </application>
 ```
-Class ***AppConnectivityProvider*** is derived from ***DatabaseConnectivityProvider***. Keep it clean. That is enough.
+Class ***AppConnectivityProvider*** is derived from ***DatabaseConnectivityProvider***. Keep it implementation empty is enough.
 ```java
 public class AppConnectivityProvider extends DatabaseConnectivityProvider {
 
 }
 ```
-Basically, you only need one provider like this to handle all the database operations. Keep the authority of this provider same as your package name will make everything easy.
-When you create a ***DatabaseReader*** or ***DatabaseWriter***,  you can use a shortcut creator, like this:
+Usually, you only need one provider like this to handle all the database operations in your application. Defining the authority of this provider same as your package name will make everything easy. When you create a ***DatabaseReader*** or ***DatabaseWriter***,  you can use a shortcut creator, like this:
 ```java
 DatabaseReader<People> reader = new DatabaseReader(context, People.class);
 DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
 ...
 ```
-But sometimes, we need to handle more complicated cases. You may need to define another provider. One is using inside application, while the other one is using to share data with other applications. In this case, you need to declare a provider with different authority:
+But sometimes, you need to handle more complicated cases. You may need to define two providers. One is using inside application, while the other one is using to share data with other applications. In this case, you need to declare another provider with a different authority:
 ```xml
 <application
 	android:icon="@drawable/ic_app"
@@ -132,7 +131,7 @@ But sometimes, we need to handle more complicated cases. You may need to define 
     ...
 </application>
 ```
-When you use DatabaseReader or DatabaseWriter on this provider, you need to pass the authority as second parameter in creator:
+At the same time, when you want to use DatabaseReader or DatabaseWriter on this provider, you need to pass the authority as second parameter in creator:
 ```java
 
 DatabaseReader<People> reader = new DatabaseReader(context, "com.yourdomain.external", People.class);
@@ -140,9 +139,9 @@ DatabaseWriter<People> writer = new DatabaseWriter(context, "com.yourdomain.exte
 ...
 ```
 
-Now, when you finish these steps above, you can easily use database read/write facilites to save or load ***People** objects between mem or database. 
+Now, when you finish these steps above, you can easily use database read/write facilites to save or load ***People** objects between memory and database. 
 
-***DatabaseWriter*** is a shortcut class to save im-memory obejct to database.  For example, add a ***People*** to database:
+***DatabaseWriter*** is a shortcut class to save im-memory obejcts to database.  For example, add a ***People*** to database:
 
 ```java
 DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
@@ -157,7 +156,7 @@ p.setMarried(true);
 writer.insert(p);
 ```
 
-***DatabaseReader*** is a shortcut class to load database record into memory.  For example, query all ***People*** from database:
+***DatabaseReader*** is a shortcut class to load database records into memory.  For example, query all ***People*** from database:
 
 ```java
 DatabaseReader<People> reader = new DatabaseReader(context, People.class);
@@ -169,6 +168,17 @@ for (People p: people) {
 }
 
 ```
+When you are using the ***DatabaseReader***, the ***Query*** will become a much more important helper class. You need to rely on this helper class to describe your query on the database.
+A ***Query*** object combines the following  ***ExpressToken***  together to define a query. Each kind of these ***ExpressionToken*** correspond to a related SQLite statement:
 
+Expression Token | SQLite Statement
+:--              | :--
+Selection Token  | where 
+GroupBy Token    | group by
+OrderBy Token    | order by
+Having Token     | having
+Limit Token      | limit 
+
+ 
 >Copyright
 >2010-2016 by Daily Studio.
