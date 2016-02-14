@@ -168,7 +168,7 @@ for (People p: people) {
 }
 
 ```
-When you are using the ***DatabaseReader***, the ***Query*** will become a much more important helper class. You need to rely on this helper class to describe your query on the database.
+When you are using the ***DatabaseReader***, the ***Query*** will become a much more important helper class. You need to rely on this helper class to describe all of your query on the database.
 A ***Query*** object combines the following  ***ExpressToken***  together to define a query. Each kind of these ***ExpressionToken*** correspond to a related SQLite statement:
 
 Expression Token | SQLite Statement
@@ -179,6 +179,32 @@ OrderBy Token    | order by
 Having Token     | having
 Limit Token      | limit 
 
- 
+The  following *binary operator* can be performed on a ***ExpressToken*** with another ***ExpressToken***:
+
+Op function      | SQLite Equivalent  | Explanation
+:--              | :--                | :--
+.plus()          | +                  | a + b
+.minus()         | -                  | a - b
+.multiple()      | *                  | a * b
+.divide()        | /                  | a / b
+.modulo()        | %                  | a % b
+
+The  following *logical operations* can  between combine two ***ExpressToken***:
+
+Op function      | SQLite Equivalent  | Explanation
+:--              | :--                | :--
+.and()           | &&                 | a && b
+.or()            | \|\|               | a \|\| b
+.eq()            | ==                 | a == b
+.neq()           | <>                 | a <> b
+.gt()            | >                  | a > b
+.gte()           | >=                 | a >= b
+.lt()            | <                  | a < b
+.lte()           | <=                 | a <= b
+.in()            | >= and <=          | a >= b && a <= c
+.out()           | < or >             | a < b \|\| a > c
+
+
+
 >Copyright
 >2010-2016 by Daily Studio.
