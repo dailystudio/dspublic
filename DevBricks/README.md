@@ -220,6 +220,46 @@ ExpressionToken selToken = People.COLUMN_AGE.gt(30).and（bmiToken.outOf(18.5, 2
 query.setSelection(selToken);
 ```
 
+Last but not the least, accessing the database may be high latency operations. It is better to move these kind of operations out of main UI thread. To handle this, you can move forward to the next chapter - ***Loader***.
+
+## Loaders and AsyncTasks
+***Loader*** and ***AsyncTask*** are both designed to be helper classes around ***Thread*** and ***Handler *** in ***Android framework***. ***Loader*** is better integrated with ***Activity*** and ***Fragment***.  
+As mentioned in last chapter, accessing the database should not be frequently used in main UI thread. To easily use  ***Database*** classes and facilities in your applications, ***DevBricks*** also provides you some helper classes to combine ***Loader*** and ***AsyncTask*** with ***DatabaseObject***.
+
+###Loaders
+Breifly, ***DevBricks*** provides two helper classes for you to access database asynchronously, ***DatabaseObjectsLoader*** and ***DatabaseCursorLoader***. The main difference between these two classes is the returned value. ***DatabaseObjectsLoader*** will return a list of ***DatabaseObjects***, while ***DatabaseCursorLoader*** will directly return the Cursor. 
+The advantage of returning a list of objects is you can add more properties to the objects in memory. For example, the portrait of a person. You could not save the entire image of the portrait in database.  Usually, you only save the URI in database and save the resolved image in the same data structure in memory. After you load a list of objects from database, you will traverse the list and resolve each URI of portrait and then attach to the related object. In this case, using ***DatabaseCursorLoader*** will be more complicated. Because you could not attach anything on the return cursor. The solutions is creating an extra map to holds the relationship between images and database objects. 
+Obviously, the ***DatabaseCursorLoader*** has its own applications, saving the memory. If you have thousands records in the database, loading them all to the memory may not be good choice. ***DatabaseCursorLoader*** will only return a cursor. You can use the cursor to traverse the entire database, but there is only a small piece of memory used to keep active content of database. 
+***DatabaseObjectsLoader*** and ***DatabaseCursorLoader*** are abstract classes. You need to implement the only abstract interface ***getObjectClass()*** before using them. Here is an example:
+```java
+public class PeopleObjectsLoader extends DatabaseObjectsLoader<People> {
+
+	public PeopleObjectsLoader(Context context) {
+		super(context)
+	}
+
+	protected Class<People> getObjectClass() {
+		return People.class
+	}
+
+}
+
+public class PeopleCursorLoader extends DatabaseCursorLoader {
+
+	public PeopleCursorLoader(Context context) {
+		super(context)
+	}
+
+	protected Class<People> getObjectClass() {
+		return People.class
+	}
+
+}
+```
+***DatabaseObjectsLoader*** has two advanced classes for handling more complicated cases: ***ProjectedDatabaseObjectsLoader*** and ***ConvertedDatabaseObjectsLoader***. 
+
+All the ***Loader*** in ***DevBricks*** are drived from ***android.support.v4.content.Loader***. How to use a ***Loader*** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. 
+
 
 >Copyright
 >2010-2016 by Daily Studio.
