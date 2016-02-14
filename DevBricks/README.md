@@ -169,7 +169,7 @@ for (People p: people) {
 
 ```
 When you are using the ***DatabaseReader***, the ***Query*** will become a much more important helper class. You need to rely on this helper class to describe all of your query on the database.
-A ***Query*** object combines the following  ***ExpressToken***  together to define a query. Each kind of these ***ExpressionToken*** correspond to a related SQLite statement:
+A ***Query*** object combines the following  ***ExpressionToken***  together to define a query. Each kind of these ***ExpressionToken*** correspond to a related SQLite statement:
 
 Expression Token | SQLite Statement
 :--              | :--
@@ -179,7 +179,7 @@ OrderBy Token    | order by
 Having Token     | having
 Limit Token      | limit 
 
-The  following *binary operator* can be performed on a ***ExpressToken*** with another ***ExpressToken***:
+Well known  *binary operators* can be performed on a ***ExpressionToken***, including:
 
 Op function      | SQLite Equivalent  | Explanation
 :--              | :--                | :--
@@ -189,7 +189,7 @@ Op function      | SQLite Equivalent  | Explanation
 .divide()        | /                  | a / b
 .modulo()        | %                  | a % b
 
-The  following *logical operations* can  between combine two ***ExpressToken***:
+Besides, *logical operations* can  between combine two ***ExpressionToken*** together:
 
 Op function      | SQLite Equivalent  | Explanation
 :--              | :--                | :--
@@ -204,6 +204,21 @@ Op function      | SQLite Equivalent  | Explanation
 .in()            | >= and <=          | a >= b && a <= c
 .out()           | < or >             | a < b \|\| a > c
 
+Here is a real case to demonstrate how to convert a SQLite query statement into a Query object. Taking People as example, we want to find out a set of people who is older than 30 and their BMI is not in standard range:
+> BMI is Body Mass Index.  The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
+> *BMI = weight (kg) / height ^ 2 (m)*
+
+```sql
+SELECT * FROME People WHERE (age > 30) AND (weight / (height * height) > 24) OR (weight / (height * height) < 18.5);
+```
+To describe this query with Query object, here is the snippet:
+```java
+Query query = new Query(People.class);
+ExpressionToken bmiToken = People.COLUMN_WEIGHT.divide(People.COLUMN_HEIGHT.multiple(People.COLUMN_HEIGHT));
+ExpressionToken selToken = People.COLUMN_AGE.gt(30).and（bmiToken.outOf(18.5, 24)）
+
+query.setSelection(selToken);
+```
 
 
 >Copyright
