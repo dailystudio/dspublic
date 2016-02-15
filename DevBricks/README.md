@@ -10,19 +10,19 @@ DevBricks provides several classes which will be usually  used in daily Android 
 - **Consistency** : DevBricks includes unified logging system, database accessing, UI elements and styles. This make all of your applications has consistency at primary impression.
 
 ## Database
-Database facilities in DevBricks provides a efficient way to convert between **In-Memory Data Structures** and **SQLite Database Records**. 
+Database facilities in DevBricks provides a efficient way to convert between *In-Memory Data Structures* and *SQLite Database Records*。 
 
-- ***DatabaseObject*** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
-- ***Column*** describe how to map a field of a In-Memory class to a column of database record.
-- ***Template*** contains a set of *Column* which is usually used to describe how to convert a *DatabaseObject* to database record.
-- ***Query*** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
-- ***DatabaseReader*** is a shortcut class to reading obejcts from database.
-- ***DatabaseWriter*** is a shortcut class to saving objects into database.
+- **DatabaseObject** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
+- **Column** describe how to map a field of a In-Memory class to a column of database record.
+- **Template** contains a set of *Column* which is usually used to describe how to convert a **DatabaseObject** to database record.
+- **Query** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
+- **DatabaseReader** is a shortcut class to reading obejcts from database.
+- **DatabaseWriter** is a shortcut class to saving objects into database.
 
 With these classes, even you do not have any knowledge about SQL or Androiud Content Provider, you can easily bind data in your application with permanent database storage.
 
 ### Define an Object
-For example, if you have a class named ***People***, which represent a people data structure in memory. It is defined as below:
+For example, if you have a class named **People**, which represent a people data structure in memory. It is defined as below:
 ```java
 public class People {
 	private String mName;
@@ -40,7 +40,7 @@ ID   | Name    | Age  | Weight | Height | Married
 2    | Lucy    | 33   | 48.5   | 165    | 0
 ...  | ...     | ..   | ..     | ...    | .
 
-To map a ***People*** to a database record, you need to derive ***People*** from ***DatabaseObject*** firstly,  then define a template and bind them together:
+To map a **People** to a database record, you need to derive **People** from **DatabaseObject** firstly,  then define a template and bind them together:
 
 ```java
 public class People extends DatabaseObject {
@@ -95,7 +95,7 @@ public class People extends DatabaseObject {
 ```
 
 ###Saving or loading objects
-Before moving forward, you need to understand a little more implementation behind the interface. Database manipulation in DevBricks is basing on ***Content Provider***, which is an important component on Android platform. Even you do not need to know more about this concept, you have to declare things in your ***AndroidManifest.xml*** before you start to use these interfaces. Firstly, you need to declare a ***Content Provider*** in the ***AndroidManifest.xml*** of your project:
+Before moving forward, you need to understand a little more implementation behind the interface. Database manipulation in DevBricks is basing on *Content Provider*, which is an important component on Android platform. Even you do not need to know more about this concept, you have to declare things in your *AndroidManifest.xml* before you start to use these interfaces. Firstly, you need to declare a **ContentProvider** in the *AndroidManifest.xml* of your project:
 ```xml
 <application
 	android:icon="@drawable/ic_app"
@@ -107,13 +107,13 @@ Before moving forward, you need to understand a little more implementation behin
     ...
 </application>
 ```
-Class ***AppConnectivityProvider*** is derived from ***DatabaseConnectivityProvider***. Keep it implementation empty is enough.
+Class **AppConnectivityProvider** is derived from **DatabaseConnectivityProvider**. Keep it implementation empty is enough.
 ```java
 public class AppConnectivityProvider extends DatabaseConnectivityProvider {
 
 }
 ```
-Usually, you only need one provider like this to handle all the database operations in your application. Defining the authority of this provider same as your package name will make everything easy. When you create a ***DatabaseReader*** or ***DatabaseWriter***,  you can use a shortcut creator, like this:
+Usually, you only need one provider like this to handle all the database operations in your application. Defining the authority of this provider same as your package name will make everything easy. When you create a **DatabaseReader** or **DatabaseWriter**,  you can use a shortcut creator, like this:
 ```java
 DatabaseReader<People> reader = new DatabaseReader(context, People.class);
 DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
@@ -139,9 +139,9 @@ DatabaseWriter<People> writer = new DatabaseWriter(context, "com.yourdomain.exte
 ...
 ```
 
-Now, when you finish these steps above, you can easily use database read/write facilites to save or load ***People** objects between memory and database. 
+Now, when you finish these steps above, you can easily use database read/write facilites to save or load **People** objects between memory and database. 
 
-***DatabaseWriter*** is a shortcut class to save im-memory obejcts to database.  For example, add a ***People*** to database:
+**DatabaseWriter** is a shortcut class to save im-memory obejcts to database.  For example, add a **People** to database:
 
 ```java
 DatabaseWriter<People> writer = new DatabaseWriter(context, People.class);
@@ -156,7 +156,7 @@ p.setMarried(true);
 writer.insert(p);
 ```
 
-***DatabaseReader*** is a shortcut class to load database records into memory.  For example, query all ***People*** from database:
+**DatabaseReader** is a shortcut class to load database records into memory.  For example, query all **People** from database:
 
 ```java
 DatabaseReader<People> reader = new DatabaseReader(context, People.class);
@@ -168,8 +168,8 @@ for (People p: people) {
 }
 
 ```
-When you are using the ***DatabaseReader***, the ***Query*** will become a much more important helper class. You need to rely on this helper class to describe all of your query on the database.
-A ***Query*** object combines the following  ***ExpressionToken***  together to define a query. Each kind of these ***ExpressionToken*** correspond to a related SQLite statement:
+When you are using the **DatabaseReader**, the **Query** will become a much more important helper class. You need to rely on this helper class to describe all of your query on the database.
+A **Query** object combines the following  **ExpressionToken**  together to define a query. Each kind of these **ExpressionToken** correspond to a related SQLite statement:
 
 Expression Token | SQLite Statement
 :--              | :--
@@ -179,7 +179,7 @@ OrderBy Token    | order by
 Having Token     | having
 Limit Token      | limit 
 
-Well known  *binary operators* can be performed on a ***ExpressionToken***, including:
+Well known  *binary operators* can be performed on a **ExpressionToken**, including:
 
 Op function      | SQLite Equivalent  | Explanation
 :--              | :--                | :--
@@ -189,7 +189,7 @@ Op function      | SQLite Equivalent  | Explanation
 .divide()        | /                  | a / b
 .modulo()        | %                  | a % b
 
-Besides, *logical operations* can  between combine two ***ExpressionToken*** together:
+Besides, *logical operations* can  between combine two **ExpressionToken** together:
 
 Op function      | SQLite Equivalent  | Explanation
 :--              | :--                | :--
@@ -220,17 +220,16 @@ ExpressionToken selToken = People.COLUMN_AGE.gt(30).and（bmiToken.outOf(18.5, 2
 query.setSelection(selToken);
 ```
 
-Last but not the least, accessing the database may be high latency operations. It is better to move these kind of operations out of main UI thread. To handle this, you can move forward to the next chapter - ***Loader***.
+Last but not the least, accessing the database may be high latency operations. It is better to move these kind of operations out of main UI thread. To handle this, you can move forward to the next chapter - *Loaders and AsyncTasks*.
 
 ## Loaders and AsyncTasks
-***Loader*** and ***AsyncTask*** are both designed to be helper classes around ***Thread*** and ***Handler *** in ***Android framework***. ***Loader*** is better integrated with ***Activity*** and ***Fragment***.  
-As mentioned in last chapter, accessing the database should not be frequently used in main UI thread. To easily use  ***Database*** classes and facilities in your applications, ***DevBricks*** also provides you some helper classes to combine ***Loader*** and ***AsyncTask*** with ***DatabaseObject***.
+**Loader** and **AsyncTask** are both designed to be helper classes around *Thread* and *Handler* in *Android framework*. ***Loader*** is better integrated with ***Activity*** and ***Fragment***.  As mentioned in the last chapter, accessing the database should not be frequently used in main UI thread. To easily use  **Database** classes and facilities in your applications,  DevBricks also provides you a set of helper classes to combine **Loader** and **AsyncTask** with **DatabaseObject**.
 
 ###Loaders
-Breifly, ***DevBricks*** provides two helper classes for you to access database asynchronously, ***DatabaseObjectsLoader*** and ***DatabaseCursorLoader***. The main difference between these two classes is the returned value. ***DatabaseObjectsLoader*** will return a list of ***DatabaseObjects***, while ***DatabaseCursorLoader*** will directly return the Cursor. 
-The advantage of returning a list of objects is you can add more properties to the objects in memory. For example, the portrait of a person. You could not save the entire image of the portrait in database.  Usually, you only save the URI in database and save the resolved image in the same data structure in memory. After you load a list of objects from database, you will traverse the list and resolve each URI of portrait and then attach to the related object. In this case, using ***DatabaseCursorLoader*** will be more complicated. Because you could not attach anything on the return cursor. The solutions is creating an extra map to holds the relationship between images and database objects. 
-Obviously, the ***DatabaseCursorLoader*** has its own applications, saving the memory. If you have thousands records in the database, loading them all to the memory may not be good choice. ***DatabaseCursorLoader*** will only return a cursor. You can use the cursor to traverse the entire database, but there is only a small piece of memory used to keep active content of database. 
-***DatabaseObjectsLoader*** and ***DatabaseCursorLoader*** are abstract classes. You need to implement the only abstract interface ***getObjectClass()*** before using them. Here is an example:
+Breifly, DevBricks provides two helper classes for you to access database asynchronously, ***DatabaseObjectsLoader*** and ***DatabaseCursorLoader***. The main difference between these two classes is the returned value. **DatabaseObjectsLoader** will return a list of **DatabaseObjects**, while **DatabaseCursorLoader** will directly return the Cursor. 
+The advantage of returning a list of objects is you can add more properties to the objects in memory. For example, the portrait of a person. You could not save the entire image of the portrait in database.  Usually, you only save the URI in database and save the resolved image in the same data structure in memory. After you load a list of objects from database, you will traverse the list and resolve each URI of portrait and then attach to the related object. In this case, using **DatabaseCursorLoader** will be more complicated. Because you could not attach anything on the return cursor. The solutions is creating an extra map to holds the relationship between images and database objects. 
+Obviously, the **DatabaseCursorLoader** has its own applications, saving the memory. If you have thousands records in the database, loading them all to the memory may not be good choice. **DatabaseCursorLoader** will only return a cursor. You can use the cursor to traverse the entire database, but there is only a small piece of memory used to keep active content of database. 
+**DatabaseObjectsLoader** and **DatabaseCursorLoader** are abstract classes. You need to implement the only abstract interface *getObjectClass()* before using them. Here is an example:
 ```java
 public class PeopleObjectsLoader extends DatabaseObjectsLoader<People> {
 
@@ -256,9 +255,9 @@ public class PeopleCursorLoader extends DatabaseCursorLoader {
 
 }
 ```
-***DatabaseObjectsLoader*** has two advanced classes for handling more complicated cases: ***ProjectedDatabaseObjectsLoader*** and ***ConvertedDatabaseObjectsLoader***. 
+**DatabaseObjectsLoader** has two advanced classes for handling more complicated cases: **ProjectedDatabaseObjectsLoader** and **ConvertedDatabaseObjectsLoader**. 
 
-All the ***Loader*** in ***DevBricks*** are drived from ***android.support.v4.content.Loader***. How to use a ***Loader*** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. 
+All the **Loader** in DevBricks are drived from **android.support.v4.content.Loader**. How to use a **Loader** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. 
 
 
 >Copyright
