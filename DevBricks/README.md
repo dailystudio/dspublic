@@ -55,17 +55,12 @@ public class People extends DatabaseObject {
 	private final static Column[] COLUMNS = {
 		COLUMN_ID,
 		COLUMN_AGE,
+		COLUMN_NAME,
 		COLUMN_WEIGHT,
 		COLUMN_HEIGHT,
 		COLUMN_MARRIED,
 	};
 	
-	private String mName;
-	private int mAge;
-	private float mWeight;
-	private int mHeight;
-	private boolean mMarried;
-
 	public People(Context context) {
 		super(context);
 		
@@ -131,7 +126,7 @@ But sometimes, you need to handle more complicated cases. You may need to define
     ...
 </application>
 ```
-At the same time, when you want to use DatabaseReader or DatabaseWriter on this provider, you need to pass the authority as second parameter in creator:
+At the same time, when you want to use **DatabaseReader** or **DatabaseWriter** on this provider, you need to pass the authority as second parameter in creator:
 ```java
 
 DatabaseReader<People> reader = new DatabaseReader(context, "com.yourdomain.external", People.class);
@@ -168,6 +163,65 @@ for (People p: people) {
 }
 
 ```
+Sometimes, you may not want to retrieve all the columns from the database or you want to retrieve some calculated columns, like count(), sum() in SQLite. Another query interface will help you on this case. Before using the interface, you need to defined an projection class. 
+
+Here is example, which includes basic information about people and related BMI.
+> BMI is Body Mass Index.  The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
+> *BMI = weight (kg) / height ^ 2 (m)*
+
+The class **PeopleBmi** is defined as:
+```java
+public class PeopleBmi extends DatabaseObject {
+
+	public static final Column COLUMN_AGE = new IntegerColumn("age");
+	public static final Column COLUMN_BMI = new DoubleColumn(People.COLUMN_WEIGHT.divide(People.COLUMN_HEIGHT.multiple(People.COLUMN_HEIGHT)).toString());
+	
+	private final static Column[] COLUMNS = {
+		People.COLUMN_ID,
+		People.COLUMN_NAME,
+		COLUMN_BMI,
+	};
+
+	public PeopleBmi(Context context) {
+		super(context);
+		
+		final Template templ = getTemplate();
+		templ.addColumns(COLUMNS);
+	}
+	
+	public int getId() {
+		return getIntegerValue(People.COLUMN_ID);
+	}
+	
+	public String getName() {
+		return getTextValue(People.COLUMN_NAME);
+	}
+	
+	public double getBMI() {
+		return getDoubleValue(COLUMN_BMI);
+	}
+
+}
+```
+Then you pass this class as second parameters of query interfaces:
+```java
+DatabaseReader<People> reader = new DatabaseReader(context, People.class);
+
+List<DatabaseObject> bmiList = reader.query(new Query(People.class), PeopleBmi.class);
+
+PeopleBmi bmi;
+for (DatabaseObject obj: bmiList) {
+	if (object instanceof PeopleBmi == false) {
+		/* usually, this will not happen */
+		continue;
+	}
+	
+	bmi = (PeopleBmi)obj;
+	/* process each people BMI */
+}
+
+```
+
 When you are using the **DatabaseReader**, the **Query** will become a much more important helper class. You need to rely on this helper class to describe all of your query on the database.
 A **Query** object combines the following  **ExpressionToken**  together to define a query. Each kind of these **ExpressionToken** correspond to a related SQLite statement:
 
@@ -205,8 +259,6 @@ Op function      | SQLite Equivalent  | Explanation
 .out()           | < or >             | a < b \|\| a > c
 
 Here is a real case to demonstrate how to convert a SQLite query statement into a Query object. Taking People as example, we want to find out a set of people who is older than 30 and their BMI is not in standard range:
-> BMI is Body Mass Index.  The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
-> *BMI = weight (kg) / height ^ 2 (m)*
 
 ```sql
 SELECT * FROME People WHERE (age > 30) AND (weight / (height * height) > 24) OR (weight / (height * height) < 18.5);
@@ -256,6 +308,29 @@ public class PeopleCursorLoader extends DatabaseCursorLoader {
 }
 ```
 **DatabaseObjectsLoader** has two advanced classes for handling more complicated cases: **ProjectedDatabaseObjectsLoader** and **ConvertedDatabaseObjectsLoader**. 
+
+**ProjectedDatabaseObjectsLoader** is used to handle cases that the returned data are projections of original database.  Taking the class **PeopleBmi** shown in last chapter as example, you need to override on more interface of **ProjectedDatabaseObjectsLoader**:
+
+```java
+public class PeopleBmisLoader extends DatabaseObjectsLoader<People> {
+
+	public PeopleBmisLoader(Context context) {
+		super(context)
+	}
+
+	protected Class<People> getObjectClass() {
+		return People.class
+	}
+	
+	protected Class<P> getProjectionClass() {
+		return PeopleBmi.class;
+	}
+
+}
+
+```
+
+**ConvertedDatabaseObjectsLoader** is used to handle cases that the returned data may not directly represent or project the database, but some calculation or statistics on the dataset retrieved from database.
 
 All the **Loader** in DevBricks are drived from **android.support.v4.content.Loader**. How to use a **Loader** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. 
 
