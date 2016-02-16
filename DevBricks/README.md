@@ -203,7 +203,7 @@ public class PeopleBmi extends DatabaseObject {
 
 }
 ```
-Then you pass this class as second parameters of query interfaces:
+Then you pass this class as second parameters of query interfaces and cast returned result to **PeopleBmi** objects:
 ```java
 DatabaseReader<People> reader = new DatabaseReader(context, People.class);
 
@@ -307,9 +307,9 @@ public class PeopleCursorLoader extends DatabaseCursorLoader {
 
 }
 ```
-**DatabaseObjectsLoader** has two advanced classes for handling more complicated cases: **ProjectedDatabaseObjectsLoader** and **ConvertedDatabaseObjectsLoader**. 
+The retrieved data will be return in onLoaderFinished() callback. For **PeopleObjectsLoader**, a list of People objects will be passed as second parameter. For **PeopleCursorLoader**, a **Cursor** will be passed and you can use *DatabaseObject.fillValuesFromCursor()* to convert **Cursor** to a **DatabaseObject**.
 
-**ProjectedDatabaseObjectsLoader** is used to handle cases that the returned data are projections of original database.  Taking the class **PeopleBmi** shown in last chapter as example, you need to override on more interface of **ProjectedDatabaseObjectsLoader**:
+**DatabaseObjectsLoader** has an advanced classe: **ProjectedDatabaseObjectsLoader**. **ProjectedDatabaseObjectsLoader** is used to handle cases that the returned data are projections of original database.  Taking the class **PeopleBmi** shown in last chapter as example, you need to override on more interface of **ProjectedDatabaseObjectsLoader**:
 
 ```java
 public class PeopleBmisLoader extends DatabaseObjectsLoader<People> {
@@ -322,18 +322,36 @@ public class PeopleBmisLoader extends DatabaseObjectsLoader<People> {
 		return People.class
 	}
 	
-	protected Class<P> getProjectionClass() {
+	protected Class<PeopleBmi> getProjectionClass() {
 		return PeopleBmi.class;
 	}
 
 }
 
 ```
+If you want a more complicated customized query, you can also override the protected function *getQuery()* for all the loaders above. For example, we only need people who is older than 30:
+```java
+...
 
-**ConvertedDatabaseObjectsLoader** is used to handle cases that the returned data may not directly represent or project the database, but some calculation or statistics on the dataset retrieved from database.
+	protected Query getQuery(Class<People> klass) {
+		Query query = super.getQuery(klass);
 
-All the **Loader** in DevBricks are drived from **android.support.v4.content.Loader**. How to use a **Loader** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. 
+		ExpressionToken selToken = People.COLUMN_AGE.gt(30);
+		query.setSelection(selToken);
 
+		return query;
+	}
+	
+...
+```
+
+###AsyncTasks
+
+
+
+All the **Loader**in DevBricks are drived from **android.support.v4.content.Loader**, while the **AsyncTask** are drived from **android.os.AsyncTask**. How to use a **Loader** or **AsyncTask** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. But if you want to save your energy to save the world, please move on to read the following chapter - *Fragments and Adapters*. 
+
+## Fragments and Adapters
 
 >Copyright
 >2010-2016 by Daily Studio.
