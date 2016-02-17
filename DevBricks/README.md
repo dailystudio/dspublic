@@ -286,11 +286,11 @@ Obviously, the **DatabaseCursorLoader** has its own applications, saving the mem
 public class PeopleObjectsLoader extends DatabaseObjectsLoader<People> {
 
 	public PeopleObjectsLoader(Context context) {
-		super(context)
+		super(context);
 	}
 
 	protected Class<People> getObjectClass() {
-		return People.class
+		return People.class;
 	}
 
 }
@@ -298,11 +298,11 @@ public class PeopleObjectsLoader extends DatabaseObjectsLoader<People> {
 public class PeopleCursorLoader extends DatabaseCursorLoader {
 
 	public PeopleCursorLoader(Context context) {
-		super(context)
+		super(context);
 	}
 
 	protected Class<People> getObjectClass() {
-		return People.class
+		return People.class;
 	}
 
 }
@@ -312,16 +312,17 @@ The retrieved data will be return in onLoaderFinished() callback. For **PeopleOb
 **DatabaseObjectsLoader** has an advanced classe: **ProjectedDatabaseObjectsLoader**. **ProjectedDatabaseObjectsLoader** is used to handle cases that the returned data are projections of original database.  Taking the class **PeopleBmi** shown in last chapter as example, you need to override on more interface of **ProjectedDatabaseObjectsLoader**:
 
 ```java
-public class PeopleBmisLoader extends DatabaseObjectsLoader<People> {
+public class PeopleBmisLoader extends ProjectedDatabaseObjectsLoader<People, PeopleBmi> {
 
 	public PeopleBmisLoader(Context context) {
-		super(context)
+		super(context);
 	}
 
 	protected Class<People> getObjectClass() {
-		return People.class
+		return People.class;
 	}
 	
+	@Override
 	protected Class<PeopleBmi> getProjectionClass() {
 		return PeopleBmi.class;
 	}
@@ -333,6 +334,7 @@ If you want a more complicated customized query, you can also override the prote
 ```java
 ...
 
+	@Override
 	protected Query getQuery(Class<People> klass) {
 		Query query = super.getQuery(klass);
 
@@ -344,9 +346,55 @@ If you want a more complicated customized query, you can also override the prote
 	
 ...
 ```
+Don't forget that if your authority of **ContentProvider** is not same as the package name of your application, you may need to override *getDatabaseConnectivity()* to define a special **DatabaseConnectivity**:
+```java
+...
 
-###AsyncTasks
+	@Override
+	protected DatabaseConnectivity getDatabaseConnectivity(
+			Class<? extends DatabaseObject> objectClass) {
+		return new DatabaseConnectivity(getContext(), "com.yourdomain.external", objectClass);
+	}
+	
+...
+```
 
+###AsyncTask
+AsyncTask is quite same as Loader, **DatabaseObjectsAsyncTask** is the most used class to retrieve data from database , while **ProjectedDatabaseObjectsAsyncTask** is its advance version which support projection of database content. Most interfaces mentioned above are also available in AsyncTask. Here is an example about **ProjectedDatabaseObjectsAsyncTask** which is calculate the BMI of people who is older than 30:
+```java
+public class PeopleBmisAsyncTask extends ProjectedDatabaseObjectsAsyncTask<People, PeopleBmi> {
+
+	public PeopleBmisAsyncTask(Context context) {
+		super(context);
+	}
+
+	protected Class<People> getObjectClass() {
+		return People.class;
+	}
+	
+	@Override
+	protected Class<PeopleBmi> getProjectionClass() {
+		return PeopleBmi.class;
+	}
+
+	@Override
+	protected Query getQuery(Class<People> klass) {
+		Query query = super.getQuery(klass);
+
+		ExpressionToken selToken = People.COLUMN_AGE.gt(30);
+		query.setSelection(selToken);
+
+		return query;
+	}
+
+	@Override
+	protected DatabaseConnectivity getDatabaseConnectivity(
+			Class<? extends DatabaseObject> objectClass) {
+		return new DatabaseConnectivity(getContext(), "com.yourdomain.external", objectClass);
+	}
+
+}
+```
 
 
 All the **Loader**in DevBricks are drived from **android.support.v4.content.Loader**, while the **AsyncTask** are drived from **android.os.AsyncTask**. How to use a **Loader** or **AsyncTask** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. But if you want to save your energy to save the world, please move on to read the following chapter - *Fragments and Adapters*. 
