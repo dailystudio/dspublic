@@ -12,17 +12,17 @@ DevBricks provides several classes which will be usually  used in daily Android 
 ## Database
 Database facilities in DevBricks provides a efficient way to convert between *In-Memory Data Structures* and *SQLite Database Records*。 
 
-- **DatabaseObject** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
-- **Column** describe how to map a field of a In-Memory class to a column of database record.
-- **Template** contains a set of *Column* which is usually used to describe how to convert a **DatabaseObject** to database record.
-- **Query** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
-- **DatabaseReader** is a shortcut class to reading obejcts from database.
-- **DatabaseWriter** is a shortcut class to saving objects into database.
+- **```DatabaseObject```** represents object in memory which could be easily store in permanent database through Database read/write facility classes.
+- **```Column```** describe how to map a field of a In-Memory class to a column of database record.
+- **```Template```** contains a set of *Column* which is usually used to describe how to convert a ```DatabaseObject``` to database record.
+- **```Query```** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
+- **```DatabaseReader```** is a shortcut class to reading obejcts from database.
+- **```DatabaseWriter```** is a shortcut class to saving objects into database.
 
 With these classes, even you do not have any knowledge about SQL or Androiud Content Provider, you can easily bind data in your application with permanent database storage.
 
 ### Define an Object
-For example, if you have a class named **People**, which represent a people data structure in memory. It is defined as below:
+For example, if you have a class named ```People```, which represent a people data structure in memory. It is defined as below:
 ```java
 public class People {
 	private String mName;
@@ -40,7 +40,7 @@ ID   | Name    | Age  | Weight | Height | Married
 2    | Lucy    | 33   | 48.5   | 165    | 0
 ...  | ...     | ..   | ..     | ...    | .
 
-To map a **People** to a database record, you need to derive **People** from **DatabaseObject** firstly,  then define a template and bind them together:
+To map a ```People``` to a database record, you need to derive ```People``` from ```DatabaseObject``` firstly,  then define a template and bind them together:
 
 ```java
 public class People extends DatabaseObject {
@@ -396,10 +396,48 @@ public class PeopleBmisAsyncTask extends ProjectedDatabaseObjectsAsyncTask<Peopl
 }
 ```
 
-
-All the **Loader**in DevBricks are drived from **android.support.v4.content.Loader**, while the **AsyncTask** are drived from **android.os.AsyncTask**. How to use a **Loader** or **AsyncTask** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. But if you want to save your energy to save the world, please move on to read the following chapter - *Fragments and Adapters*. 
+All the **Loader** in DevBricks are drived from **android.support.v4.content.Loader**, while the **AsyncTask** are drived from **android.os.AsyncTask**. How to use a **Loader** or **AsyncTask** is not covered in this document, you can refer to detailed guides on offical  [Android Devloper](http://developer.android.com/index.html) website. But if you want to save your energy to save the world, please move on to read the following chapter - *Fragments and Adapters*. 
 
 ## Fragments and Adapters
+A **Fragment** is a piece of an application's user interface or behavior that can be placed in an **Activity**. DevBricks provide you some classes derived from **Fragment** and well integrated the concept mentioned in previous chapters. With these pre-defined classes, you can easily use **DatabaseObjects** and **Loaders** in your own application. 
+
+The first class you should know is **BaseIntentFragment**, this class provides an interface *bindIntent()* which will be call on the host **Activity** is created or the host **Activity** receives *New Intent* event, when onNewIntent() of host **Activity** is called. This class the base of the classes you will in following paragraphs. 
+
+The next class will be **AbsLoaderFragment**, which defines four **Loader** related interfaces. Three of them are abstracted, you need to implement them before using the loader. Taking the **PeopleBmisLoader** as an example,  here is a simple exmaple how to implement **AbsLoaderFragment**:
+```java
+public class PeopleBmisFragment extends AbsLoaderFragment<List<PeopleBmi>> {
+	
+	private final static int LOADER_PEOPLE_BMI_ID = 0x100;
+	
+    @Override
+    public void onLoadFinished(Loader<List<PeopleBmi>> loader, List<PeopleBmi> data) {
+		/* bind your data with UI */
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<PeopleBmi>> loader) {
+		/* reset your UI */
+    }
+    
+	@Override
+    public Loader<List<PeopleBmi>> onCreateLoader(int id, Bundle args) {
+        return new PeopleBmisLoader(getActivity());
+    }
+
+
+	@Override
+	protected int getLoaderId() {
+		return LOADER_PEOPLE_BMI_ID;
+	}
+
+	@Override
+	protected Bundle createLoaderArguments() {
+		return new Bundle();
+	}
+
+}
+```
+In **onCreateLoader()**, you need to create the loader which will load data used in this **Fragment** asynchronously. ```AbsLoaderFragment``` is defined as a template class.  Template T is a type abstraction of data passing through from **Loader** to **Fragment**. Here is the exmaple above, **PeopleBimsLoader** will passing a list of retrieved **PeopleBmi** objects to the callback, so you need to declare T as ```List<PeopleBmi>```.
 
 >Copyright
 >2010-2016 by Daily Studio.
