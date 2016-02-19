@@ -7,7 +7,7 @@ DevBricks provides several classes which will be usually  used in daily Android 
 
 - **Efficient** : The classes provided by DevBricks almost cover all of the aspect in daily devevoplment, from low-end databaes to user interface. You do not need to waste your time on those repeating work.
 - **Reliable** :  More than 60% code has related Unit test. Your work will stand on stable foundation. 
-- **Consistency** : DevBricks includes unified logging system, database accessing, UI elements and styles. This make all of your applications has consistency at primary impression.
+- **Consistent** : DevBricks includes unified logging system, database accessing, UI elements and styles. This make all of your applications has consistency at primary impression.
 
 ## Database
 Database facilities in DevBricks provides a efficient way to convert between *In-Memory Data Structures* and *SQLite Database Records*。 
@@ -440,6 +440,35 @@ In **`onCreateLoader()`**, you need to create the loader which will load data us
 In **`getLoaderId()`**, you need to return an unique integer in your application scope as an identifier of the loader.
 In **`createLoaderArguments()`**,  each time you call **`restartLoader()`**, this function will be called. You can create different arguments **`Bundle`** according to your needs.
 Besides these abstract methods,  **`AbsLoaderFragment`** also provides a method named **`restartLoader()`**, which can restart the loader at anytime you want.  Same as **`bindIntent()`** in its parents class, the **`restartLoader()`** is also automatically called when the host **`Activity`** is created or the host **`Activity`** receives an *New Intent* event.  Due to **`restartLoader()`** is called after **`bindIntent()`**, you are at ease about creating your loader and its argments according the **`Intent`** which is passed to the fragment.
+
+As two successor of **`AbsLoaderFragment`**,  **`AbsArrayAdapterFragment`** and **`AbsCursorAdapterFragment`** add perfect integration with **`ListView`** and **`GridView`**. **`AbsArrayAdapterFragment`** is used for the loader which is dervied from **`DatabaseObjectsLoader`**, while **`AbsCursortAdapterFragment`** is used for the loader which is dervied from **`DatabaseCursorLoader`**. Due to deriving from **`AbsLoaderFragment`**, **`onCreateLoader()`**, **`createLoaderArguments()`** and **`getLoderId()`** must be implemented before using. But one more interface you must implement **`onCreateAdapter()`**. In this funtion, you need to create an **`ArrayAdapter`** or **`CursorAdapter`** according to which **`Fragment`** you want to use. The created adapter will bind with the  **`ListView`** or **`GridView`** in the **`Fragment`**. How does **`Loader`**, **`Adapter`** and **`Fragment`** well bound together is the responsiblity of DevBricks, you do not need to care about. One important difference between these two successors and **`AbsLoaderFragment`** is the template declaration. As we talked about above, the type declaration in **`AbsLoaderFragment`** is the type of data passed between **`Loader`** and **`Fragment`**. But in these two successor, the type declaration is the type of the item used in **`ListView`** or **`GridView`**. For the **`AbsCursorAdapterFragment`**, it has already declared the template as **`Cursor`** and you needn't to anything else. For **`AbsArrayAdapterFragment`**, here is an example:
+```java
+public class PeopleBmisAdapterFragment extends AbsArrayFragment<PeopleBmi> {
+	
+	private final static int LOADER_PEOPLE_BMI_ID = 0x100;
+	
+	@Override
+    public Loader<List<PeopleBmi>> onCreateLoader(int id, Bundle args) {
+        return new PeopleBmisLoader(getActivity());
+    }
+
+	@Override
+	protected int getLoaderId() {
+		return LOADER_PEOPLE_BMI_ID;
+	}
+
+	@Override
+	protected Bundle createLoaderArguments() {
+		return new Bundle();
+	}
+
+	@Override
+	protected BaseAdapter onCreateAdapter() {
+		return new PeopleBmisAdapter(getActivity());
+	}
+
+}
+```
 
 >Copyright
 >2010-2016 by Daily Studio.
