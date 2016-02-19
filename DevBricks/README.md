@@ -166,6 +166,7 @@ Sometimes, you may not want to retrieve all the columns from the database or you
 
 Here is example, which includes basic information about people and related BMI.
 > BMI stands for Body Mass Index.  BMI is used as  one measure to gauge risk for overall health problem. The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
+> 
 > *`BMI = weight (kg) / height ^ 2 (m)`*
 
 The class **`PeopleBmi`** is defined as:
