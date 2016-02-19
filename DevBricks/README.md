@@ -16,8 +16,8 @@ Database facilities in DevBricks provides a efficient way to convert between *In
 - **`Column`** describe how to map a field of a In-Memory class to a column of database record.
 - **`Template`** contains a set of **`Column`** which is usually used to describe how to convert a **`DatabaseObject`** to database record.
 - **`Query`** is used to describe query parameters when loading objects from databases. It converts most parts of common SQL select statement into Java language. 
-- ****`DatabaseReader`**** is a shortcut class to reading obejcts from database.
-- ****`DatabaseWriter`**** is a shortcut class to saving objects into database.
+- **`DatabaseReader`** is a shortcut class to reading obejcts from database.
+- **`DatabaseWriter`** is a shortcut class to saving objects into database.
 
 With these classes, even you do not have any knowledge about SQL or Androiud Content Provider, you can easily bind data in your application with permanent database storage.
 
@@ -423,7 +423,6 @@ public class PeopleBmisFragment extends AbsLoaderFragment<List<PeopleBmi>> {
         return new PeopleBmisLoader(getActivity());
     }
 
-
 	@Override
 	protected int getLoaderId() {
 		return LOADER_PEOPLE_BMI_ID;
@@ -436,7 +435,10 @@ public class PeopleBmisFragment extends AbsLoaderFragment<List<PeopleBmi>> {
 
 }
 ```
-In **`onCreateLoader()`**, you need to create the loader which will load data used in this **`Fragment`** asynchronously. **`AbsLoaderFragment`** is defined as a template class.  Template T is a type abstraction of data passing through from **`Loader`** to **`Fragment`**. Here is the exmaple above, **`PeopleBmisLoader`** will passing a list of retrieved **`PeopleBmi`** objects to the callback, so you need to declare T as **`List<PeopleBmi>`**.
+In **`onCreateLoader()`**, you need to create the loader which will load data used in this **`Fragment`** asynchronously. **`AbsLoaderFragment`** is defined as a template class.  Template T is a type abstraction of data passing through from **`Loader`** to **`Fragment`**. In the code above, **`PeopleBmisLoader`** will passing a list of retrieved **`PeopleBmi`** objects to the callback, so you need to declare T as **`List<PeopleBmi>`**.
+In **`getLoaderId()`**, you need to return an unique integer in your application scope as an identifier of the loader.
+In **`createLoaderArguments()`**,  each time you call **`restartLoader()`**, this function will be called. You can create different arguments **`Bundle`** according to your needs.
+Besides these abstract methods,  **`AbsLoaderFragment`** also provides a method named **`restartLoader()`**, which can restart the loader at anytime you want.  Same as **`bindIntent()`** in its parents class, the **`restartLoader()`** is also automatically called when the host **`Activity`** is created or the host **`Activity`** receives an *New Intent* event.  Due to **`restartLoader()`** is called after **`bindIntent()`**, you are at ease about creating your loader and its argments according the **`Intent`** which is passed to the fragment.
 
 >Copyright
 >2010-2016 by Daily Studio.
