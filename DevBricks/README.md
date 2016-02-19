@@ -165,8 +165,8 @@ for (People p: people) {
 Sometimes, you may not want to retrieve all the columns from the database or you want to retrieve some calculated columns, like count(), sum() in SQLite. Another query interface will help you on this case. Before using the interface, you need to defined an projection class. 
 
 Here is example, which includes basic information about people and related BMI.
-> BMI is Body Mass Index.  The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
-> *BMI = weight (kg) / height ^ 2 (m)*
+> BMI stands for Body Mass Index.  BMI is used as  one measure to gauge risk for overall health problem. The standard range of BMI is from 18.5 to 24. The formula of BMI calculation is: 
+> *`BMI = weight (kg) / height ^ 2 (m)`*
 
 The class **`PeopleBmi`** is defined as:
 ```java
@@ -234,28 +234,28 @@ Limit Token      | limit
 
 Well known  *binary operators* can be performed on a **`ExpressionToken`**, including:
 
-Op function      | SQLite Equivalent  | Explanation
-:--              | :--                | :--
-.plus()          | +                  | a + b
-.minus()         | -                  | a - b
-.multiple()      | *                  | a * b
-.divide()        | /                  | a / b
-.modulo()        | %                  | a % b
+Op function        | SQLite Equivalent  | Explanation
+:--                | :--                | :--
+`.plus()`          | +                  | a + b
+`.minus()`         | -                  | a - b
+`.multiple()`      | *                  | a * b
+`.divide()`        | /                  | a / b
+`.modulo()`        | %                  | a % b
 
 Besides, *logical operations* can  between combine two **`ExpressionToken`** together:
 
-Op function      | SQLite Equivalent  | Explanation
-:--              | :--                | :--
-.and()           | &&                 | a && b
-.or()            | \|\|               | a \|\| b
-.eq()            | ==                 | a == b
-.neq()           | <>                 | a <> b
-.gt()            | >                  | a > b
-.gte()           | >=                 | a >= b
-.lt()            | <                  | a < b
-.lte()           | <=                 | a <= b
-.in()            | >= and <=          | a >= b && a <= c
-.out()           | < or >             | a < b \|\| a > c
+Op function        | SQLite Equivalent  | Explanation
+:--                | :--                | :--
+`.and()`           | &&                 | a && b
+`.or()`            | \|\|               | a \|\| b
+`.eq()`            | ==                 | a == b
+`.neq()`           | <>                 | a <> b
+`.gt()`            | >                  | a > b
+`.gte()`           | >=                 | a >= b
+`.lt()`            | <                  | a < b
+`.lte()`           | <=                 | a <= b
+`.in()`            | >= and <=          | a >= b && a <= c
+`.out()`           | < or >             | a < b \|\| a > c
 
 Here is a real case to demonstrate how to convert a SQLite query statement into a Query object. Taking People as example, we want to find out a set of people who is older than 30 and their BMI is not in standard range:
 
